@@ -198,7 +198,6 @@ p, h1, h2, h3, h4, h5, h6 {
     }
 
     .logo {
-        flex-direction: column; /* логотип и текст будут вертикально */
         gap: 8px;
     }
 
