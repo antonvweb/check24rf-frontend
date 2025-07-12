@@ -1,9 +1,8 @@
-name: 🚀 Deploy to Server
+name: 🚀 Deploy Dev Project
 
 on:
   push:
-    branches:
-      - main  # или 'master', если у тебя такой
+    branches: [main]
 
 jobs:
   deploy:
@@ -13,11 +12,34 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v3
 
-      - name: 📡 Setup SSH connection
+      - name: 🔐 Setup SSH
         uses: webfactory/ssh-agent@v0.8.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: 📂 Deploy files via rsync
+      - name: 🚀 Deploy and Start Dev Server
         run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            # создаем папку
+            mkdir -p ${{ secrets.DEPLOY_PATH }}
+
+            # переходим в нее
+            cd ${{ secrets.DEPLOY_PATH }}
+
+            # очищаем и копируем проект заново
+            rm -rf *
+            exit
+          EOF
+
+          # копируем проект на сервер
           rsync -avz --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
+
+          # запускаем сервер
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ${{ secrets.DEPLOY_PATH }}
+            npm install
+            # убиваем старый dev (грубовато, но временно)
+            pkill -f "npm run dev" || true
+            # запускаем в фоне
+            nohup npm run dev > output.log 2>&1 &
+          EOF
