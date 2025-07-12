@@ -1,45 +1,34 @@
-name: 🚀 Deploy Dev Project
+name: Deploy to test server
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: 🔐 Setup SSH
+      - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.8.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: 🚀 Deploy and Start Dev Server
+      - name: Sync project to server
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            # создаем папку
-            mkdir -p ${{ secrets.DEPLOY_PATH }}
+          rsync -avz --delete --exclude node_modules ./ root@217.199.252.124:/root/www/test/check24rf/
 
-            # переходим в нее
-            cd ${{ secrets.DEPLOY_PATH }}
-
-            # очищаем и копируем проект заново
-            rm -rf *
-            exit
-          EOF
-
-          # копируем проект на сервер
-          rsync -avz --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
-
-          # запускаем сервер
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd ${{ secrets.DEPLOY_PATH }}
+      - name: Install dependencies and restart app
+        run: |
+          ssh root@217.199.252.124 << 'EOF'
+            cd /root/www/test/check24rf/
             npm install
-            # убиваем старый dev (грубовато, но временно)
+            # убиваем текущий dev-сервер (грубовато, но работает)
             pkill -f "npm run dev" || true
-            # запускаем в фоне
+            # запускаем dev-сервер в фоне
             nohup npm run dev > output.log 2>&1 &
           EOF
