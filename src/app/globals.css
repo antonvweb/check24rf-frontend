@@ -190,11 +190,11 @@ p, h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 768px) {
     .logo .title h1 {
-        font-size: 2rem; /* уменьшение размера заголовка */
+        font-size: 1.2rem; /* уменьшение размера заголовка */
     }
 
     .logo .title p {
-        font-size: 1rem; /* уменьшение размера подзаголовка */
+        font-size: .6rem; /* уменьшение размера подзаголовка */
     }
 
     .logo {
