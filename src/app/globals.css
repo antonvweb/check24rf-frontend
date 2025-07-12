@@ -167,3 +167,27 @@ p, h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     line-height: normal;
 }
+
+@media (max-width: 768px) {
+    .logo .title h1 {
+        font-size: 2rem; /* уменьшение размера заголовка */
+    }
+
+    .logo .title p {
+        font-size: 1rem; /* уменьшение размера подзаголовка */
+    }
+
+    .dev-mode h1, .dev-mode h3 {
+        font-size: 1.5rem; /* уменьшение основного текста */
+        padding: 0 10px; /* небольшой внутренний отступ */
+    }
+
+    .logo {
+        flex-direction: column; /* логотип и текст будут вертикально */
+        gap: 8px;
+    }
+
+    .wrapper {
+        padding: 10px;
+    }
+}
