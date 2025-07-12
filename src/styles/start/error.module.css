@@ -1,0 +1,62 @@
+
+.errorWrapper {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    left: -85px;
+    top: 43px;
+    padding: 0 16px;
+    min-height: 47px;
+}
+
+.errorWrapperPhone {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    left: -325px;
+    top: 5px;
+    padding: 0 16px;
+    min-height: 47px;
+}
+
+.errorBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 216px;
+    height: auto;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.errorBackgroundPhone{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 321px;
+    height: auto;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.errorContent {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.errorIcon {
+    position: relative;
+    width: 24px;
+    height: 24px;
+}
+
+.errorText {
+    color: #2E374F;
+    font-weight: 600;
+}

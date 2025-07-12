@@ -1,0 +1,182 @@
+.chatBox {
+    position: absolute;
+    bottom: 6.5vw;
+    left: 11vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 9px;
+    background: var(--text-invert);
+    border-radius: 10px;
+    height: 531px;;
+    width: 449px;
+    gap: 5px;
+}
+
+.top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    border-radius: 6px;
+    padding: 4px;
+    background: var(--secondery_background);
+    flex: 0 0 auto;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.avatar{
+    border-radius: 34px;
+}
+
+.specialistName{
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.chat {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 5px;
+}
+
+.messageBox {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 420px;
+}
+
+.message {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    word-break: break-word;
+}
+
+.userMessage {
+    align-self: flex-end;
+    background-color: var(--blue-400);
+    color: var(--textColor);
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.specialistMessage {
+    align-self: flex-start;
+    background-color: var(--textColor);
+    color: var(--text-invert);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.sendMessage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    flex: 0 0 auto;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+}
+
+
+.sendMessage input {
+    width: 100%;
+    color: var(--textColor);
+    outline: none;
+    border: none;
+    height: 41px;
+    background: #F0F3F6;
+    padding: 0 90px 0 10px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: normal;
+    border-radius: 6px;
+}
+
+.sendMessage input::placeholder {
+    color: var(--textColor);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.sendMessage button {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    height: 41px;
+    padding:11px 23px;
+    background: var(--blue-400);
+    border: none;
+    border-radius: 6px;
+    color: var(--textColor);
+    font-size: 1rem;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+/* Tablet: от 768px до 1024px */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .chatBox {
+        width: 80vw;
+        height: 60vh;
+        bottom: 6.5vw;
+        left: 11vh;
+    }
+
+    .message {
+        font-size: 0.95rem;
+    }
+
+    .specialistName {
+        font-size: 0.95rem;
+    }
+}
+
+/* Desktop: от 1024px до 1440px */
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .chatBox {
+        width: 30vw;
+        height: 55vh;
+        bottom: 7.5vw;
+        left: 15.5vh;
+    }
+
+    .message {
+        font-size: 1rem;
+    }
+
+    .specialistName {
+        font-size: 1rem;
+    }
+}
+
+/* Large desktop: от 1440px и выше */
+@media (min-width: 1440px) {
+    .chatBox {
+        width: 449px;
+        height: 531px;
+        bottom: 6vw;
+        left: 13vh;
+    }
+
+    .message {
+        font-size: 1rem;
+    }
+
+    .specialistName {
+        font-size: 1rem;
+    }
+}
+

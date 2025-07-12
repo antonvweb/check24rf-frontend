@@ -1,0 +1,342 @@
+.account{
+    display: flex;
+    flex-direction: column;
+    flex: 0.9;
+    gap: 19px;
+    user-select: none;
+    min-height: 100%;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header__right {
+    margin-left: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 13px;
+}
+
+.mainAccount{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    height: 100%;
+    min-height: 0;
+}
+
+.mainAccount .top{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.welcome{
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: normal;
+    opacity: 0.8;
+}
+
+.mainAccount .top .description{
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.mainAccount .top:after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #6B6B6B;;
+}
+
+.mainAccountContent {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.mainSection{
+    flex: 74.95%;
+    display:flex;
+    flex-direction:column;
+    gap: 25px;
+    min-width:0;
+}
+
+.basicInformation, .cardSubscribe, .expensesPerMonth{
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background: #FEFEFE;
+    box-shadow: 0 4px 4px 1px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    height: 100%;
+}
+
+.basicInformation {
+    flex: 52.01%;
+}
+
+.subscription {
+    flex: 45.97%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.cardSubscribe{
+    flex: 77.66%;
+}
+
+.autoPayment{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    flex: 15.84%;
+    border-radius: 10px;
+    background: #FEFEFE;
+    box-shadow: 0 4px 4px 1px rgba(0, 0, 0, 0.25);
+    font-size: 1.3125rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.basicInformation .content{
+    flex: .9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.infoSection {
+    flex: 50.73%;
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.infoExpenses {
+    flex: 45.4%;
+}
+
+.titleWrapper, .payBtn{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: #2E374F;
+    flex: .1;
+}
+
+.title{
+    color: #FEFEFE;
+    font-size: 1.3125rem;
+    font-weight: 600;
+    line-height: normal;
+    padding: 11px 0 11px 18px;
+}
+
+.info{
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 0 18px;
+    height: 100%;
+}
+
+.mainInfo, .secondInfo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.secondInfo{
+    font-size: 1.0625rem;
+    opacity: 0.8;
+}
+
+.column{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.column:after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -15px;
+    width: 100%;
+    height: 1px;
+    background-color: #C2C2C2;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.progressBar{
+    position: relative;
+    width: 100%;
+    height: 12px;
+    background: #F0F3F6;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+}
+
+.progressBar:after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    width: 80%;
+    height: 8px;
+    border-radius: 15px;
+    background: #2E374F;
+}
+
+.changeBtns{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding: 0 18px 18px;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.changeBtns button{
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    background: #A7DFF1;
+    color: var(--textColor);
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    padding: 6px 13px;
+    cursor: pointer;
+}
+
+.extend{
+    display: flex;
+    flex-direction: row;
+    gap: 18px;
+    color: #2E374F;
+    font-size: 1.3125rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    align-items: center;
+}
+
+.extend button{
+    border-radius: 5px;
+    background: #F0F3F6;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    border: none;
+    outline: none;
+    padding: 5px 18px;
+    color: var(--textColor);
+    font-size: 1.0625rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.payBtn{
+    padding: 12px 0;
+}
+
+.payBtn{
+    outline: none;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    color: #FEFEFE;
+    font-size: 1.3125rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.reklama {
+    flex: 23.53%;        /* ровно 390 и не ужимается */
+    background:#f2f2f2;
+    box-shadow:0 0 8px rgba(0,0,0,.2);
+}
+
+.expenses{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    padding: 16px;
+}
+
+.amountOfExpenses{
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.columnExpenses{
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 7px 25px 20px;
+    border-radius: 6px;
+    background: #2E374F;
+    box-shadow: 0 4px 4px 1px rgba(0, 0, 0, 0.25);
+    color: #FFF;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleExpenses{
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.infoExpenses{
+    font-size: 1.875rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.grafications{
+    height: 100%;
+}

@@ -1,0 +1,26 @@
+.menu{
+    position: fixed;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 9999;
+    list-style: none;
+    padding: 4px 0;
+}
+
+.menuItem{
+    padding: 3px 100px 3px 9px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.menuItem:hover{
+    background-color: #E5E5E5;;
+}

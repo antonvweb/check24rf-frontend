@@ -1,0 +1,23 @@
+.message {
+    max-width: 70%;
+    padding: 10px 14px;
+    border-radius: 15px;
+    margin: 6px 0;
+    font-size: 0.9rem;
+    line-height: 1.3rem;
+    white-space: pre-wrap;
+}
+
+.user {
+    background-color: #F0F3F6;
+    color: #2E374F;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+.support {
+    background-color: #A1C0DE;
+    color: #2E374F;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+}

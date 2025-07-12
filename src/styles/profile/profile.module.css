@@ -1,0 +1,54 @@
+.profile{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--secondery_background);
+    z-index: 0;
+}
+
+.content{
+    position: relative;
+    display: flex;
+    padding: 13px;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 1;
+    color: var(--textColor);
+}
+
+.main{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100%;
+    gap: 7px;
+}
+
+.leftBox{
+    flex: .1;
+    display: flex;
+    flex-direction: column;
+    gap: 54px;
+    position: relative;
+}
+
+.leftBox main{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    height: 100%;
+}
+
+.reklama{
+    position: relative;
+    width: 96%;
+    height: 321px;
+    flex-shrink: 0;
+    aspect-ratio: 167/321;
+    background: #505050;
+    border-radius: 10px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}

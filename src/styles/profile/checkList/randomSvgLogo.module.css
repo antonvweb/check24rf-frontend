@@ -1,0 +1,11 @@
+.logo{
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background: #E6E9EB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 43px;
+}

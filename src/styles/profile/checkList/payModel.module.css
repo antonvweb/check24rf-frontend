@@ -1,0 +1,150 @@
+.payModel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 27px;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.payCheckList{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-radius: 6px;
+    max-height: 325px;
+    overflow-y: auto;
+    padding: 16px 15px 16px 16px;
+    border: 1px solid #2E374F;
+}
+
+.payCheckList .item{
+    display: grid;
+    grid-template-columns: 119px 175px 100px;
+    gap: 64px;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.payCheckList .item .date{
+    text-align: left;
+}
+
+.payCheckList .item .price{
+    text-align: right;
+}
+
+.payCheckList .salesManData{
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    text-align: left;
+}
+
+.functional{
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.resultPayment{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.paymentList{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.paymentSelect {
+    height: 54px;
+    border-radius: 6px;
+    border: 1px solid #2E374F;
+    background: #FFF;
+    padding-left: 15px;
+    font-size: 1.125rem;
+    color: #2E374F;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    outline: none;
+}
+
+
+.mailForTheCheck{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.mailForTheCheck input{
+    height: 54px;
+    border-radius: 6px;
+    border: 1px solid #2E374F;
+    background: #FFF;
+    padding-left: 15px;
+    font-size: 1.125rem;
+    color: #2E374F;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    outline: none;
+}
+
+.mailForTheCheck input::placeholder{
+    color: #2E374F;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.agreementsPayment{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.agreementsPayment .top{
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+.agreementsPayment .description{
+    margin-left: 50px;
+}
+
+.buyBtn{
+    border-radius: 6px;
+    background: #FF6700;
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 13px;
+    color: #FFF;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    cursor: pointer;
+}

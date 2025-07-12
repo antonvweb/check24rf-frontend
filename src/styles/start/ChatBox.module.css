@@ -1,0 +1,107 @@
+.svgBackground {
+    position: relative;
+}
+
+.svgBackground svg {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9;
+}
+
+.svgBackground.visible svg {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.svgBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 352px;
+    height: 532px;
+    opacity: 0;
+    transform: translateY(-92%) scale(1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.svgBackground.visible {
+    opacity: 1;
+    transform: translateY(-92%) scale(1);
+}
+
+.svgBackground .chat{
+    position: relative;
+    z-index: 10;
+    margin-bottom: 14%;
+    padding: 15px;
+}
+
+.chat textarea {
+    border: none;
+    border-radius: 5px;
+    background: #F0F3F6;
+    width: 100%;
+    font-family: "Inter", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #2E374F;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    max-height: 80px;
+    min-height: 40px;
+    line-height: 1.2rem;
+    resize: none;
+    outline: none;
+}
+
+.titleTech{
+    margin-bottom: auto;
+    z-index: 10;
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.titleTech .avatar{
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    background: #F0F3F6;
+}
+
+.titleTech p{
+    margin-top: auto;
+    color: #F0F3F6;
+    font-size: 1.05rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.titleTech:after{
+    content: "";
+    position: absolute;
+    top: 10%;
+    left: 4%;
+    width: 92%;
+    height: 2px;
+    background: #F0F3F6;
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+
+.chatMessages {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+    gap: 4px;
+    overflow-y: auto;
+    max-height: 380px;
+    z-index: 10;
+}

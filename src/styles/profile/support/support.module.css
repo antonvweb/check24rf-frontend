@@ -1,0 +1,302 @@
+.support {
+    display: flex;
+    flex-direction: column;
+    flex: 0.9;
+    gap: 19px;
+    user-select: none;
+    min-height: 100%;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header__right {
+    margin-left: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 13px;
+}
+
+.mainSupport {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    border-radius: 10px;
+    background: #FFF;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    height: 100%;
+    min-height: 0;
+}
+
+.chatBox{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 61.69%;
+    padding: 10px;
+    gap: 6px;
+    min-height: 0;
+}
+
+.specialist{
+    border-radius: 6px;
+    background: #F0F3F6;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: normal;
+    padding: 4px;
+}
+
+.avatar{
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+}
+
+.chat{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.messages{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #2E374F #F0F3F6;
+    min-height: 0;
+}
+
+.messages::-webkit-scrollbar {
+    width: 8px;
+    background: #F0F3F6;
+}
+
+.messages::-webkit-scrollbar-track {
+    background: #F0F3F6;
+    border-radius: 2px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+    background: #2E374F;
+    border-radius: 2px;
+}
+
+.messages::-webkit-scrollbar-button {
+    display: none;
+}
+
+.sendMessage{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+.sendMessage input{
+    border-radius: 6px;
+    background: #F0F3F6;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 9px 12px;
+    color: #2E374F;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.sendMessage input::placeholder {
+    color: #2E374F;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.sendMessage button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 6px;
+    background: #2E374F;
+    color: #FFF;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 9px;
+}
+
+.appeals{
+    flex: 36.88%;
+    border-radius: 10px;
+    background: #2E374F;
+    color: #FFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.top{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    padding: 18px;
+    font-size: 1.1875rem;
+    font-weight: 500;
+}
+
+.top:after{
+    content: "";
+    position: absolute;
+    left: 18px;
+    bottom: 0;
+    width: 93%;
+    height: 1px;
+    background: #FFF;
+}
+
+.appealsList{
+    margin-top: 9px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 9px;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    min-height: 0;
+}
+
+.appeals button{
+    margin: 14px;
+    border-radius: 6px;
+    background: #F0F3F6;
+    border: none;
+    outline: none;
+    padding: 11px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2E374F;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.appeals button .content{
+    display: flex;
+    flex-direction: row;
+    gap: 13px;
+    justify-content: center;
+}
+
+
+.appeal{
+    background: #3E4966;
+    padding: 9px 18px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.appeal .content{
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.appeal .content .title{
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+
+.appeal .content .description{
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    opacity: 0.8;
+}
+
+.messageWrapper {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 12px;
+    gap: 4px;
+}
+
+.user {
+    justify-content: flex-end;
+}
+
+.admin {
+    justify-content: flex-start;
+}
+
+.messageBubble {
+    max-width: 60%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.user .messageBubble {
+    background: #A7DFF1;
+    color: #000;
+}
+
+.admin .messageBubble {
+    background: #2E374F;
+    color: #fff;
+}
+
+.text {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.time {
+    align-self: flex-end;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: normal;
+    opacity: 0.7;
+}
+

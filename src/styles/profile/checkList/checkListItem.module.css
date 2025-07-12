@@ -1,0 +1,43 @@
+.listItem {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 15px;
+    padding-right: 4px;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.listItem:hover {
+    background: #ececec;
+}
+
+.listItem img {
+    margin-right: 43px;
+}
+
+.characteristic {
+    display: grid;
+    grid-template-columns: 1.95fr 2.37fr 2.35fr 2.2fr 1.13fr;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+
+.selectListItem{
+    background: #A7DFF1;
+}
+
+.selectListItem:hover{
+    background: #8cdcf6;
+}
+
+@media (max-width: 1280px) {
+    .characteristic {
+        grid-template-columns: 1.6fr 2fr 2fr 1.8fr 1fr;
+    }
+}
+

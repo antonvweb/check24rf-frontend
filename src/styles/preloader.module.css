@@ -1,0 +1,74 @@
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100vw;
+    height: 100vh;
+    background-color: #F0F3F6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preloaderWrapper {
+    position: relative;
+    width: 110px;
+    height: 110px;
+}
+
+.staticCircle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 110px;
+    height: 110px;
+    pointer-events: none;
+}
+
+.spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 110px;
+    height: 110px;
+    animation: spinner-rotate 2s linear infinite;
+}
+
+.track {
+    stroke: #E5E5E5;
+}
+
+.path {
+    stroke: #FF6700;
+    stroke-linecap: round;
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+    animation: spinner-dash 1.5s ease-in-out infinite;
+}
+
+/* Вращение оранжевой дуги */
+@keyframes spinner-rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Анимация дуги */
+@keyframes spinner-dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 75, 150;
+        stroke-dashoffset: -25;
+    }
+    100% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: -125;
+    }
+}
