@@ -21,7 +21,7 @@ jobs:
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H 217.199.252.124 >> ~/.ssh/authorized_keys
+          ssh-keyscan -H 217.199.252.124 >> ~/.ssh/known_hosts
 
       - name: Sync project to server
         run: |
