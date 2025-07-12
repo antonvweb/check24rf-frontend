@@ -1,0 +1,39 @@
+name: Deploy to test server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 217.199.252.124 >> ~/.ssh/known_hosts
+
+      - name: Sync project to server
+        run: |
+          rsync -avz --delete --exclude node_modules ./ root@217.199.252.124:/root/www/test/check24rf/
+
+      - name: Install dependencies and restart app
+        run: |
+          ssh root@217.199.252.124 << 'EOF'
+            cd /root/www/test/check24rf/
+            npm install
+            # убиваем текущий dev-сервер (грубовато, но работает)
+            pkill -f "npm run dev" || true
+            # запускаем dev-сервер в фоне
+            nohup npm run dev > output.log 2>&1 &
+          EOF
