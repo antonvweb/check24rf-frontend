@@ -222,7 +222,8 @@ export default function Home() {
             </div>
           </div>
           <div className="dev-mode">
-            <h1>Сайт находится в <br/> разработке</h1>
+            <h1>Сайт находится в <br/> разработке.</h1>
+            <p>Ожидайте релиза</p>
           </div>
         </div>
       </div>
