@@ -94,7 +94,7 @@
 
 .btnKey::after {
     content: "";
-    background: url('public/keyArrow.svg') no-repeat center / contain;
+    background: url('/keyArrow.svg') no-repeat center / contain;
     display: inline-block;
     width: 12px;
     height: 8px;
