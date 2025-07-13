@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from "@/styles/start/start.module.css";
 import Image from "next/image";
+import Preloader from "@/components/Preloader";
 
 const isMobileDevice = (): boolean => {
   return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -17,7 +18,7 @@ export default function Home() {
 
   if (isMobile === null) {
     // Пока не определился тип устройства — можно показывать загрузку
-    return <div>Загрузка...</div>;
+    return <Preloader />;
   }
 
   if (isMobile) {
