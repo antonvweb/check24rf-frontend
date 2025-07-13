@@ -1,7 +1,7 @@
 'use client';
 
 import { SmartCaptcha } from '@yandex/smart-captcha';
-import { CAPTCHA_SITE_KEY, CAPTCHA_VERIFY_URL } from "@/components/types/constants";
+import { CAPTCHA_SITE_KEY } from "@/components/types/constants";
 import styles from "@/styles/start/start.module.css";
 
 export const ComponentWithCaptcha = ({ setIsCaptchaVerified }: { setIsCaptchaVerified: (b: boolean) => void }) => {
