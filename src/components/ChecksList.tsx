@@ -90,6 +90,7 @@ export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksList
                             <CalendarModel />
                         )}
                         {<SortControls setSortKey={setSortKey} setOrderDir={setOrderDir} /> }
+                        <div className={styles.stub}/>
                     </div>
                     <div className={styles.list}>
                         {items.map((item) => (

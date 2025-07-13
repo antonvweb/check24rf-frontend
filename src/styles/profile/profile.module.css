@@ -6,7 +6,7 @@
     z-index: 0;
 }
 
-.content{
+.content {
     position: relative;
     display: flex;
     padding: 13px;
@@ -16,7 +16,11 @@
     gap: 20px;
     z-index: 1;
     color: var(--textColor);
+
+    max-width: 100%; /* по умолчанию */
+    margin: 0 auto;   /* центрирование */
 }
+
 
 .main{
     display: flex;
@@ -51,4 +55,14 @@
     background: #505050;
     border-radius: 10px;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+
+@media (min-width: 2560px) {
+    .content {
+        max-width: 2560px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 30px;
+    }
 }

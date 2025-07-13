@@ -55,7 +55,6 @@ export const BalanceChart: React.FC = () => {
 
     const options: ChartOptions<'line'> = {
         responsive: true,
-        maintainAspectRatio: false,
         scales: {
             x: {
                 ticks: { color: '#fff' },
@@ -108,15 +107,21 @@ export const BalanceChart: React.FC = () => {
                 background: '#2E374F',
                 borderRadius: '6px',
                 padding: '10px',
-                height: '268px',
-                width: '877px',
+                width: '100%', // ❗️ Вместо fixed-width
+                height: '99%',
                 position: 'relative',
             }}
+
         >
             <div style={{ color: '#fff', fontSize: '0.75rem', fontWeight: 400, opacity: .6, position: 'absolute',
                 top: 10,
                 left: 10,}}>Март 2025</div>
-            <Line data={data} options={options} ref={chartRef} style={{overflow: 'visible'}} />
+            <Line
+                data={data}
+                options={options}
+                ref={chartRef}
+                style={{ overflow: 'visible', width: '100%', height: '100%' }}
+            />
         </div>
     );
 };

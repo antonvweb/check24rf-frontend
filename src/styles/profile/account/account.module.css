@@ -70,11 +70,11 @@
 }
 
 .mainSection{
-    flex: 74.95%;
+    flex: 1 1 75%;
+    min-width: 0;
     display:flex;
     flex-direction:column;
     gap: 25px;
-    min-width:0;
 }
 
 .basicInformation, .cardSubscribe, .expensesPerMonth{
@@ -277,9 +277,6 @@
 
 .payBtn{
     padding: 12px 0;
-}
-
-.payBtn{
     outline: none;
     border: none;
     align-items: center;
@@ -292,7 +289,7 @@
 }
 
 .reklama {
-    flex: 23.53%;        /* ровно 390 и не ужимается */
+    flex: 0 0 25%;        /* ровно 390 и не ужимается */
     background:#f2f2f2;
     box-shadow:0 0 8px rgba(0,0,0,.2);
 }
@@ -302,12 +299,15 @@
     flex-direction: row;
     gap: 30px;
     padding: 16px;
+    flex: 1;
 }
 
 .amountOfExpenses{
     display: flex;
     flex-direction: column;
     gap: 28px;
+    height: 100%;
+    justify-content: center;
 }
 
 .columnExpenses{
@@ -340,3 +340,101 @@
 .grafications{
     height: 100%;
 }
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .mainAccountContent {
+        gap: 20px;
+    }
+
+    .info {
+        padding: 0 14px;
+    }
+
+    .description {
+        font-size: 1.75rem;
+    }
+
+    .infoExpenses {
+        font-size: 1.5rem;
+    }
+
+    .reklama {
+        flex: none;
+        width: 350px;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 2559px) {
+    .mainSection {
+        flex: 70%;
+    }
+
+    .reklama {
+        flex: 30%;
+    }
+
+    .info {
+        padding: 0 30px;
+    }
+
+    .expenses {
+        gap: 40px;
+    }
+}
+
+@media (min-width: 2560px) {
+    .title{
+        font-size: 2rem;
+    }
+
+    .mainInfo, .secondInfo {
+        font-size: 2rem;
+    }
+
+    .info {
+        padding: 0 40px;
+    }
+
+    .changeBtns button{
+        font-size: 1.6rem;
+    }
+
+    .row{
+        font-size: 2rem;
+    }
+
+    .extend{
+        font-size: 1.5rem;
+    }
+
+    .extend button{
+        font-size: 1.7rem;
+    }
+
+    .payBtn{
+        font-size: 1.6rem;
+    }
+
+    .autoPayment{
+        font-size: 2rem;
+    }
+
+    .expenses {
+        gap: 50px;
+    }
+
+    .description {
+        font-size: 2.25rem;
+    }
+
+    .titleExpenses{
+        font-size: 2rem;
+    }
+
+    .infoExpenses {
+        font-size: 2.7rem;
+    }
+}
+
+
+

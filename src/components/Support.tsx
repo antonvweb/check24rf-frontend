@@ -6,7 +6,7 @@ import ChangeTheme from "@/components/ChangeTheme";
 import Image from "next/image";
 import { Appeal } from "@/components/support/Appeal";
 import { Message } from "@/components/support/Message";
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 interface ChatMessage {
     from: "user" | "admin";
@@ -17,11 +17,22 @@ interface ChatMessage {
 export const Support = () => {
     const [inputValue, setInputValue] = useState("");
     const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
     const getCurrentTime = (): string => {
         const now = new Date();
         return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     };
+
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const handleSend = (e: React.FormEvent) => {
         e.preventDefault();
@@ -68,10 +79,11 @@ export const Support = () => {
                     </div>
 
                     <div className={styles.chat}>
-                        <div className={styles.messages}>
+                        <div className={styles.messages} ref={messagesContainerRef}>
                             {messages.map((msg, index) => (
                                 <Message key={index} from={msg.from} text={msg.text} time={msg.time} />
                             ))}
+                            <div ref={messagesEndRef} />
                         </div>
 
                         <form className={styles.sendMessage} onSubmit={handleSend}>

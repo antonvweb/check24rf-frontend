@@ -39,7 +39,7 @@
     flex-direction: column;
     flex: 61.69%;
     padding: 10px;
-    gap: 6px;
+    gap: 10px;
     min-height: 0;
 }
 
@@ -77,28 +77,9 @@
     gap: 15px;
     flex: 1;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #2E374F #F0F3F6;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     min-height: 0;
-}
-
-.messages::-webkit-scrollbar {
-    width: 8px;
-    background: #F0F3F6;
-}
-
-.messages::-webkit-scrollbar-track {
-    background: #F0F3F6;
-    border-radius: 2px;
-}
-
-.messages::-webkit-scrollbar-thumb {
-    background: #2E374F;
-    border-radius: 2px;
-}
-
-.messages::-webkit-scrollbar-button {
-    display: none;
 }
 
 .sendMessage{
