@@ -33,8 +33,6 @@ jobs:
             cd /root/www/test/check24rf/
             npm install
             npm run build
-            # убиваем текущий production-сервер (например, Next.js start)
             pkill -f "npm run start" || true
-            # запускаем production-сервер в фоне и пишем логи
-            nohup npm run start > output.log 2>&1 &
+            nohup npm run start -- -p 4000 > output.log 2>&1 &
           EOF
