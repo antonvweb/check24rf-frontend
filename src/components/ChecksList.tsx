@@ -25,6 +25,8 @@ interface ChecksListProps {
     onArchiveToggle: (id: number) => Promise<void>;
 }
 
+
+
 export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksListProps) {
     const [contextMenu, setContextMenu] = useState<MenuState>(null);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
