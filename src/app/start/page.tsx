@@ -128,7 +128,7 @@ export default function Start() {
                   <div className={styles.startRightBox}>
                       <div className={styles.registerModal}>
                           <div>
-                              <span className={styles.loginTitle}>Вход по номеру телефона</span>
+                              <span className={styles.loginTitle}>Вход по номеру телефана</span>
                               <div className={styles.numberPhone}>
                                   <span className={styles.numberPhoneLabel}>Номер телефона</span>
                                   <form onSubmit={handleFormPhoneSubmit} className={styles.numberPhoneForm}>
