@@ -31,8 +31,19 @@ jobs:
         run: |
           ssh root@217.199.252.124 << 'EOF'
             cd /root/www/test/check24rf/
+
+            echo "📦 Установка зависимостей..."
             npm install
+
+            echo "🔧 Сборка проекта..."
             npm run build
-            pkill -f "npm run start" || true
+
+            echo "🛑 Завершение процессов, использующих порт 4000..."
+            for pid in $(ss -tulnp | grep ':4000' | awk -F 'pid=' '{print $2}' | awk -F ',' '{print $1}'); do
+              echo "  ➤ Убиваем процесс PID=$pid"
+              kill -9 $pid || true
+            done
+
+            echo "🚀 Запуск приложения на порту 4000..."
             nohup npm run start -- -p 4000 > output.log 2>&1 &
           EOF
