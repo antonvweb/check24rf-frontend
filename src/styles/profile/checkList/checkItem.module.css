@@ -199,7 +199,7 @@
 }
 
 .qrCode {
-    background: url("public/qr-code_1.png") no-repeat center center;
+    background: url("/qr-code_1.png") no-repeat center center;
     background-size: contain;
     flex-shrink: 0;
     width: 240px;
