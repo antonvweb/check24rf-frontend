@@ -163,7 +163,7 @@
     height: 100%;
 }
 
-.mainInfo, .secondInfo{
+.mainInfo{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -174,8 +174,14 @@
 }
 
 .secondInfo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     font-size: 1.0625rem;
     opacity: 0.8;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 .column{
@@ -387,8 +393,12 @@
         font-size: 2rem;
     }
 
-    .mainInfo, .secondInfo {
+    .mainInfo {
         font-size: 2rem;
+    }
+
+    .secondInfo{
+        font-size: 1.7rem;
     }
 
     .info {
@@ -396,7 +406,7 @@
     }
 
     .changeBtns button{
-        font-size: 1.6rem;
+        font-size: 1.45rem;
     }
 
     .row{
