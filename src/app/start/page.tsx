@@ -16,20 +16,6 @@
     import Preloader from "@/components/Preloader";
     import {PersonalDataModel} from "@/components/ui/loginUI/PersonalDataModel";
 
-    function isLoggedInValid() {
-        if (typeof window === "undefined") return false;
-
-        const data = localStorage.getItem("isLoggedIn");
-        if (!data) return false;
-
-        try {
-            const parsed = JSON.parse(data);
-            return parsed.value && parsed.expiresAt > Date.now();
-        } catch {
-            return false;
-        }
-    }
-
     export default function Start() {
         const [phone, setPhone] = useState('');
         const [isPhoneValid, setIsPhoneValid] = useState(false);
@@ -42,7 +28,6 @@
         const inputPhoneRef = useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
         const [isLoading, setIsLoading] = useState(true);
         const [isOpenPersonalData, setIsOpenPersonalData] = useState(false);
-        const [shouldRender, setShouldRender] = useState(false);
 
         const { seconds, start, reset} = useTimer(10);
         const {  handleInput,
@@ -55,38 +40,61 @@
             setSuccessTimer} = useCodeInput();
 
         useEffect(() => {
-            const checkAuth = () => {
-                if (typeof window === "undefined") return;
+            const handleLoad = () => {
+                setIsLoading(false);
+            };
 
-                if (isLoggedInValid()) {
-                    router.replace('/profile');
-                } else {
-                    setShouldRender(true);
+            // Если страница уже загружена полностью — сразу скрываем прелоадер
+            if (document.readyState === "complete") {
+                handleLoad();
+            } else {
+                // Иначе ждем события полной загрузки
+                window.addEventListener("load", handleLoad);
+            }
+
+            // Очистка обработчика при размонтировании
+            return () => {
+                window.removeEventListener("load", handleLoad);
+            };
+        }, []);
+
+        useEffect(() => {
+            const images = document.images;
+            let loadedCount = 0;
+            const totalImages = images.length;
+
+            if (totalImages === 0) {
+                setIsLoading(false);
+                return;
+            }
+
+            const onImageLoad = () => {
+                loadedCount++;
+                if (loadedCount === totalImages) {
+                    setIsLoading(false);
                 }
             };
 
-            if (document.readyState === "complete") {
-                checkAuth();
-            } else {
-                window.addEventListener("load", checkAuth);
+            for (const img of images) {
+                if (img.complete) {
+                    loadedCount++;
+                } else {
+                    img.addEventListener("load", onImageLoad);
+                    img.addEventListener("error", onImageLoad);
+                }
             }
 
-            return () => window.removeEventListener("load", checkAuth);
-        }, [router]);
-
-        useEffect(() => {
-            const handlePageLoad = () => {
+            // Если все изображения уже загружены
+            if (loadedCount === totalImages) {
                 setIsLoading(false);
-            };
-
-            if (document.readyState === "complete") {
-                setIsLoading(false);
-            } else {
-                window.addEventListener("load", handlePageLoad);
             }
 
+            // Очистка обработчиков
             return () => {
-                window.removeEventListener("load", handlePageLoad);
+                for (const img of images) {
+                    img.removeEventListener("load", onImageLoad);
+                    img.removeEventListener("error", onImageLoad);
+                }
             };
         }, []);
 
@@ -113,7 +121,7 @@
 
         useEffect(() => {
             const goToProfile = async () => {
-                await router.prefetch('/profile');
+                router.prefetch('/profile');
                 router.push('/profile');
             };
 
@@ -138,7 +146,7 @@
             }
         }, [reset, seconds]);
 
-        if (isLoading || !shouldRender) return <Preloader />;
+        if (isLoading) return <Preloader />;
 
         return (
         <main className={styles.mainStart}>
