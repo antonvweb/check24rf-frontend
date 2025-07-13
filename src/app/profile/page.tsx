@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import styles from '../../styles/profile/profile.module.css';
 import { ActiveChecks } from "@/components/ActiveChecks";
 import Logo from "@/components/Logo";
@@ -9,8 +9,9 @@ import { ArchiveChecks } from "@/components/ArchiveChecks";
 import {Account} from "@/components/Account";
 import {Notifications} from "@/components/Notifications";
 import {Support} from "@/components/Support";
+import { withAuthProtection } from "@/hoc/withAuthProtection";
 
-export default function Profile() {
+function Profile() {
     const [activeTab, setActiveTab] = useState('checks');
 
     useEffect(() => {
@@ -46,3 +47,5 @@ export default function Profile() {
         </div>
     );
 }
+
+export default withAuthProtection(Profile);
