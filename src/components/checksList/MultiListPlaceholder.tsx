@@ -35,7 +35,7 @@ export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
                 <div className={styles.multiCharacteristics}>
                     <section className={styles.multiChecksList}>
                         <div className={styles.top}>
-                            <span>ПРОДАВЕЦ</span>
+                            <span>ПРОДАВЕц</span>
                             <span>ПОКУПАТЕЛЬ</span>
                             <span>СУММА, ₽</span>
                         </div>
