@@ -55,6 +55,7 @@ export const BalanceChart: React.FC = () => {
 
     const options: ChartOptions<'line'> = {
         responsive: true,
+        maintainAspectRatio: false,
         scales: {
             x: {
                 ticks: { color: '#fff' },
@@ -107,8 +108,9 @@ export const BalanceChart: React.FC = () => {
                 background: '#2E374F',
                 borderRadius: '6px',
                 padding: '10px',
-                width: '100%', // ❗️ Вместо fixed-width
-                height: '99%',
+                width: '100%',
+                height: '100%',
+                maxHeight: '400px',
                 position: 'relative',
             }}
 

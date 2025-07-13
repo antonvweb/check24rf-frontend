@@ -344,6 +344,10 @@
 }
 
 .grafications{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
     height: 100%;
 }
 
@@ -438,11 +442,11 @@
     }
 
     .titleExpenses{
-        font-size: 2rem;
+        font-size: 1.6rem;
     }
 
     .infoExpenses {
-        font-size: 2.7rem;
+        font-size: 2.3rem;
     }
 }
 
