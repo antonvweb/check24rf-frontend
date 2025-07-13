@@ -12,7 +12,7 @@ export function useLoadReceipts({ endpoint, mode }: UseLoadReceiptsParams) {
     const [offset, setOffset] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const limit = 20;
+    const limit = 30;
     const [sortKey, setSortKey] = useState<string>("date");
     const [orderDir, setOrderDir] = useState<"asc" | "desc">("desc");
 

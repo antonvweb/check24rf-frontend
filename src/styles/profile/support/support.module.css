@@ -281,3 +281,142 @@
     opacity: 0.7;
 }
 
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .chatBox {
+        flex: 60%;
+        padding: 8px;
+    }
+
+    .appeals {
+        flex: 40%;
+    }
+
+    .messageBubble {
+        max-width: 70%;
+    }
+
+    .text {
+        font-size: 0.9375rem;
+    }
+
+    .top {
+        font-size: 1.0625rem;
+        padding: 16px;
+    }
+
+    .appeal .content .title {
+        font-size: 1.125rem;
+    }
+
+    .appeal .content .description {
+        font-size: 0.9375rem;
+    }
+
+    .sendMessage input {
+        font-size: 0.8125rem;
+    }
+
+    .sendMessage button {
+        font-size: 0.8125rem;
+        padding: 8px;
+    }
+}
+
+
+@media (min-width: 1441px) and (max-width: 2559px) {
+    .chatBox {
+        flex: 62%;
+        padding: 12px;
+    }
+
+    .appeals {
+        flex: 38%;
+    }
+
+    .messageBubble {
+        max-width: 65%;
+    }
+
+    .text {
+        font-size: 1rem;
+    }
+
+    .top {
+        font-size: 1.25rem;
+        padding: 20px;
+    }
+
+    .appeal .content .title {
+        font-size: 1.25rem;
+    }
+
+    .appeal .content .description {
+        font-size: 1rem;
+    }
+
+    .sendMessage input {
+        font-size: 0.875rem;
+    }
+
+    .sendMessage button {
+        font-size: 0.875rem;
+        padding: 9px 12px;
+    }
+}
+
+
+@media (min-width: 2560px) {
+    .chatBox {
+        flex: 65%;
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .appeals {
+        flex: 35%;
+    }
+
+    .specialist {
+        font-size: 1.125rem;
+    }
+
+    .text {
+        font-size: 1.125rem;
+    }
+
+    .messageBubble {
+        max-width: 55%;
+        padding: 14px 16px;
+        gap: 6px;
+    }
+
+    .top {
+        font-size: 1.5rem;
+        padding: 24px;
+    }
+
+    .appeal .content .title {
+        font-size: 1.5rem;
+    }
+
+    .appeal .content .description {
+        font-size: 1.125rem;
+    }
+
+    .sendMessage input {
+        font-size: 1rem;
+        padding: 12px 16px;
+    }
+
+    .sendMessage button {
+        font-size: 1rem;
+        padding: 12px 16px;
+    }
+
+    .avatar {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+

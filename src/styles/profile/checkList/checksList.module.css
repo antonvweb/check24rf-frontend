@@ -42,6 +42,7 @@
     flex: 0.7;
     gap: 20px;
     padding-top: 15px;
+    height: 100%;
 }
 
 .top {
@@ -112,30 +113,11 @@
     flex-direction: column;
     gap: 2px;
     flex: 1;
-    min-height: 0;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #2E374F #F0F3F6;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    min-height: 0;
     padding-bottom: 15px;
-}
-
-.list::-webkit-scrollbar {
-    width: 8px;
-    background: #F0F3F6;
-}
-
-.list::-webkit-scrollbar-track {
-    background: #F0F3F6;
-    border-radius: 2px;
-}
-
-.list::-webkit-scrollbar-thumb {
-    background: #2E374F;
-    border-radius: 2px;
-}
-
-.list::-webkit-scrollbar-button {
-    display: none;
 }
 
 .loadMoreBtn {
@@ -154,50 +136,83 @@
     cursor: pointer;
 }
 
-
-/* ==== Desktop: 1024px – 1440px ==== */
-@media (min-width: 1025px) and (max-width: 1440px)  {
-    .calendar {
-        margin-right: 30px;
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .mainCheckList {
+        flex-direction: column;
+        padding: 20px;
     }
 
     .sortedKey {
-        grid-template-columns: 1.6fr 2fr 2fr 1.8fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+        font-size: 0.9rem;
     }
 
-    .header__left {
-        gap: 20px;
+    .calendar {
+        margin-right: 20px;
     }
 
     .leftBoxCheckList {
         flex: 1;
         padding-top: 10px;
     }
-}
 
-/* ==== Large Desktop: 1440px – 2560px ==== */
-@media (min-width: 1440px) and (max-width: 2559.98px) {
-    .sortedKey {
-        grid-template-columns: 1fr 1.5fr 1fr 0.7fr 1fr;
-    }
-
-    .leftBoxCheckList {
-        gap: 25px;
+    .header__left {
+        gap: 15px;
     }
 
     .btnKey {
-        font-size: 1.125rem;
+        font-size: 1rem;
+    }
+
+    .loadMoreBtn {
+        width: 160px;
+        font-size: 18px;
     }
 }
 
-/* ==== Ultra-Wide: >2560px ==== */
+@media (min-width: 1441px) and (max-width: 2559px) {
+    .mainCheckList {
+        padding: 30px;
+    }
+
+    .sortedKey {
+        grid-template-columns: .85fr 1.2fr 1fr .5fr 1fr;
+        gap: 10px;
+    }
+
+    .calendar {
+        margin-right: 35px;
+        padding: 6px;
+    }
+
+    .btnKey {
+        font-size: 1.1rem;
+    }
+
+    .leftBoxCheckList {
+        padding-top: 15px;
+    }
+
+    .loadMoreBtn {
+        width: 180px;
+        font-size: 20px;
+    }
+}
+
+
 @media (min-width: 2560px) {
     .mainCheckList {
         gap: 25px;
     }
 
+    .top{
+        padding-left: 30px;
+    }
+
     .sortedKey {
-        grid-template-columns: 1.2fr 1.8fr 1.2fr 0.8fr 1.2fr;
+        grid-template-columns: 1fr 1.5fr 1.2fr 0.7fr 1.3fr;
+        font-size: 1.1rem;
+        gap: 15px;
     }
 
     .btnKey {
@@ -205,11 +220,13 @@
     }
 
     .loadMoreBtn {
-        width: 280px;
+        width: 240px;
         font-size: 24px;
+        padding: 10px 0;
     }
 
-    .leftBoxCheckList {
-        gap: 30px;
+    .header__left,
+    .header__right {
+        gap: 25px;
     }
 }

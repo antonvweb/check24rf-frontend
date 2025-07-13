@@ -18,7 +18,7 @@ export function SortControls({ setSortKey, setOrderDir }: SortControlsProps) {
             <button className={styles.btnKey} id="salesman" onClick={() => toggleOrder("salesman")}>Продавец</button>
             <button className={styles.btnKey} id="buyer" onClick={() => toggleOrder("buyer")}>Покупатель</button>
             <span>ИНН</span>
-            <button className={styles.btnKey} id="price" onClick={() => toggleOrder("price")} style={{marginRight: '66px'}}>Стоимость</button>
+            <button className={styles.btnKey} id="price" onClick={() => toggleOrder("price")}>Стоимость</button>
         </div>
     );
 }

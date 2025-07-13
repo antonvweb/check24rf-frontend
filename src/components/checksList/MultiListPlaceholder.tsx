@@ -1,4 +1,4 @@
-import styles from '../../styles/profile/checkList/checkItem.module.css';
+import styles from '@/styles/profile/checkList/checkItem.module.css';
 import {CheckItemProps} from "@/components/types/interfaces";
 import { PayModel } from "@/components/ui/profileUI/PayModel";
 import {useEffect, useState} from "react";

@@ -32,6 +32,7 @@
     flex-direction: column;
     gap: 22px;
     padding: 19px;
+    height: 100%;
 }
 
 .top, .center, .data, .result {
@@ -94,34 +95,14 @@
     display: flex;
     flex-direction: column;
     gap: 22px;
+    flex: 1;
     overflow-y: auto;
-    height: 580px;
-    scrollbar-width: thin;
-    scrollbar-color: #2E374F #F0F3F6;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    min-height: 0;
     padding-right: 15px;
     box-sizing: content-box;
 }
-
-.characteristics::-webkit-scrollbar {
-    padding-left: 10px;
-    width: 8px;
-    background: #F0F3F6;
-}
-
-.characteristics::-webkit-scrollbar-track {
-    background: #F0F3F6;
-    border-radius: 2px;
-}
-
-.characteristics::-webkit-scrollbar-thumb {
-    background: #2E374F;
-    border-radius: 2px;
-}
-
-.characteristics::-webkit-scrollbar-button {
-    display: none;
-}
-
 .section1, .section2, .section3, .section4 {
     display: flex;
     flex-direction: column;
@@ -135,9 +116,10 @@
 
 .section1 .top, .section1 .data {
     display: grid;
-    grid-template-columns: 2fr .6fr 1fr;
+    grid-template-columns: 2fr 0.6fr 1fr;
     gap: 20px;
 }
+
 
 .section1 .top{
     opacity: 0.75;
@@ -217,7 +199,7 @@
 }
 
 .qrCode {
-    background: url("/qr-code_1.png") no-repeat center center;
+    background: url("public/qr-code_1.png") no-repeat center center;
     background-size: contain;
     flex-shrink: 0;
     width: 240px;
@@ -270,10 +252,12 @@
     height: 100%;
 }
 
-.multiChecksList .top, .itemChecksList .item{
+.multiChecksList .top,
+.itemChecksList .item {
     display: grid;
-    grid-template-columns: 174px 144px 130px;
+    grid-template-columns: 1.74fr 1.44fr 1.3fr;
 }
+
 
 .multiChecksList .top span:nth-child(2), .itemChecksList .item .buyer{
     text-align: center;
@@ -387,3 +371,108 @@
     backdrop-filter: blur(2px);
     z-index: 9998;                  /* ниже PayModel (9999) */
 }
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .checkItem {
+        flex: 0.4;
+        max-width: 450px;
+    }
+
+    .top .center span:first-child {
+        font-size: 1.75rem;
+    }
+
+    .top .center span:last-child {
+        font-size: 1.125rem;
+    }
+
+    .download {
+        font-size: 1.5rem;
+        padding: 6px 35px;
+    }
+
+    .qrCode {
+        width: 200px;
+        height: 200px;
+    }
+
+    .multiChecksList .top,
+    .itemChecksList .item {
+        grid-template-columns: 1.6fr 1.3fr 1.1fr;
+    }
+
+    .btnBottom .buyChecks {
+        font-size: 0.875rem;
+        padding: 10px 18px;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 2559px) {
+    .checkItem {
+        flex: 0.3;
+        max-width: 500px;
+    }
+
+    .top .center span:first-child {
+        font-size: 2rem;
+    }
+
+    .top .center span:last-child {
+        font-size: 1.25rem;
+    }
+
+    .download {
+        font-size: 1.75rem;
+        padding: 6px 41px;
+    }
+
+    .qrCode {
+        width: 240px;
+        height: 239px;
+    }
+
+    .multiChecksList .top,
+    .itemChecksList .item {
+        grid-template-columns: 1.74fr 1.44fr 1.3fr;
+    }
+
+    .btnBottom .buyChecks {
+        font-size: 1rem;
+        padding: 11px 20px;
+    }
+}
+
+@media (min-width: 2560px) {
+    .checkItem {
+        flex: 0.25;
+        max-width: 600px;
+    }
+
+    .top .center span:first-child {
+        font-size: 2.25rem;
+    }
+
+    .top .center span:last-child {
+        font-size: 1.5rem;
+    }
+
+    .download {
+        font-size: 2rem;
+        padding: 10px 50px;
+    }
+
+    .qrCode {
+        width: 300px;
+        height: 300px;
+    }
+
+    .multiChecksList .top, .itemChecksList .item {
+        grid-template-columns: 2fr 1.6fr 1.5fr;
+    }
+
+    .btnBottom .buyChecks {
+        font-size: 1.125rem;
+        padding: 14px 24px;
+    }
+}
+

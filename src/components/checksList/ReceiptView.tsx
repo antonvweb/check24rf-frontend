@@ -1,5 +1,5 @@
 
-import styles from '../../styles/profile/checkList/checkItem.module.css';
+import styles from '@/styles/profile/checkList/checkItem.module.css';
 import {Receipt} from "@/components/types/interfaces";
 import {ContextMenuSimple} from "@/components/ui/profileUI/ContextMenuSimple";
 import {useState} from "react";

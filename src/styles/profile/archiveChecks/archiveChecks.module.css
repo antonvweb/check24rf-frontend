@@ -178,6 +178,7 @@
     border-radius: 5px;
     outline: none;
     border: none;
+    cursor: pointer;
 }
 
 .unArchiveItem{
@@ -187,3 +188,56 @@
 .download{
     background: #FF6700;
 }
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .archiveItem {
+        width: 260px;
+        height: 320px;
+    }
+
+    .mainArchiveChecks {
+        padding: 20px;
+    }
+
+    .archives {
+        gap: 20px;
+    }
+}
+
+
+@media (min-width: 1441px) and (max-width: 2559px) {
+    .archiveItem {
+        width: 330px;
+        height: 370px;
+    }
+
+    .mainArchiveChecks {
+        padding: 40px;
+    }
+
+    .titleMonth {
+        font-size: 1rem;
+    }
+}
+
+
+@media (min-width: 2560px) {
+    .archiveItem {
+        width: 400px;
+        height: 400px;
+    }
+
+    .title span {
+        font-size: 1.2rem;
+    }
+
+    .btnFunc button {
+        font-size: 1.1rem;
+        padding: 6px 10px;
+    }
+
+    .mainArchiveChecks {
+        padding: 50px;
+    }
+}
+

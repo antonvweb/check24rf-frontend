@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../../styles/profile/notifications/notifications.module.css';
+import styles from '@/styles/profile/notifications/notifications.module.css';
 
 interface NotificationItemProps {
     date: string;
