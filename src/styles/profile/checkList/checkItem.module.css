@@ -6,7 +6,6 @@
     border-radius: 5px;
     background: #F0F3F6;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    max-width: 500px;
 }
 
 .notHaveChek {
@@ -44,7 +43,7 @@
     position: relative;
 }
 
-.center{
+.center {
     flex-direction: column;
     gap: 1px;
     text-align: center;
@@ -117,7 +116,6 @@
 .section1 .top, .section1 .data {
     display: grid;
     grid-template-columns: 2fr 0.6fr 1fr;
-    gap: 20px;
 }
 
 
@@ -208,11 +206,11 @@
 }
 
 .multiChecks{
-    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 22px;
     padding: 19px;
+    height: 100%;
 }
 
 .multiTop{
@@ -238,20 +236,6 @@
     flex: .05;
 }
 
-.multiCharacteristics{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    height: 100%;
-}
-
-.multiChecksList{
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    height: 100%;
-}
-
 .multiChecksList .top,
 .itemChecksList .item {
     display: grid;
@@ -268,28 +252,14 @@
 }
 
 .itemChecksList{
-    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 40px;
     overflow-y: auto;
-    max-height: 530px;
-}
-
-.itemChecksList::-webkit-scrollbar {
-    padding-left: 10px;
-    width: 8px;
-    background: #F0F3F6;
-}
-
-.itemChecksList::-webkit-scrollbar-track {
-    background: #F0F3F6;
-    border-radius: 2px;
-}
-
-.itemChecksList::-webkit-scrollbar-thumb {
-    background: #2E374F;
-    border-radius: 2px;
+    flex: 1;
+    min-height: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .salesManData{
@@ -373,9 +343,16 @@
 }
 
 @media (min-width: 1024px) and (max-width: 1440px) {
+    .itemChecksList .item span{
+        font-size: .7rem;
+    }
+
+    .characteristics{
+        font-size: .75rem;
+    }
+
     .checkItem {
-        flex: 0.4;
-        max-width: 450px;
+        flex: .5;
     }
 
     .top .center span:first-child {
@@ -408,9 +385,8 @@
 }
 
 @media (min-width: 1441px) and (max-width: 2559px) {
-    .checkItem {
-        flex: 0.3;
-        max-width: 500px;
+    .characteristics{
+        font-size: .9rem;
     }
 
     .top .center span:first-child {
@@ -443,11 +419,6 @@
 }
 
 @media (min-width: 2560px) {
-    .checkItem {
-        flex: 0.25;
-        max-width: 600px;
-    }
-
     .top .center span:first-child {
         font-size: 2.25rem;
     }

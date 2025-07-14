@@ -110,7 +110,7 @@
 
         const handleFormPhoneSubmit = (e: FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            if (!isPhoneValid || !checked || !isCaptchaVerified || sendCode) return;
+            if (!isPhoneValid || !checked || isCaptchaVerified || sendCode) return;
 
             setSendCode(true);
             setIsVisible(true);
@@ -174,8 +174,8 @@
                               </svg>
                           </button>
                           <p className={styles.techSupportText}>Техническая поддержка</p>
+                          <ChatBox isVisible={isChatVisible} />
                       </div>
-                      <ChatBox isVisible={isChatVisible} />
                   </div>
                   <div className={styles.formWrapper}>
                       <div className={styles.startRightBox}>
@@ -186,7 +186,7 @@
                                       <span className={styles.numberPhoneLabel}>Номер телефона</span>
                                       <form onSubmit={handleFormPhoneSubmit} className={styles.numberPhoneForm}>
                                           <PhoneInput phone={phone} setPhone={setPhone} inputRef={inputPhoneRef} setIsPhoneValid={setIsPhoneValid} />
-                                          <CustomButtonSendCode sendCode={sendCode} timer={seconds} checked={checked} isPhoneValid={isPhoneValid} isCaptchaVerified={isCaptchaVerified} />
+                                          <CustomButtonSendCode sendCode={sendCode} timer={seconds} checked={checked} isPhoneValid={isPhoneValid} isCaptchaVerified={!isCaptchaVerified} />
                                       </form>
                                   </div>
                                   <div className={styles.codeSection}>

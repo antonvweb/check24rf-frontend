@@ -2,7 +2,8 @@
 import styles from '@/styles/profile/checkList/checkItem.module.css';
 import {Receipt} from "@/components/types/interfaces";
 import {ContextMenuSimple} from "@/components/ui/profileUI/ContextMenuSimple";
-import {useState} from "react";
+import React, {useState} from "react";
+import {DownloadModal} from "@/components/ui/profileUI/DownloadModal";
 
 interface Props {
     receipt: Receipt;
@@ -12,19 +13,21 @@ interface Props {
 
 export const ReceiptView = ({ receipt, onRemove, mode }: Props) => {
     const [isMenuVisible, setIsMenuVisible] = useState(false);
+    const [isOpenDownloadModal, setIsOpenDownloadModal] = useState(false);
 
     const toggleMenu = () => setIsMenuVisible(p => !p);
 
     const handleDownload = () => {
-        /* TODO: реальное скачивание, пока console.log */
-        console.log('Скачать чек', receipt.id);
+        openOpenDownloadModal();
         setIsMenuVisible(false);
     };
 
     const handleArchive = () => {
-        console.log('Архивировать чек', receipt.id);
         setIsMenuVisible(false);
     };
+
+    const openOpenDownloadModal   = () => setIsOpenDownloadModal(true);
+    const closeOpenDownloadModal  = () => setIsOpenDownloadModal(false);
 
     return (
         <div className={styles.checkItem}>
@@ -163,9 +166,14 @@ export const ReceiptView = ({ receipt, onRemove, mode }: Props) => {
                     <div className={styles.qrCode}/>
                 </div>
 
-                <button type="button" className={styles.download}>Скачать</button>
+                <button type="button" className={styles.download} onClick={handleDownload}>Скачать</button>
             </div>
+            {isOpenDownloadModal && (
+                <>
+                    <div className={styles.modalOverlay} onClick={closeOpenDownloadModal} />
+                    <DownloadModal isVisible={true} />
+                </>
+            )}
         </div>
-
     );
 }

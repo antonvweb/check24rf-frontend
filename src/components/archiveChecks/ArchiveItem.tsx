@@ -1,5 +1,7 @@
 import styles from "@/styles/profile/archiveChecks/archiveChecks.module.css";
 import {Receipt} from "@/components/types/interfaces";
+import React, {useState} from "react";
+import {DownloadModal} from "@/components/ui/profileUI/DownloadModal";
 
 interface ArchiveItemProps {
     id: number;
@@ -9,6 +11,11 @@ interface ArchiveItemProps {
 }
 
 export const ArchiveItem = ({id, date, count, checks} :ArchiveItemProps) => {
+    const [isOpenDownloadModal, setIsOpenDownloadModal] = useState(false);
+
+    const openOpenDownloadModal   = () => setIsOpenDownloadModal(true);
+    const closeOpenDownloadModal  = () => setIsOpenDownloadModal(false);
+
     return (
         <div className={styles.archiveItem} key={id}>
             <div className={styles.top}>
@@ -37,7 +44,7 @@ export const ArchiveItem = ({id, date, count, checks} :ArchiveItemProps) => {
                         <path fillRule="evenodd" clipRule="evenodd" d="M6.75281 0.0935185C6.71964 0.0638744 6.68024 0.0403554 6.63686 0.0243079C6.59347 0.00826046 6.54697 -2.62386e-07 6.5 -2.5828e-07C6.45303 -2.54174e-07 6.40652 0.00826048 6.36314 0.024308C6.31976 0.0403554 6.28036 0.0638745 6.24719 0.0935185L4.10472 2.00343C4.03767 2.0632 4 2.14427 4 2.2288C4 2.31333 4.03767 2.3944 4.10472 2.45417C4.17177 2.51394 4.26271 2.54752 4.35753 2.54752C4.45235 2.54752 4.54329 2.51394 4.61034 2.45417L6.14292 1.08731C6.14292 1.08731 6.14292 4.09726 6.14292 4.18168C6.14292 4.2661 6.18054 4.34707 6.24751 4.40677C6.31447 4.46646 6.4053 4.5 6.5 4.5C6.5947 4.5 6.68553 4.46646 6.75249 4.40677C6.81946 4.34707 6.85708 4.2661 6.85708 4.18168L6.85708 1.08731L8.38966 2.45417C8.45671 2.51394 8.54765 2.54752 8.64247 2.54752C8.73729 2.54752 8.82823 2.51394 8.89528 2.45417C8.96233 2.3944 9 2.31333 9 2.2288C9 2.14427 8.96233 2.0632 8.89528 2.00343L6.75281 0.0935185Z" fill="white"/>
                     </svg>
                 </button>
-                <button type={"button"} className={styles.download}>
+                <button type={"button"} className={styles.download} onClick={openOpenDownloadModal}>
                     <span>Скачать</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="14" viewBox="0 0 11 14" fill="none">
                         <path fillRule="evenodd" clipRule="evenodd" d="M1.3125 8.75C1.19647 8.75 1.08519 8.70391 1.00314 8.62186C0.921094 8.53981 0.875 8.42853 0.875 8.3125V1.3125C0.875 1.19647 0.921094 1.08519 1.00314 1.00314C1.08519 0.921094 1.19647 0.875 1.3125 0.875H9.1875C9.30353 0.875 9.41481 0.921094 9.49686 1.00314C9.57891 1.08519 9.625 1.19647 9.625 1.3125V8.3125C9.625 8.42853 9.57891 8.53981 9.49686 8.62186C9.41481 8.70391 9.30353 8.75 9.1875 8.75H7.4375C7.32147 8.75 7.21019 8.79609 7.12814 8.87814C7.04609 8.96019 7 9.07147 7 9.1875C7 9.30353 7.04609 9.41481 7.12814 9.49686C7.21019 9.57891 7.32147 9.625 7.4375 9.625H9.1875C9.5356 9.625 9.86944 9.48672 10.1156 9.24058C10.3617 8.99444 10.5 8.6606 10.5 8.3125V1.3125C10.5 0.964403 10.3617 0.630564 10.1156 0.384422C9.86944 0.138281 9.5356 0 9.1875 0L1.3125 0C0.964403 0 0.630564 0.138281 0.384422 0.384422C0.138281 0.630564 0 0.964403 0 1.3125V8.3125C0 8.6606 0.138281 8.99444 0.384422 9.24058C0.630564 9.48672 0.964403 9.625 1.3125 9.625H3.0625C3.17853 9.625 3.28981 9.57891 3.37186 9.49686C3.45391 9.41481 3.5 9.30353 3.5 9.1875C3.5 9.07147 3.45391 8.96019 3.37186 8.87814C3.28981 8.79609 3.17853 8.75 3.0625 8.75H1.3125Z" fill="white"/>
@@ -45,6 +52,13 @@ export const ArchiveItem = ({id, date, count, checks} :ArchiveItemProps) => {
                     </svg>
                 </button>
             </div>
+
+            {isOpenDownloadModal && (
+                <>
+                    <div className={styles.modalOverlay} onClick={closeOpenDownloadModal} />
+                    <DownloadModal isVisible={true} />
+                </>
+            )}
         </div>
     )
 }

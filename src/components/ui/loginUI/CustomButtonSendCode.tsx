@@ -22,7 +22,7 @@ export const CustomButtonSendCode = ({sendCode, isPhoneValid, checked, isCaptcha
                 backdropFilter: 'blur(18px)',
                 border: 'none',
                 outline: 'none',
-                fontSize: '1.146vw',
+                fontSize: '1.3rem',
                 fontWeight: 400,
                 lineHeight: 'normal',
                 textTransform: 'none',

@@ -1,6 +1,3 @@
-/* ==========================================================================
-   Main Layout Component
-   ========================================================================== */
 .mainStart {
     position: relative;
     height: 100vh;
@@ -45,9 +42,6 @@
     z-index: 2;
 }
 
-/* ==========================================================================
-   Left Column Component
-   ========================================================================== */
 .startLeftBox {
     display: flex;
     flex-direction: column;
@@ -109,6 +103,7 @@
 }
 
 .techSupport {
+    position: relative;
     display: flex;
     flex-direction: row;
     gap: clamp(15px, 2vw, 30px);
@@ -136,9 +131,6 @@
     margin: 0;
 }
 
-/* ==========================================================================
-   Right Column - Form Component
-   ========================================================================== */
 .formWrapper {
     display: flex;
     justify-content: center;
@@ -167,9 +159,6 @@
     justify-content: space-between;
 }
 
-/* ==========================================================================
-   Login Form Component
-   ========================================================================== */
 .loginTitle {
     font-size: 1.875vw;
     font-weight: 600;
@@ -206,7 +195,7 @@
     min-width: 0;
     max-width: 62%;
     color: var(--textColor);
-    height: 5.463vh;
+    height: 59px;
     border-radius: var(--border-radius-xs);
     border: 1px solid var(--color-border-main);
     background: rgba(255, 255, 255, 0.9);
@@ -230,9 +219,6 @@
     cursor: not-allowed;
 }
 
-/* ==========================================================================
-   Code Section Component
-   ========================================================================== */
 .codeSection {
     position: relative;
     display: flex;
@@ -285,9 +271,6 @@
     40%, 80% { transform: translateX(5px); }
 }
 
-/* ==========================================================================
-   Agreements Component
-   ========================================================================== */
 .agreements {
     position: relative;
     display: flex;
@@ -382,9 +365,6 @@
     height: auto;
 }
 
-/* ==========================================================================
-   Modal Component
-   ========================================================================== */
 .modalOverlay {
     position: fixed;
     inset: 0;
@@ -394,153 +374,149 @@
     z-index: 9998;
 }
 
-@media (min-width: 1366px) and (max-width: 1439px) {
-    .formWrapper{
-        width: clamp(550px, 34.271vw, 600px);
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .logoTitleMain {
+        font-size: 2vw;
     }
 
-    .startRightBox{
-        max-height: clamp(550px, 57.519vh, 600px);
+    .logoTitleSubtitle {
+        font-size: 0.88vw;
     }
 
-    .codeInput{
-        width: 55px;
-        height: 55px;
+    .techSupportText {
+        font-size: 1.15vw;
     }
 
-    .numberPhoneLabel {
+    .loginTitle {
+        font-size: 1.7vw;
+    }
+
+    .numberPhoneLabel,
+    .codeSectionLabel,
+    .codeInput {
+        font-size: 1.05vw;
+    }
+
+    .codeInput {
+        width: 52px;
+        height: 52px;
+    }
+
+    .agreementsTitle {
+        font-size: 0.85vw;
+    }
+
+    .formWrapper {
+        width: clamp(600px, 40vw, 700px);
+    }
+
+    .startRightBox {
+        max-height: 650px;
+    }
+
+    .captchaDescription {
+        margin-left: clamp(20px, 3vw, 40px);
+    }
+}
+
+
+@media (min-width: 1441px) and (max-width: 2559px) {
+    .logoTitleMain {
+        font-size: 2.1vw;
+    }
+
+    .logoTitleSubtitle {
+        font-size: 1vw;
+    }
+
+    .techSupportText {
+        font-size: 1.2vw;
+    }
+
+    .loginTitle {
+        font-size: 1.8vw;
+    }
+
+    .numberPhoneLabel,
+    .codeSectionLabel,
+    .codeInput {
         font-size: 1.1vw;
     }
-}
 
-@media (min-width: 2560px) and (max-width: 3839px) {
-    .logoCheckRfIcon{
-        width: clamp(80px, 6.219vw, 120px);
+    .codeInput {
+        width: 60px;
+        height: 60px;
     }
 
-    .logoTitleMain{
-        font-size: 1.641vw;
+    .agreementsTitle {
+        font-size: 0.9vw;
     }
 
-    .logoTitleSubtitle{
-        font-size: 0.742vw;
+    .formWrapper {
+        width: clamp(700px, 38vw, 850px);
     }
 
-    .fnsLogo{
-        width: clamp(350px, 33.521vw, 400px);
-    }
-
-    .techSupportText{
-        font-size: 0.938vw;
-    }
-
-    .formWrapper{
-        width: clamp(900px, 54.271vw, 1200px);
-    }
-
-    .startRightBox{
-        max-height: clamp(950px, 67.519vh, 1000px);
-    }
-
-    .loginTitle{
-        font-size: 1.806vw;
-    }
-
-    .numberPhoneLabel {
-        font-size: 1vw;
-    }
-
-    .numberPhoneInput{
-        height: 6.097vh;
-        font-size: 1.446vw;
-    }
-
-    .numberPhoneInput::placeholder {
-        font-size: 1.446vw;
-    }
-
-    .codeInput{
-        width: 105px;
-        height: 105px;
-        border-radius: 13px;
-    }
-
-    .agreementsTitle{
-        font-size: 1.03vw;
-    }
-
-
-    .captchaText {
-        font-size: 1.242vw;
+    .startRightBox {
+        max-height: 680px;
     }
 
     .captchaDescription {
-        font-size: 1.2vw;
+        margin-left: clamp(25px, 3.5vw, 50px);
     }
 }
 
-@media (min-width: 3840px) {
-    .logoCheckRfIcon{
-        width: clamp(80px, 6.219vw, 120px);
+
+@media (min-width: 2560px) {
+    .mainContent {
+        max-width: 2560px;
+        margin: auto;
+        max-height: 1440px;
     }
 
-    .logoTitleMain{
-        font-size: 1.641vw;
+    .logoTitleMain {
+        font-size: 1.6vw;
     }
 
-    .logoTitleSubtitle{
-        font-size: 0.742vw;
+    .logoTitleSubtitle {
+        font-size: 0.8vw;
     }
 
-    .fnsLogo{
-        width: clamp(350px, 33.521vw, 400px);
-    }
-
-    .techSupportText{
-        font-size: 0.938vw;
-    }
-
-    .formWrapper{
-        width: clamp(900px, 54.271vw, 1200px);
-    }
-
-    .startRightBox{
-        max-height: clamp(950px, 67.519vh, 1000px);
-    }
-
-    .loginTitle{
-        font-size: 1.806vw;
-    }
-
-    .numberPhoneLabel {
+    .techSupportText {
         font-size: 1vw;
     }
 
-    .numberPhoneInput{
-        height: 6.097vh;
-        font-size: 1.446vw;
+    .loginTitle {
+        font-size: 1.6vw;
     }
 
-    .numberPhoneInput::placeholder {
-        font-size: 1.446vw;
+    .codeInput {
+        font-size: 1vw;
+        width: 65px;
+        height: 65px;
     }
 
-    .codeInput{
-        width: 105px;
-        height: 105px;
-        border-radius: 13px;
+    .agreementsTitle {
+        font-size: 0.75vw;
     }
 
-    .agreementsTitle{
-        font-size: 1.03vw;
+    .formWrapper {
+        width: clamp(800px, 30vw, 1000px);
     }
 
-
-    .captchaText {
-        font-size: 1.242vw;
+    .startRightBox {
+        max-height: 840px;
     }
 
     .captchaDescription {
-        font-size: 1.2vw;
+        margin-left: clamp(30px, 3vw, 60px);
+    }
+
+    .fnsLogo {
+        width: clamp(200px, 13vw, 320px);
+    }
+
+    .logoCheckRfIcon {
+        width: clamp(60px, 5vw, 100px);
     }
 }
+

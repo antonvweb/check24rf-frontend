@@ -109,8 +109,6 @@ export const BalanceChart: React.FC = () => {
                 borderRadius: '6px',
                 padding: '10px',
                 width: '100%',
-                height: '100%',
-                maxHeight: '400px',
                 position: 'relative',
             }}
 

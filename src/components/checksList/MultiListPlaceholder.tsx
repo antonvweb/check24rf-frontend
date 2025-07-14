@@ -32,30 +32,28 @@ export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
                         </svg>
                     </button>
                 </header>
-                <div className={styles.multiCharacteristics}>
-                    <section className={styles.multiChecksList}>
-                        <div className={styles.top}>
-                            <span>ПРОДАВЕц</span>
-                            <span>ПОКУПАТЕЛЬ</span>
-                            <span>СУММА, ₽</span>
-                        </div>
-                        <div className={styles.itemChecksList}>
-                            {items.map((r, i) => (
-                                <div key={i} className={styles.item}>
-                                    <div className={styles.salesManData}>
-                                        <span className={styles.salesman}>{r.salesman}</span>
-                                        <span className={styles.ooo}>{r.ooo}</span>
-                                    </div>
-                                    <span className={styles.buyer}>{r.buyer}</span>
-                                    <span className={styles.price}>{r.price.toFixed(2)} ₽</span>
+                <div className={styles.characteristics}>
+                    <div className={styles.top}>
+                        <span>ПРОДАВЕЦ</span>
+                        <span>ПОКУПАТЕЛЬ</span>
+                        <span>СУММА, ₽</span>
+                    </div>
+                    <div className={styles.itemChecksList}>
+                        {items.map((r, i) => (
+                            <div key={i} className={styles.item}>
+                                <div className={styles.salesManData}>
+                                    <span className={styles.salesman}>{r.salesman}</span>
+                                    <span className={styles.ooo}>{r.ooo}</span>
                                 </div>
-                            ))}
-                        </div>
-                        <div className={styles.bottom}>
-                            <span>СУММА ВЫБРАННЫХ ЧЕКОВ:</span>
-                            <span>{sumReceipts} ₽</span>
-                        </div>
-                    </section>
+                                <span className={styles.buyer}>{r.buyer}</span>
+                                <span className={styles.price}>{r.price.toFixed(2)} ₽</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className={styles.bottom}>
+                        <span>СУММА ВЫБРАННЫХ ЧЕКОВ:</span>
+                        <span>{sumReceipts} ₽</span>
+                    </div>
                 </div>
                 <section className={styles.btnBottom}>
                     <button type={"button"} className={styles.buyChecks} onClick={openPayMenu}>

@@ -35,7 +35,7 @@ function Profile() {
                     <Logo/>
                     <main>
                         <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
-                        <div className={styles.reklama}/>
+                        <div className={styles.reklama} style={{display: activeTab === 'account' ? 'none' : 'block'}}/>
                     </main>
                 </div>
                 {activeTab === 'checks' && <ActiveChecks />}

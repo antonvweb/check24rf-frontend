@@ -5,6 +5,7 @@
     align-items: center;
     gap: 0.31rem;
     user-select: none;
+    margin-right: auto;
 }
 
 .left{

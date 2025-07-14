@@ -49,34 +49,14 @@
 }
 
 @media (min-width: 1024px) and (max-width: 1440px) {
-    .listItem {
-        padding-left: 12px;
-    }
-
-    .listItem img {
-        margin-right: 25px;
-        width: 36px;
-        height: 36px;
-    }
-
     .characteristic {
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: .85fr 1.2fr 1fr .5fr 1fr;
         font-size: 0.8125rem;
         gap: 8px;
     }
 }
 
 @media (min-width: 1441px) and (max-width: 2559px) {
-    .listItem {
-        padding-left: 20px;
-    }
-
-    .listItem img {
-        margin-right: 40px;
-        width: 40px;
-        height: 40px;
-    }
-
     .characteristic {
         grid-template-columns: .85fr 1.2fr 1fr .5fr 1fr;
         font-size: 0.875rem;
@@ -85,10 +65,6 @@
 }
 
 @media (min-width: 2560px) {
-    .listItem {
-        padding-left: 30px;
-    }
-
 
     .characteristic {
         grid-template-columns: 1fr 1.5fr 1.2fr 0.7fr 1.3fr;

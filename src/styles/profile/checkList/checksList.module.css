@@ -137,18 +137,9 @@
 }
 
 @media (min-width: 1024px) and (max-width: 1440px) {
-    .mainCheckList {
-        flex-direction: column;
-        padding: 20px;
-    }
-
     .sortedKey {
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: .85fr 1.2fr 1fr .5fr 1fr;
         font-size: 0.9rem;
-    }
-
-    .calendar {
-        margin-right: 20px;
     }
 
     .leftBoxCheckList {
@@ -161,7 +152,7 @@
     }
 
     .btnKey {
-        font-size: 1rem;
+        font-size: .9rem;
     }
 
     .loadMoreBtn {
@@ -171,18 +162,9 @@
 }
 
 @media (min-width: 1441px) and (max-width: 2559px) {
-    .mainCheckList {
-        padding: 30px;
-    }
-
     .sortedKey {
         grid-template-columns: .85fr 1.2fr 1fr .5fr 1fr;
         gap: 10px;
-    }
-
-    .calendar {
-        margin-right: 35px;
-        padding: 6px;
     }
 
     .btnKey {
@@ -201,10 +183,6 @@
 
 
 @media (min-width: 2560px) {
-    .mainCheckList {
-        gap: 25px;
-    }
-
     .top{
         padding-left: 30px;
     }
