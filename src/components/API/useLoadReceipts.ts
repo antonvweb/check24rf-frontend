@@ -26,6 +26,7 @@ export function useLoadReceipts({ endpoint, mode }: UseLoadReceiptsParams) {
             const res = await fetch(endpoint, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify({
                     mode,
                     offset: currentOffset,
