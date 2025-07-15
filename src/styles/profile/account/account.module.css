@@ -1,8 +1,8 @@
 .account{
     display: flex;
     flex-direction: column;
-    flex: 0.9;
     gap: 19px;
+    flex: .9;
     user-select: none;
     min-height: 100%;
 }
@@ -25,7 +25,7 @@
 .mainAccount{
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 1%;
     height: 100%;
     min-height: 0;
 }
@@ -265,6 +265,7 @@
     line-height: normal;
     align-items: center;
     padding-bottom: 30px;
+    text-wrap: nowrap;
 }
 
 .extend button{
@@ -308,6 +309,8 @@
     gap: 30px;
     padding: 16px;
     flex: 1;
+    align-items: center;
+    height: 100%;
 }
 
 .amountOfExpenses{
@@ -316,6 +319,7 @@
     gap: 28px;
     height: 100%;
     justify-content: center;
+    flex: .32;
 }
 
 .columnExpenses{
@@ -345,17 +349,41 @@
     line-height: normal;
 }
 
-.grafications{
+.graphModal {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 1;
+    background: var(--textColor);
+    border-radius: 6px;
+    padding: 10px;
+    width: 100%;
     height: 100%;
+    overflow: visible;
+    position: relative;
+    flex: .68;
+}
+
+.dateGraph{
+    color: var(--text-invert);
+    font-size: .75rem;
+    font-weight: 400;
+    opacity: .6;
+    position: absolute;
+    top: 10px;
+    left: 10px;
 }
 
 @media (min-width: 1024px) and (max-width: 1440px) {
+    .top .welcome{
+        font-size: .75rem;
+    }
+
+    .mainAccount .top .description{
+        font-size: 1rem;
+    }
+
     .mainAccountContent {
-        gap: 20px;
+        gap: 1%;
     }
 
     .info {
@@ -363,26 +391,144 @@
     }
 
     .description {
-        font-size: 1.75rem;
+        font-size: 1rem;
     }
 
     .infoExpenses {
         font-size: 1.5rem;
     }
 
-    .reklama {
-        flex: none;
-        width: 350px;
+
+    .graphModal{
+        max-height: 232px;
+    }
+
+    .autoPayment {
+        font-size: 1.1rem;
+        padding: 14px;
+    }
+
+    .changeBtns button {
+        font-size: 0.65rem;
+        padding: 5px 11px;
+    }
+
+    .extend {
+        font-size: 0.7rem;
+        gap: 14px;
+    }
+
+    .extend button {
+        font-size: 0.6rem;
+        padding: 4px 14px;
+    }
+
+    .payBtn {
+        font-size: 1.1rem;
+        padding: 10px 0;
+    }
+
+    .title {
+        font-size: .9rem;
+    }
+
+    .row, .mainInfo {
+        font-size: 1rem;
+    }
+
+    .secondInfo {
+        font-size: 0.85rem;
+    }
+
+    .columnExpenses{
+        padding: 7px 20px 15px;
+    }
+
+    .titleExpenses{
+        font-size: .8rem;
+        text-wrap: nowrap;
+    }
+
+    .infoExpenses{
+        font-size: 1rem;
+        text-wrap: nowrap;
     }
 }
 
 @media (min-width: 1441px) and (max-width: 2559px) {
-    .mainSection {
-        flex: 70%;
+    .top .welcome{
+        font-size: 1rem;
     }
 
-    .reklama {
-        flex: 30%;
+    .mainAccount .top .description{
+        font-size: 1.2rem;
+    }
+
+    .mainAccountContent {
+        gap: 1%;
+    }
+
+    .info {
+        padding: 0 14px;
+    }
+
+    .description {
+        font-size: 1rem;
+    }
+
+    .infoExpenses {
+        font-size: 1.3rem;
+    }
+
+
+    .graphModal{
+        max-height: 232px;
+    }
+
+    .autoPayment {
+        font-size: 1.1rem;
+        padding: 14px;
+    }
+
+    .changeBtns button {
+        font-size: .9rem;
+        padding: 5px 11px;
+    }
+
+    .extend {
+        font-size: 1rem;
+        gap: 14px;
+    }
+
+    .extend button {
+        font-size: .9rem;
+        padding: 4px 14px;
+    }
+
+    .payBtn {
+        font-size: 1.1rem;
+        padding: 10px 0;
+    }
+
+    .title {
+        font-size: 1.1rem;
+    }
+
+    .row, .mainInfo {
+        font-size: 1.3rem;
+    }
+
+    .secondInfo {
+        font-size: 1.1rem;
+    }
+
+    .columnExpenses{
+        padding: 7px 20px 15px;
+    }
+
+    .titleExpenses{
+        font-size: 1rem;
+        text-wrap: nowrap;
     }
 }
 

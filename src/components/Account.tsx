@@ -104,9 +104,7 @@ export const Account = () => {
                                             <div className={styles.infoExpenses}>32 986 623,21 ₽</div>
                                         </div>
                                     </div>
-                                    <div className={styles.grafications}>
-                                        <BalanceChart/>
-                                    </div>
+                                    <BalanceChart/>
                                 </div>
                             </div>
                         </section>

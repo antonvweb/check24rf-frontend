@@ -66,7 +66,6 @@ export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
                 {isPayMenuVisible && (
                     <>
                         <div className={styles.modalOverlay} onClick={closePayMenu} />
-                        {/* PayModel ловит клики внутри и НЕ закрывает модалку */}
                         <PayModel items={items} isVisible={true} />
                     </>
                 )}

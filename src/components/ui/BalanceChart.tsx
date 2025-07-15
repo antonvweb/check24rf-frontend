@@ -1,22 +1,12 @@
-import {
-    Chart as ChartJS,
-    LineElement,
-    PointElement,
-    LinearScale,
-    CategoryScale,
-    Tooltip,
-    Filler,
-    Chart, TooltipItem,
-} from 'chart.js';
-import type { ChartOptions } from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import React, { useRef } from 'react';
+'use client';
 
-ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Filler);
+import React, { useRef } from 'react';
+import ReactECharts from 'echarts-for-react';
+import * as echarts from 'echarts';
+import styles from '@/styles/profile/account/account.module.css';
 
 export const BalanceChart: React.FC = () => {
-    const chartRef = useRef<Chart<'line'> | null>(null);
-    const containerRef = React.useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const labels = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
     const dataValues = [
@@ -27,100 +17,93 @@ export const BalanceChart: React.FC = () => {
         800, 100,
     ];
 
-    const data = {
-        labels,
-        datasets: [
-            {
-                label: 'Баланс',
-                data: dataValues,
-                fill: true,
-                tension: 0.4,
-                clip: false as const,
-                backgroundColor: (ctx: { chart: ChartJS }) => {
-                    const gradient = ctx.chart.ctx.createLinearGradient(0, -250, 0, 300);
-                    gradient.addColorStop(0, '#64D4F8');
-                    gradient.addColorStop(.85, '#2E374F');
-                    return gradient;
+    const option: echarts.EChartsOption = {
+        grid: {
+            top: 20,
+            bottom: 20,
+            left: 0 ,
+            right: 20,
+            containLabel: true,
+        },
+        tooltip: {
+            trigger: 'axis',
+            backgroundColor: '#fff',
+            borderColor: '#64D4F8',
+            borderWidth: 1,
+            textStyle: {
+                color: '#2E374F',
+            },
+            formatter: (params: any) => {
+                const val = params[0]?.data;
+                return `<strong>${Number(val).toLocaleString('ru-RU', {
+                    style: 'currency',
+                    currency: 'RUB',
+                })}</strong>`;
+            },
+            axisPointer: {
+                type: 'line',
+                lineStyle: {
+                    color: '#64D4F8',
                 },
-                borderColor: '#64D4F8',
-                pointBackgroundColor: '#ff6600',
-                pointBorderColor: '#ff6600',
-                pointRadius: 0,
-                pointHoverRadius: 6,
-                pointHoverBorderColor: '#ffffff',
-                cursor: 'pointer',
+            },
+        },
+        xAxis: {
+            type: 'category',
+            data: labels,
+            boundaryGap: false,
+            axisLine: { show: false },
+            axisTick: { show: false },
+            axisLabel: {
+                color: '#fff',
+            },
+        },
+        yAxis: {
+            type: 'value',
+            show: false,
+        },
+        series: [
+            {
+                name: 'Баланс',
+                type: 'line',
+                data: dataValues,
+                smooth: true,
+                symbol: 'circle',
+                symbolSize: 6,
+                showSymbol: false,
+                lineStyle: {
+                    color: '#64D4F8',
+                    width: 2,
+                },
+                itemStyle: {
+                    color: '#ff6600',
+                },
+                areaStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: '#64D4F8' },
+                        { offset: 0.85, color: '#2E374F' },
+                    ]),
+                },
             },
         ],
     };
 
-    const options: ChartOptions<'line'> = {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            x: {
-                ticks: { color: '#fff' },
-                grid: { display: false },
-            },
-            y: { display: false },
-        },
-        plugins: {
-            tooltip: {
-                backgroundColor: '#fff',
-                titleColor: '#2E374F',
-                bodyColor: '#2E374F',
-                callbacks: {
-                    label: (tooltipItem: TooltipItem<'line'>) => {
-                        const value = tooltipItem.raw as number;
-                        return `${value.toLocaleString('ru-RU', {
-                            style: 'currency',
-                            currency: 'RUB',
-                        })}`;
-                    },
-                },
-                displayColors: false,
-                yAlign: 'bottom',
-                caretPadding: 10,
-            },
-            legend: { display: false },
-        },
-        elements: {
-            point: {
-                radius: 0,
-                hoverRadius: 6,
-                hoverBorderWidth: 2,
-                borderColor: '#fff',
-                backgroundColor: '#ff6600',
-                hoverBackgroundColor: '#ff6600',
-                hitRadius: 10,
-            },
-        },
-        onHover: (event, activeElements) => {
-            if (containerRef.current) {
-                containerRef.current.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
-            }
-        },
-    };
 
     return (
-        <div
-            ref={containerRef}
-            style={{
-                background: '#2E374F',
-                borderRadius: '6px',
-                padding: '10px',
-                width: '100%',
-                position: 'relative',
-            }}
-
-        >
-            <div style={{ color: '#fff', fontSize: '0.75rem', fontWeight: 400, opacity: .6, position: 'absolute',
-                top: 10,
-                left: 10,}}>Март 2025</div>
-            <Line
-                data={data}
-                options={options}
-                ref={chartRef}
-                style={{ overflow: 'visible', width: '100%', height: '100%' }}
+        <div ref={containerRef} className={styles.graphModal}>
+            <span className={styles.dateGraph}>Март 2025</span>
+            <ReactECharts
+                option={option}
+                notMerge={true}
+                lazyUpdate={true}
+                style={{ width: '100%', height: '100%' }}
+                onEvents={{
+                    mouseover: () => {
+                        if (containerRef.current) containerRef.current.style.cursor = 'pointer';
+                    },
+                    mouseout: () => {
+                        if (containerRef.current) containerRef.current.style.cursor = 'default';
+                    },
+                }}
             />
         </div>
     );

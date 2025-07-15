@@ -114,11 +114,17 @@ p, h1, h2, h3, h4, h5, h6 {
     padding: 0;
 }
 
+button {
+    font-family: "Inter", sans-serif;
+    border: none;
+    outline: none;
+}
+
 .wrapper {
     display: flex;
-    justify-content: center; /* по горизонтали */
-    align-items: center;     /* по вертикали */
-    height: 100vh;           /* на всю высоту экрана */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .dev-container {
@@ -195,11 +201,11 @@ p, h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 768px) {
     .logo .title h1 {
-        font-size: 1.6rem; /* уменьшение размера заголовка */
+        font-size: 1.6rem;
     }
 
     .logo .title p {
-        font-size: .7rem; /* уменьшение размера подзаголовка */
+        font-size: .7rem;
     }
 
     .logo {

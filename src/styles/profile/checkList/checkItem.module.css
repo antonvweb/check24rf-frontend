@@ -336,10 +336,10 @@
 
 .modalOverlay {
     position: fixed;
-    inset: 0;                       /* top, right, bottom, left: 0 */
+    inset: 0;
     background: rgba(0, 0, 0, 0.27);
     backdrop-filter: blur(2px);
-    z-index: 9998;                  /* ниже PayModel (9999) */
+    z-index: 9998;
 }
 
 @media (min-width: 1024px) and (max-width: 1440px) {
