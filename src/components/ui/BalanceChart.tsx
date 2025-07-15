@@ -4,6 +4,7 @@ import React, { useRef } from 'react';
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts';
 import styles from '@/styles/profile/account/account.module.css';
+import type { CallbackDataParams } from 'echarts/types/dist/shared';
 
 export const BalanceChart: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -33,8 +34,10 @@ export const BalanceChart: React.FC = () => {
             textStyle: {
                 color: '#2E374F',
             },
-            formatter: (params: any) => {
-                const val = params[0]?.data;
+            formatter: (params: CallbackDataParams[] | CallbackDataParams) => {
+                const point = Array.isArray(params) ? params[0] : params;
+                const val = point.data;
+
                 return `<strong>${Number(val).toLocaleString('ru-RU', {
                     style: 'currency',
                     currency: 'RUB',
