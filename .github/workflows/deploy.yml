@@ -5,35 +5,30 @@ on:
     branches:
       - main
 
-env:
-  SERVER_IP: ${{ secrets.SERVER_IP }} # Храним IP в секретах
-  DEPLOY_PATH: /root/www/test/check24rf
-  APP_PORT: 4000
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # Обновляем до последней версии
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4 # Устанавливаем Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '20' # Указываем конкретную версию Node.js
-          cache: 'npm' # Кэшируем node_modules
+          node-version: '20'
+          cache: 'npm'
 
       - name: Setup SSH agent
-        uses: webfactory/ssh-agent@v0.9.0 # Обновляем до последней версии
+        uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ env.SERVER_IP }} >> ~/.ssh/known_hosts
-        continue-on-error: false # Явно указываем, что ошибка критична
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+        continue-on-error: false
 
       - name: Sync project to server
         run: |
@@ -43,45 +38,37 @@ jobs:
             --exclude .gitignore \
             --exclude *.log \
             --exclude .env \
-            ./ root@${{ env.SERVER_IP }}:${{ env.DEPLOY_PATH }}/
+            ./ root@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}/
 
       - name: Build and deploy app
         run: |
-          ssh root@${{ env.SERVER_IP }} << 'EOF'
-            set -e # Прерываем выполнение при любой ошибке
+          ssh root@${{ secrets.SERVER_IP }} << 'EOF'
+            set -e
 
-            cd ${{ env.DEPLOY_PATH }}
+            cd ${{ secrets.DEPLOY_PATH }}
 
             echo "📦 Установка зависимостей..."
-            npm ci # Используем npm ci для детерминированной установки
+            npm ci
 
             echo "🔧 Сборка проекта..."
             npm run build
 
-            echo "🛑 Завершение текущего процесса на порту ${{ env.APP_PORT }}..."
-            pkill -f "node.*${{ env.APP_PORT }}" || true # Более мягкое завершение
+            echo "🛑 Завершение текущего процесса на порту ${{ secrets.APP_PORT }}..."
+            pkill -f "node.*${{ secrets.APP_PORT }}" || true
 
             echo "🚀 Запуск приложения с PM2..."
-            npm install -g pm2 # Устанавливаем PM2 глобально
-            pm2 start npm --name "check24rf" -- start -- -p ${{ env.APP_PORT }}
-            pm2 save # Сохраняем конфигурацию PM2
+            npm install -g pm2
+            pm2 start npm --name "check24rf" -- start -- -p ${{ secrets.APP_PORT }}
+            pm2 save
           EOF
 
       - name: Verify deployment
         run: |
-          sleep 5 # Даем время приложению запуститься
-          response=$(curl --silent --write-out "%{http_code}" --output /dev/null http://${{ env.SERVER_IP }}:${{ env.APP_PORT }}/health || true)
+          sleep 5
+          response=$(curl --silent --write-out "%{http_code}" --output /dev/null http://${{ secrets.SERVER_IP }}:${{ secrets.APP_PORT }}/health || true)
           if [ "$response" -ne 200 ]; then
             echo "❌ Ошибка: приложение не отвечает (HTTP $response)"
             exit 1
           else
             echo "✅ Приложение успешно запущено"
           fi
-
-      - name: Notify on failure
-        if: failure()
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
-          channel-id: 'deploy-notifications'
-          text: '🚨 Deployment to test server failed! Check GitHub Actions for details.'
