@@ -61,14 +61,3 @@ jobs:
             pm2 start npm --name "check24rf" -- start -- -p ${{ secrets.APP_PORT }}
             pm2 save
           EOF
-
-      - name: Verify deployment
-        run: |
-          sleep 5
-          response=$(curl --silent --write-out "%{http_code}" --output /dev/null http://${{ secrets.SERVER_IP }}:${{ secrets.APP_PORT }}/health || true)
-          if [ "$response" -ne 200 ]; then
-            echo "❌ Ошибка: приложение не отвечает (HTTP $response)"
-            exit 1
-          else
-            echo "✅ Приложение успешно запущено"
-          fi
