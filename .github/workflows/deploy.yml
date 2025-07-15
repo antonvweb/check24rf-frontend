@@ -1,4 +1,4 @@
-name: Deploy to test server
+name: Deploy to Test Server
 
 on:
   push:
@@ -11,39 +11,53 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
       - name: Setup SSH agent
-        uses: webfactory/ssh-agent@v0.8.0
+        uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H 217.199.252.124 >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+        continue-on-error: false
 
       - name: Sync project to server
         run: |
-          rsync -avz --delete --exclude node_modules ./ root@217.199.252.124:/root/www/test/check24rf/
+          rsync -avz --delete \
+            --exclude node_modules \
+            --exclude .git \
+            --exclude .gitignore \
+            --exclude *.log \
+            --exclude .env \
+            ./ root@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}/
 
-      - name: Build and restart app
+      - name: Build and deploy app
         run: |
-          ssh root@217.199.252.124 << 'EOF'
-            cd /root/www/test/check24rf/
+          ssh root@${{ secrets.SERVER_IP }} << 'EOF'
+            set -e
+
+            cd ${{ secrets.DEPLOY_PATH }}
 
             echo "📦 Установка зависимостей..."
-            npm install
+            npm ci
 
             echo "🔧 Сборка проекта..."
             npm run build
 
-            echo "🛑 Завершение процессов, использующих порт 4000..."
-            for pid in $(ss -tulnp | grep ':4000' | awk -F 'pid=' '{print $2}' | awk -F ',' '{print $1}'); do
-              echo "  ➤ Убиваем процесс PID=$pid"
-              kill -9 $pid || true
-            done
+            echo "🛑 Завершение текущего процесса на порту ${{ secrets.APP_PORT }}..."
+            pkill -f "node.*${{ secrets.APP_PORT }}" || true
 
-            echo "🚀 Запуск приложения на порту 4000..."
-            nohup npm run start -- -p 4000 > output.log 2>&1 &
+            echo "🚀 Запуск приложения с PM2..."
+            npm install -g pm2
+            pm2 start npm --name "check24rf" -- start -- -p ${{ secrets.APP_PORT }}
+            pm2 save
           EOF
