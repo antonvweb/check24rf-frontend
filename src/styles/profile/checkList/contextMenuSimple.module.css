@@ -2,9 +2,9 @@
     position: absolute;
     left: 0;
     top: 80%;
-    background: #FFF;
+    background-color: var(--bg-secondary);
     border-radius: 5px;
-    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+    box-shadow: var(--main-box-shadow);
     z-index: 9999;
     display: flex;
     flex-direction: column;
@@ -54,10 +54,11 @@
     background: none;
     border: none;
     text-align: left;
+    color: var(--font-primary);
     cursor: pointer;
     transition: background-color .2s ease-in-out;
 }
 
 .menu button:hover {
-    background-color: #E5E5E5;
+    background-color: var(--btn-bg-primary-hover);;
 }

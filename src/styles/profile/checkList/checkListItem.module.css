@@ -37,11 +37,11 @@
     content: '';
     width: 100%;
     height: 1px;
-    background: #EBEBEB;
+    background: var(--btn-quaternary);
 }
 
 .listItem:hover {
-    background: #ececec;
+    background: var(--btn-quaternary-hover);
 }
 
 .listItem img {
@@ -62,11 +62,11 @@
 }
 
 .selectListItem{
-    background: #A7DFF1;
+    background: var(--btn-secondary);
 }
 
 .selectListItem:hover{
-    background: #8cdcf6;
+    background: var(--btn-secondary-hover);
 }
 
 @media (min-width: 1024px) and (max-width: 1440px) {

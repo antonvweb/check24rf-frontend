@@ -1,9 +1,9 @@
 .menu{
     position: fixed;
-    background-color: white;
+    background-color: var(--bg-secondary);
     border: 1px solid #ccc;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: var(--main-box-shadow);
     z-index: 9999;
     list-style: none;
     padding: 4px 0;
@@ -36,8 +36,9 @@
     font-weight: 400;
     line-height: normal;
     transition: background-color 0.2s ease-in-out;
+    background: none;
 }
 
 .menuItem:hover{
-    background-color: #E5E5E5;;
+    background-color: var(--btn-bg-primary-hover);;
 }

@@ -62,7 +62,7 @@ export default function Reference() {
             className={styles.reference}
             type="button"
             onClick={handleClick}
-            style={{ width: '48px', height: '48px' }}
+            style={{ width: '50px', height: '50px' }}
         >
             {showLinks && (
                 <div className={styles.dropLinks}>
@@ -70,7 +70,7 @@ export default function Reference() {
                     <a href="#">Контакты</a>
                 </div>
             )}
-            <div style={{marginLeft: 'auto', marginBottom: 'auto', marginTop: '10px'}}>
+            <div style={{marginBottom: 'auto', marginTop: '10px'}}>
                 <div className={styles.circle}><span>?</span></div>
             </div>
         </button>

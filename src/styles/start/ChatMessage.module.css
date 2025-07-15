@@ -9,15 +9,15 @@
 }
 
 .user {
-    background-color: #F0F3F6;
-    color: #2E374F;
+    background-color: var(--bg-primary);
+    color: var(--font-primary);
     align-self: flex-end;
     border-bottom-right-radius: 0;
 }
 
 .support {
-    background-color: #A1C0DE;
-    color: #2E374F;
+    background-color: var(--btn-secondary);
+    color: var(--font-primary);
     align-self: flex-start;
     border-bottom-left-radius: 0;
 }

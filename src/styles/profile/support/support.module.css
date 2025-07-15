@@ -27,8 +27,8 @@
     flex-direction: row;
     gap: 15px;
     border-radius: 10px;
-    background: #FFF;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: var(--bg-secondary);
+    box-shadow: var(--main-box-shadow);
     height: 100%;
     min-height: 0;
 }
@@ -45,8 +45,8 @@
 
 .specialist{
     border-radius: 6px;
-    background: #F0F3F6;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: var(--bg-primary);
+    box-shadow: var(--main-box-shadow);
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -90,13 +90,13 @@
 
 .sendMessage input{
     border-radius: 6px;
-    background: #F0F3F6;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: var(--bg-primary);
+    box-shadow: var(--main-box-shadow);
     border: none;
     outline: none;
     width: 100%;
     padding: 9px 12px;
-    color: #2E374F;
+    color: var(--font-primary);
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
@@ -104,7 +104,7 @@
 }
 
 .sendMessage input::placeholder {
-    color: #2E374F;
+    color: var(--font-primary);
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
@@ -119,8 +119,8 @@
     outline: none;
     cursor: pointer;
     border-radius: 6px;
-    background: #2E374F;
-    color: #FFF;
+    background: var(--btn-tertiary);
+    color: var(--font-secondary);
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 500;
@@ -130,14 +130,14 @@
 }
 
 .sendMessage button:hover{
-    background: var(--textColorHover);
+    background: var(--btn-tertiary-hover);
 }
 
 .appeals{
     flex: 36.88%;
     border-radius: 10px;
-    background: #2E374F;
-    color: #FFF;
+    background: var(--bg-quaternary);
+    color: var(--font-secondary);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -162,7 +162,7 @@
     bottom: 0;
     width: 93%;
     height: 1px;
-    background: #FFF;
+    background: var(--bg-secondary);
 }
 
 .appealsList{
@@ -181,13 +181,13 @@
 .appeals button{
     margin: 14px;
     border-radius: 6px;
-    background: #F0F3F6;
+    background: var(--btn-bg-primary);
     border: none;
     outline: none;
     padding: 11px 0;
     cursor: pointer;
     align-items: center;
-    color: #2E374F;
+    color: var(--font-primary);
     font-size: 1rem;
     font-style: normal;
     font-weight: 400;
@@ -204,7 +204,7 @@
 }
 
 .appeals button:hover{
-    background: var(--secondery_background_hover);
+    background: var(--btn-bg-primary-hover);
 }
 
 .appeals button:active svg{

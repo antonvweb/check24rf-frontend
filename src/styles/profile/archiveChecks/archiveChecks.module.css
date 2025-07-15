@@ -25,8 +25,8 @@
 .mainArchiveChecks {
     display: flex;
     border-radius: 10px;
-    background: #FFF;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: var(--bg-secondary);
+    box-shadow: var(--main-box-shadow);
     height: 100%;
     min-height: 0;
     padding: 30px;
@@ -71,10 +71,10 @@
     gap: 7px;
     padding: 6px;
     border-radius: 5px;
-    background: #F0F3F6;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: var(--bg-primary);
+    box-shadow: var(--main-box-shadow);
     height: 400px;
-    width: 299px;
+    width: 290px;
 }
 
 .top{
@@ -88,8 +88,8 @@
 
 .listChecks{
     border-radius: 4px;
-    background: #FAFCFE;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: var(--bg-primary);
+    box-shadow: var(--main-box-shadow);
     overflow: hidden;
     gap: 5px;
     height: 100%;
@@ -105,7 +105,7 @@
 }
 
 .title span{
-    color: #FFF;
+    color: var(--bg-secondary);
     font-size: 1rem;
     font-weight: 500;
     line-height: normal;
@@ -120,21 +120,21 @@
     min-height: 0;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: #2E374F #F0F3F6;
+    scrollbar-color: var(--bg-quaternary) var(--bg-primary);
 }
 
 .itemList::-webkit-scrollbar {
     width: 1px;
-    background: #F0F3F6;
+    background: var(--bg-primary);
 }
 
 .itemList::-webkit-scrollbar-track {
-    background: #F0F3F6;
+    background: var(--bg-primary);
     border-radius: 2px;
 }
 
 .itemList::-webkit-scrollbar-thumb {
-    background: #2E374F;
+    background: var(--bg-quaternary);
     border-radius: 2px;
 }
 
@@ -171,7 +171,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 4px 7px;
-    color: #FFF;
+    color: var(--bg-secondary);
     font-size: 1rem;
     font-style: normal;
     font-weight: 500;
@@ -183,12 +183,12 @@
 }
 
 .unArchiveItem{
-    background: var(--textColor);
+    background: var(--btn-tertiary);
     transition: background .2s ease-in-out, transform .2s ease-in-out;
 }
 
 .unArchiveItem:hover{
-    background: #252c3e;
+    background: var(--btn-tertiary-hover);
 }
 
 .unArchiveItem:active{
@@ -196,12 +196,12 @@
 }
 
 .download{
-    background: #FF6700;
+    background: var(--btn-primary);
     transition: background .2s ease-in-out, transform .2s ease-in-out;
 }
 
 .download:hover{
-    background: #dd5e09;
+    background: var(--btn-primary-hover);
 }
 
 .download:active{

@@ -1,7 +1,7 @@
 .changeTheme{
     border-radius: 10px;
-    background: #FFF;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: var(--bg-secondary);
+    box-shadow: var(--main-box-shadow);
     border: none;
     outline: none;
     margin: 0;

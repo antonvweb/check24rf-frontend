@@ -14,8 +14,10 @@ export default function ChangeTheme () {
     useEffect(() => {
         if (theme) {
             gsap.to("#morph", { duration: 1, morphSVG: { shape: newPath } });
+            document.documentElement.setAttribute('data-theme', 'dark');
         } else {
             gsap.to("#morph", { duration: 1, morphSVG: { shape: originalPath } });
+            document.documentElement.removeAttribute('data-theme');
         }
     }, [theme]);
 

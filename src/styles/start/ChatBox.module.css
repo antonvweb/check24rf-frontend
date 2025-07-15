@@ -42,12 +42,12 @@
 .chat textarea {
     border: none;
     border-radius: 5px;
-    background: #F0F3F6;
+    background: var(--bg-primary);
     width: 100%;
     font-family: "Inter", sans-serif;
     font-size: 0.875rem;
     font-weight: 400;
-    color: #2E374F;
+    color: var(--font-primary);
     padding: 10px;
     box-sizing: border-box;
     overflow-y: auto;
@@ -71,12 +71,12 @@
     width: 33px;
     height: 33px;
     border-radius: 50%;
-    background: #F0F3F6;
+    background: var(--bg-primary);
 }
 
 .titleTech p{
     margin-top: auto;
-    color: #F0F3F6;
+    color: var(--font-quaternary);
     font-size: 1.05rem;
     font-style: normal;
     font-weight: 400;
@@ -90,7 +90,7 @@
     left: 4%;
     width: 92%;
     height: 2px;
-    background: #F0F3F6;
+    background: var(--bg-primary);
     border-radius: 50%;
     opacity: 0.8;
 }

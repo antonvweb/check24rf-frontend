@@ -5,8 +5,8 @@
     display: flex;
     gap: 10px;
     border-radius: 4px;
-    background: #F0F3F6;
-    box-shadow: 0 4px 4px 1px rgba(0, 0, 0, 0.25);
+    background: var(--bg-primary);
+    box-shadow: var(--main-box-shadow);
     z-index: 9999;
     max-height: max-content;
     user-select: none;
@@ -74,17 +74,17 @@
     font-size: 0.625rem;
     font-weight: 600;
     text-align: center;
-    color: #2E374F;
+    color: var(--font-primary);
     position: relative;
     z-index: 1;
 }
 
 .inRange {
-    background: #2E374F;
+    background: var(--bg-quaternary);
     z-index: 2;
-    color: #F0F3F6;;
+    color: var(--font-quaternary);
     border-radius: 4px;
-    box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--main-box-shadow)
 }
 
 /* Чтобы "заливка" интервала была между крайними датами, можно добавить псевдоэлементы */
@@ -95,7 +95,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: #2E374F;
+    background: var(--bg-quaternary);
     border-radius: 4px;
     z-index: -1;
 }
@@ -108,7 +108,7 @@
     justify-content: center;
     gap: 4px;
     border-radius: 0.25rem;
-    background: #2E374F;
+    background: var(--bg-quaternary);
     padding: 5px;
 }
 
@@ -116,7 +116,7 @@
     cursor: pointer;
     padding: 2px 6px;
     border-radius: 4px;
-    color: #FFF;
+    color: var(--font-secondary);
     text-align: right;
     font-size: 0.75rem;
     font-style: normal;
@@ -125,16 +125,16 @@
 }
 
 .yearItem .active {
-    background-color: #2E374F;
-    color: white;
+    background-color: var(--btn-tertiary);
+    color: var(--bg-secondary);
 }
 
 .daySelected {
     border-radius: 4px;
-    background: #F0F3F6;
-    box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.25);
+    background: var(--bg-primary);
+    box-shadow: var(--main-box-shadow)
 }
 
 .yearActive {
-    background: #424B62;
+    background: var(--btn-tertiary-hover);
 }

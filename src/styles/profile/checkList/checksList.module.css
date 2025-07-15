@@ -13,8 +13,8 @@
     flex-direction: row;
     gap: 15px;
     border-radius: 10px;
-    background: #FFF;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: var(--bg-secondary);
+    box-shadow: var(--main-box-shadow);
     height: 100%;
     min-height: 0;
 }
@@ -72,8 +72,8 @@
     align-items: center;
     padding: 5px;
     border: none;
-    border-radius: var(--border-radius-xs);
-    background: var(--bg-light);
+    border-radius: 6px;
+    background: var(--bg-primary);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;
     margin-right: 43px;
@@ -81,7 +81,7 @@
 }
 
 .calendar:hover {
-    background: var(--secondery_background);
+    background: var(--btn-bg-primary-hover);
 }
 
 .calendar:active {
@@ -92,7 +92,7 @@
     display: flex;
     align-items: center;
     background: transparent;
-    color: var(--textColor);
+    color: var(--font-primary);
     font-size: 1.0625rem;
     font-weight: 500;
     border: none;
@@ -135,9 +135,9 @@
     width: 200px;
     padding: 5px 0;
     border: none;
-    border-radius: var(--border-radius-xs);
-    background: #FF6700;
-    color: #FFF;
+    border-radius: 6px;
+    background: var(--btn-primary);
+    color: var(--font-secondary);
     font-size: 22px;
     font-weight: 500;
     cursor: pointer;
@@ -146,7 +146,7 @@
 }
 
 .loadMoreBtn:hover {
-    background: #dd5e09;
+    background: var(--btn-primary-hover);
 }
 
 .loadMoreBtn:active {

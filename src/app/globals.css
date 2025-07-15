@@ -1,84 +1,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend+Deca:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Share+Tech+Mono&display=swap');
 
 :root {
-    /* Фоновые градиенты и цвета */
-    --background: radial-gradient(92.92% 490.48% at 6.95% 10.91%, rgba(255, 255, 255, 0.32) 0%, #2973C8 79.81%);
-    --bg-dark: #2E374F;
-    --bg-light: #FEFEFE;
-    --secondery_background: #F0F3F6;
-    --secondery_background_hover: #dde1e4;
-
-    /* Основные цвета текста */
-    --mainTextColor: #EBEBEB;
-    --blackTextColor: #151515;
-    --textColor: #2E374F;
-    --textColorHover: #252c3e;
-    --color-text-primary: #000;
-    --color-text-secondary: #666;
-
-    /* Цвета для текста и элементов */
-    --text-main: #151515;
-    --text-invert: #ffffff;
-
-    /* Цвета бренда */
-    --brand: #004e98;
-    --brand-hover: #0063c6;
-
-    /* Цвета для границ */
-    --color-border-main: var(--text-main);
-
-    /* Оттенки серого */
-    --color-grey-100: #f5f5f5;
-    --color-grey-300: #999;
-    --grey-500: #6b6b72;
-
-    /* Основные цветовые акценты */
-    --color-primary: #A7DFF1;
-    --color-primary-hover: #7BC8E3;
-
-    /* Темные цвета фона и оверлея */
-    --color-background-dark: #313036;
-    --scrollbar-track: #F0F3F6;
-    --scrollbar-thumb: #2E374F;
-
-    /* Цвета теней и оверлеев */
-    --color-shadow: rgba(0, 0, 0, 0.25);
-    --color-overlay: rgba(0, 0, 0, 0.27);
-
     /* Тени */
-    --shadow-main: 0 20px 20px 0 var(--color-shadow);
+    --main-box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
-    /* Отступы и интервалы */
-    --gap-small: 13px;
-    --gap-medium: 20px;
-    --gap-large: 110px;
-
-    /* Универсальные отступы (спейсы) */
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-
-    /* Размытие для backdrop-filter */
-    --blur-backdrop: 10px;
-
-    /* Радиусы скругления */
-    --border-radius: 10px;
-    --border-radius-xs: 6px;
-    --border-radius-sm: 10px;
-    --border-radius-md: var(--border-radius);
-    --border-radius-lg: 1rem;
+    /* Фоны */
+    --background: radial-gradient(92.92% 490.48% at 6.95% 10.91%, rgba(255, 255, 255, 0.32) 0%, #2973C8 79.81%);
+    --bg-primary: #F0F3F6;
+    --bg-secondary: #FEFEFE;
+    --bg-tertiary: #EBEBEB;
+    --bg-quaternary: #2E374F;
 
     /* Шрифты */
-    --font-base: 1rem;
+    --font-primary: #2E374F;
+    --font-secondary: #FEFEFE;
+    --font-tertiary: #EBEBEB;
+    --font-quaternary: #F0F3F6;
 
-    /* Размеры для адаптивности */
-    --main-padding: clamp(20px, 4vw, 114px);
-    --form-width: min(754px, 90vw);
-    --form-max-width: 754px;
+    /* Кнопки */
+    --btn-primary: #FF6700;
+    --btn-primary-hover: #E55E00;
+    --btn-secondary: #A7DFF1;
+    --btn-secondary-hover: #8CC3D6;
+    --btn-tertiary: #2E374F;
+    --btn-tertiary-hover: #27324A;
+    --btn-quaternary: #FEFEFE;
+    --btn-quaternary-hover: #E6E6E6;
+    --btn-bg-primary: #F0F3F6;
+    --btn-bg-primary-hover: #D9DDE1;
+
+    /* Ошибки и всплывающие окна */
+    --alert-error: #F54447;
+    --alert-success: #6EFF78;
+    --alert-info: #F0F3F6;
 }
 
+/* Тёмная тема */
+[data-theme="dark"] {
+    /* Фоны */
+    --bg-primary: #111111;
+    --bg-secondary: #242424;
+    --bg-tertiary: #2E374F;
+    --bg-quaternary: #F0F3F6;
+    --bg-quinary: #EBEBEB;
+
+    /* Шрифты */
+    --font-primary: #FFF;
+    --font-secondary: #EBEBEB;
+
+    /* Кнопки */
+    --btn-primary: #FF6700;
+    --btn-primary-hover: #E55E00; /* чуть темнее */
+    --btn-secondary: #A7DFF1;
+    --btn-secondary-hover: #8CC3D6;
+    --btn-tertiary: #242424;
+    --btn-tertiary-hover: #1E1E1E;
+
+    /* Ошибки и всплывающие окна */
+    --alert-error: #F54447;
+    --alert-success: #6EFF78;
+    --alert-info: #F0F3F6;
+}
 
 * {
     box-sizing: border-box;
@@ -89,7 +71,7 @@ body {
     height: 100vh;
     overflow: hidden;
     font-family: "Inter", sans-serif;
-    color: var(--textColor);
+    color: var(--font-primary);
     font-optical-sizing: auto;
     font-style: normal;
     margin: 0;
@@ -151,7 +133,7 @@ button, input {
 }
 
 .logo .title p {
-    color: #A7DFF1;
+    color: var(--btn-secondary);
     font-size: 1.625rem;
     font-style: normal;
     font-weight: 600;
@@ -176,7 +158,7 @@ button, input {
 
 
 .dev-mode span{
-    color: #2E374F;
+    color: var(--font-primary);
     text-align: center;
     font-size: 1rem;
     font-style: normal;

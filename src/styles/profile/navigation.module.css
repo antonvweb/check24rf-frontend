@@ -32,7 +32,7 @@
     transition: color .2s;
 }
 .selected{
-    color:#FFF;
+    color:var(--font-secondary);
 }
 
 .icon{

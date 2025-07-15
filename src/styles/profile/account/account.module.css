@@ -81,8 +81,8 @@
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    background: #FEFEFE;
-    box-shadow: 0 4px 4px 1px rgba(0, 0, 0, 0.25);
+    background: var(--bg-secondary);
+    box-shadow: var(--main-box-shadow);
     overflow: hidden;
     height: 100%;
 }
@@ -110,8 +110,8 @@
     padding: 18px;
     flex: 15.84%;
     border-radius: 10px;
-    background: #FEFEFE;
-    box-shadow: 0 4px 4px 1px rgba(0, 0, 0, 0.25);
+    background: var(--btn-quaternary);
+    box-shadow: var(--main-box-shadow);
     font-size: 1.3125rem;
     font-style: normal;
     font-weight: 600;
@@ -126,7 +126,7 @@
 }
 
 .autoPayment:hover{
-    background: #dcdfe3;
+    background: var(--btn-quaternary-hover);
 }
 
 .autoPayment:hover svg{
@@ -161,12 +161,12 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    background: #2E374F;
+    background: var(--bg-quaternary);
     flex: .1;
 }
 
 .title{
-    color: #FEFEFE;
+    color: var(--font-secondary);
     font-size: 1.3125rem;
     font-weight: 600;
     line-height: normal;
@@ -234,8 +234,8 @@
     position: relative;
     width: 100%;
     height: 12px;
-    background: #F0F3F6;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    background: var(--bg-secondary);
+    box-shadow: var(--main-box-shadow);
     border-radius: 15px;
 }
 
@@ -247,7 +247,7 @@
     width: 80%;
     height: 8px;
     border-radius: 15px;
-    background: #2E374F;
+    background: var(--font-primary);
 }
 
 .changeBtns{
@@ -263,8 +263,8 @@
     border: none;
     outline: none;
     border-radius: 5px;
-    background: #A7DFF1;
-    color: var(--textColor);
+    background: var(--btn-secondary);
+    color: var(--font-primary);
     font-size: .9rem;
     font-style: normal;
     font-weight: 600;
@@ -275,7 +275,7 @@
 }
 
 .changeBtns button:hover{
-    background: var(--color-primary-hover);
+    background: var(--btn-secondary-hover);
 }
 
 .changeBtns button:active{
@@ -287,7 +287,7 @@
     display: flex;
     flex-direction: row;
     gap: 18px;
-    color: #2E374F;
+    color: var(--font-primary);
     font-size: 1rem;
     font-style: normal;
     font-weight: 600;
@@ -300,12 +300,12 @@
 
 .btnPeriod{
     border-radius: 5px;
-    background-color: #F0F3F6;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background-color: var(--btn-bg-primary);
+    box-shadow: var(--main-box-shadow);
     border: none;
     outline: none;
     padding: 5px 18px;
-    color: var(--textColor);
+    color: var(--font-primary);
     font-size: .85rem;
     font-style: normal;
     font-weight: 600;
@@ -315,7 +315,7 @@
 }
 
 .btnPeriod:hover {
-    background-color: #dcdfe3;
+    background-color: var(--btn-bg-primary-hover);
     transform: scale(1.05);
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
 }
@@ -327,9 +327,9 @@
 
 
 .activePeriod {
-    background-color: #2E374F;
+    background-color: var(--btn-tertiary);
     border-radius: 5px;
-    color: var(--mainTextColor);
+    color: var(--font-secondary);
     box-shadow: 0 4px 10px rgba(46, 55, 79, 0.6);
     transform: scale(1.05);
     padding: 5px 18px;
@@ -342,7 +342,7 @@
 }
 
 .activePeriod:hover {
-    background-color: var(--textColorHover);
+    background-color: var(--btn-tertiary-hover);
     transform: scale(1.05);
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
 }
@@ -358,7 +358,7 @@
     border: none;
     align-items: center;
     justify-content: center;
-    color: #FEFEFE;
+    color: var(--btn-quaternary);
     font-size: 1.3125rem;
     font-style: normal;
     font-weight: 600;
@@ -369,7 +369,7 @@
 
 .payBtn:hover{
     background: #252c3e;
-    color: var(--mainTextColor);
+    color: var(--bg-secondary);
 }
 
 .reklama {
@@ -405,8 +405,8 @@
     padding: 7px 25px 20px;
     border-radius: 6px;
     background: #2E374F;
-    box-shadow: 0 4px 4px 1px rgba(0, 0, 0, 0.25);
-    color: #FFF;
+    box-shadow: var(--main-box-shadow);
+    color: var(--bg-secondary);
     justify-content: center;
     align-items: center;
 }
@@ -429,7 +429,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--textColor);
+    background: var(--bg-quaternary);
     border-radius: 6px;
     padding: 10px;
     width: 100%;
@@ -448,7 +448,7 @@
 }
 
 .dateGraph{
-    color: var(--text-invert);
+    color: var(--bg-secondary);
     font-size: .75rem;
     font-weight: 400;
     opacity: .6;

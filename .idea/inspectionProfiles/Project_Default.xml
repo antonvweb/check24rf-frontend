@@ -6,8 +6,30 @@
       <option name="myIgnoreVendorSpecificProperties" value="false" />
       <option name="myCustomPropertiesList">
         <value>
-          <list size="1">
+          <list size="23">
             <item index="0" class="java.lang.String" itemvalue="drop-shadow" />
+            <item index="1" class="java.lang.String" itemvalue="-bg-primary" />
+            <item index="2" class="java.lang.String" itemvalue="-bg-secondary" />
+            <item index="3" class="java.lang.String" itemvalue="-bg-tertiary" />
+            <item index="4" class="java.lang.String" itemvalue="-bg-quaternary" />
+            <item index="5" class="java.lang.String" itemvalue="-font-primary" />
+            <item index="6" class="java.lang.String" itemvalue="-font-secondary" />
+            <item index="7" class="java.lang.String" itemvalue="-font-tertiary" />
+            <item index="8" class="java.lang.String" itemvalue="-font-quaternary" />
+            <item index="9" class="java.lang.String" itemvalue="-btn-primary" />
+            <item index="10" class="java.lang.String" itemvalue="-btn-primary-hover" />
+            <item index="11" class="java.lang.String" itemvalue="-btn-secondary" />
+            <item index="12" class="java.lang.String" itemvalue="-btn-secondary-hover" />
+            <item index="13" class="java.lang.String" itemvalue="-btn-tertiary" />
+            <item index="14" class="java.lang.String" itemvalue="-btn-tertiary-hover" />
+            <item index="15" class="java.lang.String" itemvalue="-btn-quaternary" />
+            <item index="16" class="java.lang.String" itemvalue="-btn-quaternary-hover" />
+            <item index="17" class="java.lang.String" itemvalue="-btn-bg-primary" />
+            <item index="18" class="java.lang.String" itemvalue="-alert-error" />
+            <item index="19" class="java.lang.String" itemvalue="-alert-success" />
+            <item index="20" class="java.lang.String" itemvalue="-alert-info" />
+            <item index="21" class="java.lang.String" itemvalue="-bg-quinary" />
+            <item index="22" class="java.lang.String" itemvalue="-btn-bg-primary-hover" />
           </list>
         </value>
       </option>

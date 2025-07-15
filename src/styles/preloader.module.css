@@ -5,7 +5,7 @@
     z-index: 9999;
     width: 100vw;
     height: 100vh;
-    background-color: #F0F3F6;
+    background-color: var(--bg-primary);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,7 +40,7 @@
 }
 
 .path {
-    stroke: #FF6700;
+    stroke: var(--btn-primary);
     stroke-linecap: round;
     stroke-dasharray: 1, 150;
     stroke-dashoffset: 0;

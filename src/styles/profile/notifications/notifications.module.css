@@ -48,7 +48,7 @@
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    background: #FEFEFE;
+    background: var(--bg-secondary);
     padding: 20px;
     font-size: 1rem;
     font-weight: 500;
@@ -62,8 +62,8 @@
     }
 
 .activeItem {
-    background: #2E374F;
-    color: #EBEBEB;
+    background: var(--bg-quaternary);
+    color: var(--font-tertiary);
 }
 
 .description {

@@ -2,7 +2,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    background: var(--secondery_background);
+    background: var(--bg-secondary);
     z-index: 0;
 }
 
@@ -15,7 +15,7 @@
     flex-direction: column;
     gap: 20px;
     z-index: 1;
-    color: var(--textColor);
+    color: var(--font-primary);
     max-width: 100%; /* по умолчанию */
     margin: 0 auto;   /* центрирование */
 }
