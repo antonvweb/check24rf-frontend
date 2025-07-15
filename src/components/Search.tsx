@@ -1,29 +1,51 @@
 import React, { useState } from 'react';
 import styles from '../styles/profile/checkList/search.module.css';
 
+
 export default function Search() {
     const [query, setQuery] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [closeSuggestions, setCloseSuggestions] = useState(false);
 
-    // Жёстко заданные данные для примера
-    const suggestions = {
-        seller: ['Яндекс.Такси', 'ООО “ЯНДЕКС.ТАКСИ”'],
-        inn: '7704340310',
-        buyer: '+7 (993) 477-07-90',
-    };
+    const suggestions = [
+        {
+            seller: ['Яндекс.Такси', 'ООО “ЯНДЕКС.ТАКСИ”'],
+            inn:'7704340310',
+            buyer:'+7 (993) 477-07-90',
+            data:'05.04.2025, 16:46'
+        },
+        {
+            seller: ['Wildberries', 'ООО “ВАЙЛДБЕРРИЗ”'],
+            inn:'7721546864',
+            buyer:'+7 (993) 477-07-90',
+            data:'01.01.2025, 12:31'
+        },
+        {
+            seller: ['Золушка', 'ООО “ЗОЛУШКА”'],
+            inn:'5012083360',
+            buyer:'+7 (993) 477-07-90',
+            data:'12.03.2024, 01:46'
+        }
+    ];
 
-    // Обработчик изменения input
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value;
         setQuery(value);
 
-        // Показываем подсказки, если введено слово "Яндекс" (регистр не важен)
-        if (value.toLowerCase().includes('яндекс')) {
+        if (value !== "") {
+            setCloseSuggestions(false);
             setShowSuggestions(true);
         } else {
-            setShowSuggestions(false);
+            setCloseSuggestions(true);
+
+            setTimeout(() => {
+                setShowSuggestions(false);
+                setCloseSuggestions(false);
+            }, 400);
         }
     }
+
+
 
     return (
         <div className={styles.search}>
@@ -46,23 +68,17 @@ export default function Search() {
             />
 
             {showSuggestions && (
-                <div className={styles.overWrapper}
-                >
-                    <div className={styles.overItem}>
-                        <strong>Продавец:</strong><br />
-                        <div>
-                            <span>{suggestions.seller[0]}</span><br />
-                            <span>{suggestions.seller[1]}</span>
+                <div className={`${styles.overWrapper} ${closeSuggestions ? styles.close : styles.open}`}>
+                {suggestions.map((item, i) => (
+                        <div key={i} className={styles.overItem}>
+                            <div>
+                                <span>{item.seller[0]}</span><br />
+                                <span>{item.seller[1]}</span>
+                            </div>
+                            <span>{item.data}</span>
+                            <span>{item.inn}</span>
                         </div>
-                        </div>
-                    <div className={styles.overItem}>
-                        <strong>ИНН:</strong><br />
-                        <span>{suggestions.inn}</span>
-                    </div>
-                    <div className={styles.overItem}>
-                        <strong>Покупатель:</strong><br />
-                        <span>{suggestions.buyer}</span>
-                    </div>
+                    ))}
                 </div>
             )}
         </div>

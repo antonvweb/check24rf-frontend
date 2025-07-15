@@ -1,17 +1,19 @@
 import styles from '@/styles/profile/checkList/payModel.module.css'
 import { Receipt } from "@/components/types/interfaces";
-import {CustomCheckbox} from "@/components/ui/CustomCheckbox";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import {useState} from "react";
 import {Box} from "@mui/system";
+import {userPaySubscribe} from "@/components/Account";
 
 interface PayModelProps {
-    items: Receipt[];
+    type: "checks" | "subscribe";
+    items?: Receipt[];               // для чеков
+    subscription?: userPaySubscribe; // для подписки (отдельный пропс)
     isVisible: boolean;
 }
 
-export const PayModel = ({ items, isVisible }: PayModelProps) => {
-    const [checked, setChecked] = useState(false);
+
+export const PayModel = ({ type, items, subscription, isVisible }: PayModelProps) => {
     const [paymentMethod, setPaymentMethod] = useState('');
 
     const handlePaymentChange = (event: SelectChangeEvent) => {
@@ -19,33 +21,49 @@ export const PayModel = ({ items, isVisible }: PayModelProps) => {
     };
 
     if (!isVisible) return null;
-
-    const handleChange = (value: boolean) => {
-        setChecked(value);
-    };
-
     return (
         <div
             className={styles.payModel}
             onClick={e => e.stopPropagation()}
         >
             <div className={styles.payCheckList}>
-                {items.map((r, i) => (
-                    <div key={i} className={styles.item}>
-                        <span className={styles.buyer}>{r.date}</span>
-                        <div className={styles.salesManData}>
-                            <span className={styles.salesman}>{r.salesman}</span>
-                            <span className={styles.ooo}>{r.ooo}</span>
+                {type === "checks" ?
+                    (
+                        items?.map((r, i) => (
+                            <div key={i} className={styles.item}>
+                                <span className={styles.buyer}>{r.date}</span>
+                                <div className={styles.salesManData}>
+                                    <span className={styles.salesman}>{r.salesman}</span>
+                                    <span className={styles.ooo}>{r.ooo}</span>
+                                </div>
+                                <span className={styles.price}>{r.price.toFixed(2)} Руб.</span>
+                            </div>
+                        ))
+                    )
+                :
+                    (
+                        <div className={styles.item}>
+                            <span className={styles.buyer}>{subscription?.user}</span>
+                            <span className={styles.salesman}>{subscription?.monthPeriod}</span>
+                            <span className={styles.price}>{subscription?.price.toFixed(2)} Руб.</span>
                         </div>
-                        <span className={styles.price}>{r.price.toFixed(2)} Руб.</span>
-                    </div>
-                ))}
+                    )
+                }
             </div>
             <div className={styles.functional}>
-               <div className={styles.resultPayment}>
-                   <span>Сумма выбранных чеков</span>
-                   <span>{items.length * 12} ₽</span>
-               </div>
+                <div className={styles.resultPayment}>
+                    {type === "checks" && Array.isArray(items) ? (
+                        <>
+                            <span>Сумма выбранных чеков</span>
+                            <span>{items.reduce((acc, r) => acc + r.price, 0).toFixed(2)} ₽</span>
+                        </>
+                    ) : !Array.isArray(items) && type === "subscribe" ? (
+                        <>
+                            <span>Сумма: </span>
+                            <span>{subscription?.price.toFixed(2)} ₽</span>
+                        </>
+                    ) : null}
+                </div>
                 <div className={styles.paymentList}>
                     <span>Способ оплаты</span>
                     <FormControl fullWidth size="medium">
@@ -122,16 +140,6 @@ export const PayModel = ({ items, isVisible }: PayModelProps) => {
                 <div className={styles.mailForTheCheck}>
                     <span>Почта для чека</span>
                     <input type="email" placeholder={"Введите почту"}/>
-                </div>
-                <div className={styles.agreementsPayment}>
-                    <div className={styles.top}>
-                        <CustomCheckbox
-                            checked={checked}
-                            onChange={(e) => handleChange(e.target.checked)}
-                        />
-                        <span>Соглашение</span>
-                    </div>
-                    <span className={styles.description}>Бла блабла бла блаблабла блабла бла бла бла бла бла</span>
                 </div>
                 <div className={styles.btns}>
                     <button type={"button"} className={styles.addArchiveBtn}>Добавить в архив</button>

@@ -6,11 +6,13 @@
     --bg-dark: #2E374F;
     --bg-light: #FEFEFE;
     --secondery_background: #F0F3F6;
+    --secondery_background_hover: #dde1e4;
 
     /* Основные цвета текста */
     --mainTextColor: #EBEBEB;
     --blackTextColor: #151515;
     --textColor: #2E374F;
+    --textColorHover: #252c3e;
     --color-text-primary: #000;
     --color-text-secondary: #666;
 
@@ -61,13 +63,6 @@
     /* Размытие для backdrop-filter */
     --blur-backdrop: 10px;
 
-    /* Скроллбары */
-
-    /* Переходы */
-    --transition: 0.3s ease;
-    --transition-default: var(--transition);
-    --transition-fast: 0.2s ease;
-
     /* Радиусы скругления */
     --border-radius: 10px;
     --border-radius-xs: 6px;
@@ -89,14 +84,6 @@
     box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
 body {
     width: 100vw;
     height: 100vh;
@@ -114,7 +101,7 @@ p, h1, h2, h3, h4, h5, h6 {
     padding: 0;
 }
 
-button {
+button, input {
     font-family: "Inter", sans-serif;
     border: none;
     outline: none;

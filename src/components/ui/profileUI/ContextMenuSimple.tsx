@@ -1,8 +1,8 @@
 // components/ui/ContextMenuSimple.tsx
 'use client';
 
-import React, {useRef} from 'react';
-import styles from '../../../styles/profile/checkList/contextMenuSimple.module.css';
+import React, {useEffect, useRef, useState} from 'react';
+import styles from '@/styles/profile/checkList/contextMenuSimple.module.css';
 
 interface ContextMenuSimpleProps {
     isVisible: boolean;
@@ -22,13 +22,26 @@ const svgForActions = [
 ]
 
 export const ContextMenuSimple = ({isVisible, onDownload, onArchive, mode } :ContextMenuSimpleProps) => {
+    const [shouldRender, setShouldRender] = useState(isVisible);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (isVisible) {
+            setShouldRender(true);
+        } else if (shouldRender) {
+            const timer = setTimeout(() => {
+                setShouldRender(false);
+            }, 400); // Должен совпадать с длительностью анимации
+            return () => clearTimeout(timer);
+        }
+    }, [isVisible, shouldRender]);
+
+    if (!shouldRender) return null;
 
     return (
         <div
             ref={menuRef}
-            className={styles.menu}
-            style={{ display: isVisible ? 'flex' : 'none' }}
+            className={`${styles.menu} ${isVisible ? styles.open : styles.close}`}
         >
             <button onClick={onDownload}>
                 {svgForActions[0]}

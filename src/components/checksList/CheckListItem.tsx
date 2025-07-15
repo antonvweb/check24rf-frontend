@@ -6,6 +6,7 @@ import { Receipt } from "@/components/types/interfaces";
 import { RandomSvgLogo } from "@/components/ui/svgLogo/SvgLogoTypes";
 
 interface CheckListItemProps {
+    id: number;
     item: Receipt;
     isChecked: boolean;
     onToggle: (item: Receipt, checked: boolean) => void;
@@ -18,7 +19,7 @@ function getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export const CheckListItem = ({ item, isChecked, onToggle, onContextMenuOpen }: CheckListItemProps) => {
+export const CheckListItem = ({ id, item, isChecked, onToggle, onContextMenuOpen }: CheckListItemProps) => {
     const [checked, setChecked] = useState(isChecked);
 
     useEffect(() => {
@@ -37,10 +38,13 @@ export const CheckListItem = ({ item, isChecked, onToggle, onContextMenuOpen }: 
 
     return (
         <div
-            className={`${styles.listItem} ${checked ? styles.selectListItem : ""}`}
+            className={`${styles.listItem} ${styles.fadeIn} ${checked ? styles.selectListItem : ""}`}
             aria-checked={checked}
             onClick={() => handleChange(!checked)}
             onContextMenu={handleContextMenu}
+            style={{
+                animationDelay: `${id * 50}ms`,
+            }}
         >
             {!item.logo ? (
                 <RandomSvgLogo id={getRandomInt(0, 3)} />

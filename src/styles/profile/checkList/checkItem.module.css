@@ -74,6 +74,15 @@
     border-radius: 5px;
     cursor: pointer;
     max-height: max-content ;
+    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.moreFunc:hover{
+    background: #F0F3F6;
+}
+
+.moreFunc:active{
+    transform: scale(.97);
 }
 
 .closeBtn{
@@ -82,6 +91,11 @@
     cursor: pointer;
     border: none;
     outline: none;
+    transition: transform 0.1s ease-in-out;
+}
+
+.closeBtn:active{
+    transform: scale(.97);
 }
 
 .data {
@@ -185,15 +199,29 @@
 }
 
 .download {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
     margin: 0 auto;
-    padding: 6px 41px;
+    padding: 11px 20px;
     border: none;
     background: #FF6700;
     color: white;
-    font-size: 1.75rem;
+    font-size: 1rem;
     border-radius: 5px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;
+    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.download:hover {
+    background: #dd5e09;
+}
+
+.download:active {
+    transform: scale(.97);
 }
 
 .qrCode {
@@ -240,6 +268,7 @@
 .itemChecksList .item {
     display: grid;
     grid-template-columns: 1.74fr 1.44fr 1.3fr;
+    align-items: center;
 }
 
 

@@ -53,7 +53,7 @@ export const Support = () => {
                 ...prev,
                 {
                     from: "admin",
-                    text: "Да",
+                    text: "Это тестовое сообщение",
                     time: getCurrentTime(),
                 },
             ]);
@@ -130,13 +130,11 @@ export const Support = () => {
                     </div>
 
                     <button type={"button"}>
-                        <span className={styles.content}>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
                             <path d="M7 14V0.5" stroke="#2E374F" strokeWidth="2" strokeMiterlimit="3.99393"/>
                             <path d="M0.254883 7.24512L13.7549 7.24512" stroke="#2E374F" strokeWidth="2" strokeMiterlimit="3.99393"/>
-                          </svg>
-                          <span>Новое обращение</span>
-                        </span>
+                        </svg>
+                        <span>Новое обращение</span>
                     </button>
                 </div>
             </main>

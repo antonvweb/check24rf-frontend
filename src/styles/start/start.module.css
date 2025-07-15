@@ -119,8 +119,16 @@
     border-radius: var(--border-radius-sm);
     padding: clamp(8px, 1vh, 15px) clamp(6px, 0.5vw, 12px) clamp(3px, 0.22vw, 6px);
     cursor: pointer;
-    transition: all var(--transition-default);
+    transition: background .2s ease-in-out, transform .2s ease-in-out;
     flex-shrink: 0;
+}
+
+.techSupportButton:hover {
+    background: var(--mainTextColor);
+}
+
+.techSupportButton:active {
+    transform: translateY(2px);
 }
 
 .techSupportText {
@@ -205,7 +213,7 @@
     line-height: 1.2;
     padding: 0 clamp(8px, 1vw, 15px);
     outline: none;
-    transition: border-color var(--transition-default);
+    transition: border-color .2s ease-in-out;
 }
 
 .numberPhoneInput::placeholder {
@@ -257,7 +265,7 @@
     font-weight: 400;
     line-height: 1.2;
     text-align: center;
-    transition: border-color var(--transition-default);
+    transition: border-color .2s ease-in-out;
 }
 
 .codeInputError {
@@ -352,7 +360,11 @@
     font-weight: 500;
     line-height: inherit;
     padding: 0;
-    transition: color var(--transition-default);
+    transition: color .2s ease-in-out, color .2s ease-in-out;
+}
+
+.captchaLink:hover {
+    color: var(--color-primary-hover);
 }
 
 .captchaLink:disabled {

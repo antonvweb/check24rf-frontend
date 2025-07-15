@@ -5,9 +5,10 @@ import {Box} from "@mui/system";
 
 interface PayModelProps {
     isVisible: boolean;
+    close: () => void;
 }
 
-export const DownloadModal = ({ isVisible }: PayModelProps) => {
+export const DownloadModal = ({ close ,isVisible }: PayModelProps) => {
     const [paymentMethod, setPaymentMethod] = useState('');
 
     const handlePaymentChange = (event: SelectChangeEvent) => {
@@ -96,8 +97,8 @@ export const DownloadModal = ({ isVisible }: PayModelProps) => {
                     <input type="email" placeholder={"Введите почту"}/>
                 </div>
                 <div className={styles.btns}>
-                    <button type={"button"} className={styles.addArchiveBtn}>Добавить в архив</button>
-                    <button type={"button"} className={styles.downloadBtn}>Скачать</button>
+                    <button type={"button"} className={styles.addArchiveBtn} onClick={close}>Добавить в архив</button>
+                    <button type={"button"} className={styles.downloadBtn} onClick={close}>Скачать</button>
                 </div>
             </div>
         </div>

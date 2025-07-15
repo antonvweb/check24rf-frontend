@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState, useEffect, useRef} from 'react';
 import styles from '@/styles/profile/notifications/notifications.module.css';
 
 interface NotificationItemProps {
@@ -9,6 +9,20 @@ interface NotificationItemProps {
 
 export const NotificationItems = ({ date, type, description }: NotificationItemProps) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [height, setHeight] = useState('0px');
+
+    useEffect(() => {
+        if (contentRef.current) {
+            if (isExpanded) {
+                const scrollHeight = contentRef.current.scrollHeight;
+                setHeight((scrollHeight + 25) + 'px');
+            } else {
+                setHeight('0px');
+            }
+        }
+    }, [isExpanded]);
+
     const toggleExpand = () => setIsExpanded(prev => !prev);
 
     return (
@@ -24,11 +38,10 @@ export const NotificationItems = ({ date, type, description }: NotificationItemP
                 <div className={styles.date}>{date}</div>
                 <div className={styles.info}>
                     <div className={styles.type}>{type}</div>
-                    {!isExpanded && (
-                        <div className={styles.description}>
-                            {description.length > 120 ? description.slice(0, 120) + '...' : description}
-                        </div>
-                    )}
+                    {/* Верхнее описание исчезает при раскрытии */}
+                    <div className={`${styles.description} ${isExpanded ? styles.descriptionHidden : ''}`}>
+                        {description.length > 120 ? description.slice(0, 120) + '...' : description}
+                    </div>
                 </div>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +65,18 @@ export const NotificationItems = ({ date, type, description }: NotificationItemP
                     />
                 </svg>
             </div>
-            {isExpanded && <div className={styles.fullDescription}>{description}</div>}
+            <div
+                ref={contentRef}
+                className={styles.fullDescription}
+                style={{
+                    height,
+                    opacity: isExpanded ? 1 : 0,
+                    paddingTop: isExpanded ? '25px' : '0',
+                }}
+                aria-hidden={!isExpanded}
+            >
+                {description}
+            </div>
         </div>
     );
 };

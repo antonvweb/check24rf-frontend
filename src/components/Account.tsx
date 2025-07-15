@@ -2,8 +2,58 @@ import styles from "@/styles/profile/account/account.module.css";
 import Reference from "@/components/Reference";
 import ChangeTheme from "@/components/ChangeTheme";
 import {BalanceChart} from "@/components/ui/BalanceChart";
+import {PayModel} from "@/components/ui/profileUI/PayModel";
+import {useEffect, useState} from "react";
+
+const periods = [
+    { label: "1 мес.", value: "1m" },
+    { label: "3 мес.", value: "3m" },
+    { label: "6 мес.", value: "6m" },
+    { label: "1 год.", value: "1y" }
+];
+
+export interface userPaySubscribe {
+    user: string;
+    monthPeriod: string | null;
+    price: number;
+}
 
 export const Account = () => {
+    const [isPayMenuVisible, setIsPayMenuVisible] = useState(false);
+    const [selectedPeriod, setSelectedPeriod] = useState<string | null>("1m");
+
+    const handleSelectPeriod = (period: string) => {
+        console.log("Выбрано:", period); // ✅ Проверка
+        setSelectedPeriod(period);
+    };
+
+    const user: userPaySubscribe = {
+        user: "SERGEY BURUNOV",
+        monthPeriod: selectedPeriod,
+        price: (() => {
+            switch (selectedPeriod) {
+                case "1m":
+                    return 100;
+                case "3m":
+                    return 300;
+                case "6m":
+                    return 600;
+                case "1y":
+                    return 1200;
+                default:
+                    return 0;  // на случай, если selectedPeriod null или неизвестное значение
+            }
+        })()
+    };
+
+
+    useEffect(() => {
+        document.body.style.overflow = isPayMenuVisible ? 'hidden' : '';
+    }, [isPayMenuVisible]);
+
+    const openPayMenu   = () => setIsPayMenuVisible(true);
+    const closePayMenu  = () => setIsPayMenuVisible(false);
+
     return (
         <div className={styles.account}>
             <header className={styles.header}>
@@ -72,13 +122,25 @@ export const Account = () => {
                                         <div className={styles.progressBar}/>
                                         <div className={styles.extend}>
                                             <span>Продлить на</span>
-                                            <button type={"button"}>1 мес.</button>
-                                            <button type={"button"}>3 мес.</button>
-                                            <button type={"button"}>6 мес.</button>
-                                            <button type={"button"}>1 год.</button>
+                                            {periods.map(({ label, value }) => (
+                                                <button
+                                                    key={value}
+                                                    type="button"
+                                                    className={selectedPeriod === value ? styles.activePeriod : styles.btnPeriod}
+                                                    onClick={() => handleSelectPeriod(value)}
+                                                >
+                                                    {label}
+                                                </button>
+                                            ))}
                                         </div>
                                     </div>
-                                    <button type={"button"} className={styles.payBtn}>Перейти к оплате</button>
+                                    <button type={"button"} className={styles.payBtn} onClick={openPayMenu}>Перейти к оплате</button>
+                                    {isPayMenuVisible && (
+                                        <>
+                                            <div className={styles.modalOverlay} onClick={closePayMenu} />
+                                            <PayModel type={"subscribe"} subscription={user} isVisible={true} />
+                                        </>
+                                    )}
                                 </div>
                                 <div className={styles.autoPayment}>
                                     <span>Отключить автоплатёж</span>

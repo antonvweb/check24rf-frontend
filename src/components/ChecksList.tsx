@@ -11,6 +11,7 @@ import ChangeTheme from "@/components/ChangeTheme";
 import {useLoadReceipts} from "@/components/API/useLoadReceipts";
 import {useCheckedItems} from "@/hooks/useCheckedItems";
 import {SortControls} from "@/components/ui/profileUI/SortControls";
+import { AnimatePresence } from 'framer-motion';
 
 type MenuState = {
     x: number;
@@ -27,6 +28,7 @@ interface ChecksListProps {
 
 export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksListProps) {
     const [contextMenu, setContextMenu] = useState<MenuState>(null);
+    const [isContextMenuVisible, setContextMenuVisible] = useState(false);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -40,10 +42,12 @@ export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksList
 
     const handleContextMenuOpen = (item: Receipt, checked: boolean, x: number, y: number) => {
         setContextMenu({ x, y, item, checked });
+        setContextMenuVisible(true);
     };
 
     const handleContextMenuClose = () => {
         setContextMenu(null);
+        setContextMenuVisible(false);
     };
 
     const listChecked = items.filter(i => checkedIds.has(i.id));
@@ -85,16 +89,19 @@ export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksList
                             </svg>
                         </button>
 
-                        {isCalendarOpen && (
-                            <CalendarModel />
-                        )}
+                        <AnimatePresence>
+                            {isCalendarOpen && (
+                                <CalendarModel/>
+                            )}
+                        </AnimatePresence>
                         {<SortControls setSortKey={setSortKey} setOrderDir={setOrderDir} /> }
                         <div className={styles.stub}/>
                     </div>
                     <div className={styles.list}>
-                        {items.map((item) => (
+                        {items.map((item, index) => (
                             <CheckListItem
                                 key={item.id}
+                                id={index} // ✅ передаём индекс, а не id
                                 item={item}
                                 onToggle={toggleItem}
                                 isChecked={listChecked.some(i => i.id === item.id)}
@@ -112,6 +119,7 @@ export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksList
                         )}
                         {contextMenu && contextMenu.item && (
                             <ContextMenu
+                                isVisible={isContextMenuVisible}
                                 x={contextMenu.x}
                                 y={contextMenu.y}
                                 onClose={handleContextMenuClose}

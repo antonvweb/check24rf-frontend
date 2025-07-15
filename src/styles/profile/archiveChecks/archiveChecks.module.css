@@ -62,6 +62,7 @@
     gap: 30px;
     align-items: center;
     flex-wrap: wrap;
+    padding: 15px;
 }
 
 .archiveItem{
@@ -182,11 +183,29 @@
 }
 
 .unArchiveItem{
-    background: #2E374F;
+    background: var(--textColor);
+    transition: background .2s ease-in-out, transform .2s ease-in-out;
+}
+
+.unArchiveItem:hover{
+    background: #252c3e;
+}
+
+.unArchiveItem:active{
+    transform: scale(.97);
 }
 
 .download{
     background: #FF6700;
+    transition: background .2s ease-in-out, transform .2s ease-in-out;
+}
+
+.download:hover{
+    background: #dd5e09;
+}
+
+.download:active{
+    transform: scale(.97);
 }
 
 .modalOverlay {

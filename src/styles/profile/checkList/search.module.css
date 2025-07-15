@@ -46,16 +46,52 @@
     background: #FFF;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     overflow: hidden;
+    transform: translateY(0);
+    opacity: 0;
+    pointer-events: none; /* Скрыто по умолчанию */
+}
+
+.overWrapper.open {
+    animation: slideInLeft 0.4s ease forwards;
+    pointer-events: auto;
+}
+
+.overWrapper.close {
+    animation: slideOutLeft 0.4s ease forwards;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
 }
 
 .overItem{
     display: flex;
     height: 49px;
     justify-content: space-between;
+    align-items: center;
     padding: 10px;
     width: 100%;
     background: #FFF;
     transition: background .2s ease-in-out;
+    text-align: left;
 }
 
 .overItem:hover{

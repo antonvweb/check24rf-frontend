@@ -1,7 +1,7 @@
 // ChatBox.tsx
 import styles from '../../styles/techSupport/ChatBox.module.css';
 import Image from 'next/image';
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 type Message = { from: 'user' | 'specialist'; text: string };
 

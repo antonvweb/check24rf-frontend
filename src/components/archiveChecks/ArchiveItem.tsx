@@ -56,7 +56,7 @@ export const ArchiveItem = ({id, date, count, checks} :ArchiveItemProps) => {
             {isOpenDownloadModal && (
                 <>
                     <div className={styles.modalOverlay} onClick={closeOpenDownloadModal} />
-                    <DownloadModal isVisible={true} />
+                    <DownloadModal isVisible={true} close={closeOpenDownloadModal}/>
                 </>
             )}
         </div>

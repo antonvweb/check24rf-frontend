@@ -171,7 +171,7 @@ export const ReceiptView = ({ receipt, onRemove, mode }: Props) => {
             {isOpenDownloadModal && (
                 <>
                     <div className={styles.modalOverlay} onClick={closeOpenDownloadModal} />
-                    <DownloadModal isVisible={true} />
+                    <DownloadModal isVisible={true} close={closeOpenDownloadModal} />
                 </>
             )}
         </div>

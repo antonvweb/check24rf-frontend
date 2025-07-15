@@ -126,6 +126,11 @@
     font-weight: 500;
     line-height: normal;
     padding: 9px;
+    transition: background 0.2s ease-in-out;
+}
+
+.sendMessage button:hover{
+    background: var(--textColorHover);
 }
 
 .appeals{
@@ -181,23 +186,30 @@
     outline: none;
     padding: 11px 0;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
     align-items: center;
     color: #2E374F;
     font-size: 1rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-}
-
-.appeals button .content{
+    transition: background 0.2s ease-in-out;
     display: flex;
     flex-direction: row;
     gap: 13px;
     justify-content: center;
 }
 
+.appeals button svg{
+    transition: transform 0.2s ease-in-out;
+}
+
+.appeals button:hover{
+    background: var(--secondery_background_hover);
+}
+
+.appeals button:active svg{
+    transform: rotate(45deg);
+}
 
 .appeal{
     background: #3E4966;
@@ -207,6 +219,34 @@
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.appeal svg{
+    transition: transform 0.2s ease-in-out;
+}
+
+.appeal:hover{
+    background: #343d55;
+}
+
+.appeal:hover svg {
+    animation: clickAppeal .5s ease-in-out forwards;
+}
+
+@keyframes clickAppeal {
+    0%{
+        transform: rotate(0);
+    }
+    50%{
+        transform: rotate(180deg);
+    }
+    51%{
+        transform: translateX(0) rotate(180deg);
+    }
+    100%{
+        transform: translateX(-10px) rotate(180deg);
+    }
 }
 
 .appeal .content{
@@ -237,14 +277,29 @@
     align-items: flex-end;
     margin-bottom: 12px;
     gap: 4px;
+    transform: translateX(0); /* для анимации */
+    animation: fadeInMessage 0.3s ease forwards;
+}
+
+@keyframes fadeInMessage {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .user {
     justify-content: flex-end;
+    transform: translateX(30px);
+    animation: slideInRight 0.4s ease forwards;
 }
 
 .admin {
     justify-content: flex-start;
+    transform: translateX(-30px);
+    animation: slideInLeft 0.4s ease forwards;
 }
 
 .messageBubble {
@@ -265,6 +320,28 @@
 .admin .messageBubble {
     background: #2E374F;
     color: #fff;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .text {

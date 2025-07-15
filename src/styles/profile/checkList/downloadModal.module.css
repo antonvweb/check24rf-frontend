@@ -73,14 +73,33 @@
     font-weight: 500;
     line-height: normal;
     cursor: pointer;
+
 }
 
 .addArchiveBtn{
     background: var(--textColor);
+    transition: background .2s ease-in-out, transform .2s ease-in-out;
+}
+
+.addArchiveBtn:hover{
+    background: #252c3e;
+}
+
+.addArchiveBtn:active{
+    transform: scale(.97);
 }
 
 .downloadBtn{
     background: #FF6700;
+    transition: background .2s ease-in-out, transform .2s ease-in-out;
+}
+
+.downloadBtn:hover{
+    background: #dd5e09;
+}
+
+.downloadBtn:active{
+    transform: scale(.97);
 }
 
 @media (min-width: 1024px) and (max-width: 1440px) {

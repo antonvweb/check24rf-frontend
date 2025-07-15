@@ -85,8 +85,33 @@ export const CalendarModel = () => {
     const days = getDaysInMonth(currentYear, currentMonth);
     const years = Array.from({ length: 6 }, (_, i) => yearStart - i);
 
+    const calendarVariants = {
+        hidden: {
+            opacity: 0,
+            y: -25,
+            transition: { duration: 0.3 },
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.3 },
+        },
+        exit: {
+            opacity: 0,
+            y: -25,
+            transition: { duration: 0.3 },
+        },
+    };
+
+
     return (
-        <div className={styles.CalendarModel}>
+        <motion.div
+            className={styles.CalendarModel}
+            variants={calendarVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+        >
             <div className={styles.left}>
                 <div className={styles.topMoth}>
                     <button onClick={handlePrevMonth}>
@@ -159,6 +184,6 @@ export const CalendarModel = () => {
                     </svg>
                 </button>
             </div>
-        </div>
+        </motion.div>
     );
 };

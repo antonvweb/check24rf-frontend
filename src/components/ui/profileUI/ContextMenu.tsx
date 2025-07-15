@@ -1,7 +1,8 @@
-import React, {useEffect} from "react";
-import styles from '../../../styles/profile/checkList/ContextMenu.module.css'
+import React, {useEffect, useRef} from "react";
+import styles from '@/styles/profile/checkList/ContextMenu.module.css'
 
 interface ContextMenuProps {
+    isVisible: boolean;
     x: number;
     y: number;
     onClose: () => void;
@@ -22,15 +23,27 @@ const svgForActions = [
     </svg>)
 ]
 
-export const ContextMenu = ({ x, y, onClose, actions }: ContextMenuProps) => {
+export const ContextMenu = ({isVisible, x, y, onClose, actions }: ContextMenuProps) => {
+    const menuRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        const handleClickOutside = () => onClose();
-        document.addEventListener("click", handleClickOutside);
-        return () => document.removeEventListener("click", handleClickOutside);
-    }, [onClose]);
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                onClose();
+            }
+        };
+
+        if (isVisible) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isVisible, onClose]);
 
     return (
-        <ul className={styles.menu}
+        <ul
+            className={`${styles.menu} ${isVisible ? styles.open : ""}`}
             style={{
                 top: y,
                 left: x,

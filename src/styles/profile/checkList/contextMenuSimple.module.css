@@ -9,7 +9,43 @@
     display: flex;
     flex-direction: column;
     padding: 4px 0;
+    transform: translateY(0);
+    opacity: 0;
+    pointer-events: none; /* Скрыто по умолчанию */
 }
+
+.menu.open {
+    animation: slideInLeft 0.4s ease forwards;
+    pointer-events: auto;
+}
+
+.menu.close {
+    animation: slideOutLeft 0.4s ease forwards;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
+}
+
+
 .menu button {
     display: flex;
     flex-direction: row;
@@ -19,7 +55,9 @@
     border: none;
     text-align: left;
     cursor: pointer;
+    transition: background-color .2s ease-in-out;
 }
+
 .menu button:hover {
     background-color: #E5E5E5;
 }

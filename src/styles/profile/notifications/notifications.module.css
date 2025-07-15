@@ -58,11 +58,33 @@
     box-shadow: 0 5px 5px 1px rgba(0, 0, 0, 0.25);
     color: inherit;
     min-width: 0;
-}
+    transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
 .activeItem {
     background: #2E374F;
     color: #EBEBEB;
+}
+
+.description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 0.3s ease;
+    opacity: 1;
+}
+
+.descriptionHidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.fullDescription {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: height 0.5s ease, opacity 0.5s ease, padding-top 0.5s ease;
+    padding-top: 0;
 }
 
 .top {
@@ -91,15 +113,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.fullDescription {
-    padding-top: 25px;
-    color: inherit;
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: normal;
-    white-space: normal;
 }
 
 @media (min-width: 1024px) and (max-width: 1440px) {
