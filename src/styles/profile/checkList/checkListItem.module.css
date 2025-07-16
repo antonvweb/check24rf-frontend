@@ -37,11 +37,11 @@
     content: '';
     width: 100%;
     height: 1px;
-    background: var(--btn-quaternary);
+    background: var(--checkListItem-primary);
 }
 
 .listItem:hover {
-    background: var(--btn-quaternary-hover);
+    background: var(--checkListItem-primary-hover);
 }
 
 .listItem img {
@@ -62,11 +62,11 @@
 }
 
 .selectListItem{
-    background: var(--btn-secondary);
+    background: var(--checkSelectListItemprimary);
 }
 
 .selectListItem:hover{
-    background: var(--btn-secondary-hover);
+    background: var(--checkSelectListItem-primary-hover);
 }
 
 @media (min-width: 1024px) and (max-width: 1440px) {

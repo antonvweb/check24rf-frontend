@@ -11,11 +11,45 @@
     --bg-tertiary: #EBEBEB;
     --bg-quaternary: #2E374F;
 
+    /* Особые Фоны */
+    --calendar-primary: #F0F3F6;
+    --calendar-primary-hover: #D9DDE1;
+    --checkListItem-primary: #EBEBEB;
+    --checkListItem-primary-hover: #E6E6E6;
+    --checkSelectListItemprimary: #A7DFF1;
+    --checkSelectListItem-primary-hover: #8CC3D6;
+    --checkbox-color: #2E374F;
+    --checkbox-fill: #2E374F;
+    --contextMenu-bg-primary: #FEFEFE;
+    --contextMenu-border-primary: #CCCCCC;
+    --contextMenu-item-primary-hover: #D9DDE1;
+    --payModel-bg-primary: #FEFEFE;
+    --columnExpenses-bg-primary: #27324A;
+    --graphModal-bg-primary: #2E374F;
+    --notificationsItem-bg-primary: #FEFEFE;
+    --notificationsItemActive-bg-primary: #FEFEFE;
+    --specialistSuppoer-bg-primary: #F0F3F6;
+    --messageBubbleUser-bg-primary: #A7DFF1;
+    --messageBubbleAdmin-bg-primary: #27324A;
+    --appeals-bg-primary: #2E374F;
+    --appeal-bg-primary: #3E4966;
+    --appeal-bg-primary-hover: #343d55;
+
     /* Шрифты */
     --font-primary: #2E374F;
     --font-secondary: #FEFEFE;
     --font-tertiary: #EBEBEB;
     --font-quaternary: #F0F3F6;
+
+    /* Особые Шрифты */
+    --logo-primary: #2E374F;
+    --messageBubbleUser-font-primary: #2E374F;
+    --messageBubbleAdmin-font-primary: #FEFEFE;
+
+    /* SVG */
+    --svg-primary: #2E374F;
+    --svg-navItem-primary: #2E374F;
+    --svg-navItemSelect-primary: #EBEBEB;
 
     /* Кнопки */
     --btn-primary: #FF6700;
@@ -28,6 +62,18 @@
     --btn-quaternary-hover: #E6E6E6;
     --btn-bg-primary: #F0F3F6;
     --btn-bg-primary-hover: #D9DDE1;
+
+    /* Особые Кнопки */
+    --changeBtns-bg-primary: #A7DFF1;
+    --changeBtns-bg-primary-hover: #8CC3D6;
+    --btnPeriod-bg-primary: #F0F3F6;
+    --btnPeriod-bg-primary-hover: #D9DDE1;
+    --btnPeriodSelect-bg-primary: #A7DFF1;
+    --btnPeriodSelect-bg-primary-hover: #8CC3D6;
+    --autoPayment-bg-primary: #FEFEFE;
+    --autoPayment-bg-primary-hover: #E6E6E6;
+    --appealsBtn-bg-primary: #FEFEFE;
+    --appealsBtn-bg-primary-hover: #E6E6E6;
 
     /* Ошибки и всплывающие окна */
     --alert-error: #F54447;
@@ -44,9 +90,41 @@
     --bg-quaternary: #F0F3F6;
     --bg-quinary: #EBEBEB;
 
+    /* Особые Фоны */
+    --checkListItem-primary: #565656;
+    --checkListItem-primary-hover: #2E374F;
+    --checkSelectListItemprimary: #27324A;
+    --checkSelectListItem-primary-hover: #1a2233;
+    --checkbox-color: #EBEBEB;
+    --checkbox-fill: #EBEBEB;
+    --contextMenu-bg-primary: #111111;
+    --contextMenu-border-primary: #111111;
+    --contextMenu-item-primary-hover: #565656;
+    --payModel-bg-primary: #111111;
+    --columnExpenses-bg-primary: #111111;
+    --graphModal-bg-primary: #111111;
+    --notificationsItem-bg-primary: #242424;
+    --notificationsItemActive-bg-primary: #27324A;
+    --specialistSuppoer-bg-primary: #565656;
+    --messageBubbleUser-bg-primary: #565656;
+    --messageBubbleAdmin-bg-primary: #111111;
+    --appeals-bg-primary: #565656;
+    --appeal-bg-primary: #111111;
+    --appeal-bg-primary-hover: #050505;
+
     /* Шрифты */
     --font-primary: #FFF;
-    --font-secondary: #EBEBEB;
+    --font-secondary: #FEFEFE;
+
+    /* Особые Шрифты */
+    --logo-primary: #EBEBEB;
+    --messageBubbleUser-font-primary: #FEFEFE;
+    --messageBubbleAdmin-font-primary: #FEFEFE;
+
+    /* SVG */
+    --svg-primary: #EBEBEB;
+    --svg-navItem-primary: #EBEBEB;
+    --svg-navItemSelect-primary: #EBEBEB;
 
     /* Кнопки */
     --btn-primary: #FF6700;
@@ -56,6 +134,18 @@
     --btn-tertiary: #242424;
     --btn-tertiary-hover: #1E1E1E;
 
+    /* Особые Кнопки */
+    --changeBtns-bg-primary: #111111;
+    --changeBtns-bg-primary-hover: #050505;
+    --btnPeriod-bg-primary: #111111;
+    --btnPeriod-bg-primary-hover: #050505;
+    --btnPeriodSelect-bg-primary: #E55E00;
+    --btnPeriodSelect-bg-primary-hover: #E55E00;
+    --autoPayment-bg-primary: #242424;
+    --autoPayment-bg-primary-hover: #191919;
+    --appealsBtn-bg-primary: #111111;
+    --appealsBtn-bg-primary-hover: #050505;
+
     /* Ошибки и всплывающие окна */
     --alert-error: #F54447;
     --alert-success: #6EFF78;
@@ -64,6 +154,7 @@
 
 * {
     box-sizing: border-box;
+    transition: background-color .2s ease-in-out, background .2s ease-in-out, color .2s ease-in-out;
 }
 
 body {

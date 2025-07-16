@@ -2,7 +2,7 @@
     position: absolute;
     left: 0;
     top: 80%;
-    background-color: var(--bg-secondary);
+    background-color: var(--contextMenu-bg-primary);
     border-radius: 5px;
     box-shadow: var(--main-box-shadow);
     z-index: 9999;
@@ -59,6 +59,10 @@
     transition: background-color .2s ease-in-out;
 }
 
+.menu button svg path{
+    fill: var(--svg-primary);
+}
+
 .menu button:hover {
-    background-color: var(--btn-bg-primary-hover);;
+    background-color: var(--contextMenu-item-primary-hover);;
 }

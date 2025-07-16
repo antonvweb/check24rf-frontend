@@ -70,7 +70,7 @@ export default function Reference() {
                     <a href="#">Контакты</a>
                 </div>
             )}
-            <div style={{marginBottom: 'auto', marginTop: '10px'}}>
+            <div style={{ marginLeft: 'auto', marginBottom: 'auto', marginTop: '10px'}}>
                 <div className={styles.circle}><span>?</span></div>
             </div>
         </button>

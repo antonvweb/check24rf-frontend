@@ -4,7 +4,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9999;
-    background-color: var(--bg-secondary);
+    background-color: var(--payModel-bg-primary);
     padding: 20px;
     border-radius: 10px;
     box-shadow: var(--main-box-shadow);
@@ -13,6 +13,7 @@
     gap: 27px;
     font-weight: 400;
     font-size: 1rem;
+    color: var(--font-primary);
 }
 
 .payCheckList{
@@ -97,7 +98,7 @@
     height: 54px;
     border-radius: 6px;
     border: 1px solid var(--bg-quaternary);
-    background: #FFF;
+    background: var(--bg-secondary);
     padding-left: 15px;
     font-size: 1.125rem;
     color: var(--font-primary);
@@ -137,6 +138,7 @@
 
 .addArchiveBtn{
     background: var(--btn-tertiary);
+    transition: background .2s ease-in-out, transform .2s ease-in-out;
 }
 
 .addArchiveBtn:hover{

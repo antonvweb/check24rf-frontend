@@ -40,6 +40,12 @@
             setSuccessTimer} = useCodeInput();
 
         useEffect(() => {
+            if(localStorage.getItem("theme") === "dark" ){
+                document.documentElement.removeAttribute('data-theme')
+            }
+        },[]);
+
+        useEffect(() => {
             const handleLoad = () => {
                 setIsLoading(false);
             };

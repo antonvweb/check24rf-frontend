@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../styles/profile/checkList/search.module.css';
+import styles from '@/styles/profile/checkList/search.module.css';
 
 
 export default function Search() {
@@ -51,8 +51,8 @@ export default function Search() {
         <div className={styles.search}>
             <div className={styles.searchGlass}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="23" viewBox="0 0 24 23" fill="none">
-                    <circle cx="8.6087" cy="8.6087" r="7.8587" stroke="#2E374F" strokeWidth="1.5"/>
-                    <path d="M14.3478 14.3478L22.9565 22" stroke="#2E374F" strokeWidth="1.5" strokeLinecap="round"/>
+                    <circle cx="8.6087" cy="8.6087" r="7.8587" strokeWidth="1.5"/>
+                    <path d="M14.3478 14.3478L22.9565 22" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
             </div>
             <input

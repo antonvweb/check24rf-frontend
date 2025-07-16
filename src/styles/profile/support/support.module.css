@@ -45,7 +45,7 @@
 
 .specialist{
     border-radius: 6px;
-    background: var(--bg-primary);
+    background: var(--specialistSuppoer-bg-primary);
     box-shadow: var(--main-box-shadow);
     width: 100%;
     display: flex;
@@ -62,6 +62,10 @@
     border-radius: 50%;
     width: 34px;
     height: 34px;
+}
+
+.avatar img{
+    border-radius: 50%;
 }
 
 .chat{
@@ -136,7 +140,7 @@
 .appeals{
     flex: 36.88%;
     border-radius: 10px;
-    background: var(--bg-quaternary);
+    background: var(--appeals-bg-primary);
     color: var(--font-secondary);
     display: flex;
     flex-direction: column;
@@ -181,7 +185,7 @@
 .appeals button{
     margin: 14px;
     border-radius: 6px;
-    background: var(--btn-bg-primary);
+    background: var(--appealsBtn-bg-primary);
     border: none;
     outline: none;
     padding: 11px 0;
@@ -203,8 +207,12 @@
     transition: transform 0.2s ease-in-out;
 }
 
+.appeals button svg path{
+    stroke: var(--svg-primary);
+}
+
 .appeals button:hover{
-    background: var(--btn-bg-primary-hover);
+    background: var(--appealsBtn-bg-primary-hover);
 }
 
 .appeals button:active svg{
@@ -212,7 +220,7 @@
 }
 
 .appeal{
-    background: #3E4966;
+    background: var(--appeal-bg-primary);
     padding: 9px 18px;
     display: flex;
     flex-direction: row;
@@ -227,7 +235,7 @@
 }
 
 .appeal:hover{
-    background: #343d55;
+    background: var(--appeal-bg-primary-hover);
 }
 
 .appeal:hover svg {
@@ -313,13 +321,13 @@
 }
 
 .user .messageBubble {
-    background: #A7DFF1;
-    color: #000;
+    background: var(--messageBubbleUser-bg-primary);
+    color: var(--messageBubbleUser-font-primary);
 }
 
 .admin .messageBubble {
-    background: #2E374F;
-    color: #fff;
+    background: var(--messageBubbleAdmin-bg-primary);
+    color: var(--messageBubbleAdmin-font-primary);
 }
 
 @keyframes slideInLeft {

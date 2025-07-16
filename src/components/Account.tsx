@@ -20,7 +20,7 @@ export interface userPaySubscribe {
 
 export const Account = () => {
     const [isPayMenuVisible, setIsPayMenuVisible] = useState(false);
-    const [selectedPeriod, setSelectedPeriod] = useState<string | null>("1m");
+    const [selectedPeriod, setSelectedPeriod] = useState<string>("1m");
 
     const handleSelectPeriod = (period: string) => {
         console.log("Выбрано:", period); // ✅ Проверка
@@ -29,7 +29,20 @@ export const Account = () => {
 
     const user: userPaySubscribe = {
         user: "SERGEY BURUNOV",
-        monthPeriod: selectedPeriod,
+        monthPeriod: (() => {
+            switch (selectedPeriod) {
+                case "1m":
+                    return '1 месяц';
+                case "3m":
+                    return "3 месяца";
+                case "6m":
+                    return '6 месяцев';
+                case "1y":
+                    return '1 год';
+                default:
+                    return null;
+            }
+        })(),
         price: (() => {
             switch (selectedPeriod) {
                 case "1m":
@@ -41,7 +54,7 @@ export const Account = () => {
                 case "1y":
                     return 1200;
                 default:
-                    return 0;  // на случай, если selectedPeriod null или неизвестное значение
+                    return 0;
             }
         })()
     };

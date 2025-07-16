@@ -29,21 +29,23 @@ function Profile() {
     }, []);
 
     return (
-        <div className={styles.content}>
-            <main className={styles.main}>
-                <div className={styles.leftBox}>
-                    <Logo/>
-                    <main>
-                        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
-                        <div className={styles.reklama} style={{display: activeTab === 'account' ? 'none' : 'block'}}/>
-                    </main>
-                </div>
-                {activeTab === 'checks' && <ActiveChecks />}
-                {activeTab === 'archive' && <ArchiveChecks />}
-                {activeTab === 'account' && <Account />}
-                {activeTab === 'notif' && <Notifications />}
-                {activeTab === 'support' && <Support />}
-            </main>
+        <div className={styles.profile}>
+            <div className={styles.content}>
+                <main className={styles.main}>
+                    <div className={styles.leftBox}>
+                        <Logo/>
+                        <main>
+                            <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+                            <div className={styles.reklama} style={{display: activeTab === 'account' ? 'none' : 'block'}}/>
+                        </main>
+                    </div>
+                    {activeTab === 'checks' && <ActiveChecks />}
+                    {activeTab === 'archive' && <ArchiveChecks />}
+                    {activeTab === 'account' && <Account />}
+                    {activeTab === 'notif' && <Notifications />}
+                    {activeTab === 'support' && <Support />}
+                </main>
+            </div>
         </div>
     );
 }

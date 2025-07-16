@@ -67,7 +67,11 @@ export const PayModel = ({ type, items, subscription, isVisible }: PayModelProps
                 <div className={styles.paymentList}>
                     <span>Способ оплаты</span>
                     <FormControl fullWidth size="medium">
-                        <InputLabel id="payment-method-label">Выберите способ</InputLabel>
+                        <InputLabel id="payment-method-label"
+                                    sx={{
+                                        color: 'var(--font-primary)',
+                                    }}
+                        >Выберите способ</InputLabel>
                         <Select
                             labelId="payment-method-label"
                             value={paymentMethod}
@@ -76,11 +80,11 @@ export const PayModel = ({ type, items, subscription, isVisible }: PayModelProps
                             sx={{
                                 height: '54px',
                                 borderRadius: '6px',
-                                border: '1px solid #2E374F',
-                                backgroundColor: '#FFF',
+                                border: '1px solid var(--bg-quaternary)',
+                                backgroundColor: 'var(--bg-secondary)',
                                 paddingLeft: '15px',
                                 fontSize: '1.125rem',
-                                color: '#2E374F',
+                                color: 'var(--font-primary)',
                                 fontWeight: 400,
                                 '& .MuiSelect-select': {
                                     display: 'flex',
@@ -95,8 +99,8 @@ export const PayModel = ({ type, items, subscription, isVisible }: PayModelProps
                                     sx: {
                                         mt: '10px',
                                         borderRadius: '6px',
-                                        border: '1px solid #2E374F',
-                                        backgroundColor: '#FFF',
+                                        border: '1px solid var(--bg-quaternary)',
+                                        backgroundColor: 'var(--bg-secondary)',
                                         overflow: 'hidden'
                                     },
                                 },

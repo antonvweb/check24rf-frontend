@@ -8,6 +8,10 @@
     padding: 0.85rem 0.75rem 0.75rem;
 }
 
+.searchGlass svg path, .searchGlass svg circle{
+    stroke: var(--svg-primary);
+}
+
 .search input{
     width: 42.375rem;
     height: 3rem;
@@ -89,11 +93,11 @@
     align-items: center;
     padding: 10px;
     width: 100%;
-    background: #FFF;
+    background: var(--contextMenu-bg-primary);
     transition: background .2s ease-in-out;
     text-align: left;
 }
 
 .overItem:hover{
-    background: #E5E5E5;
+    background: var(--contextMenu-item-primary-hover);
 }

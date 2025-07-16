@@ -1,5 +1,5 @@
 import Image from "next/image"
-import styles from '../styles/profile/logo.module.css';
+import styles from '@/styles/profile/logo.module.css';
 
 export default function Logo () {
     return (

@@ -75,6 +75,7 @@
     box-shadow: var(--main-box-shadow);
     height: 400px;
     width: 290px;
+    color: var(--font-primary);
 }
 
 .top{
@@ -105,7 +106,7 @@
 }
 
 .title span{
-    color: var(--bg-secondary);
+    color: var(--font-primary);
     font-size: 1rem;
     font-weight: 500;
     line-height: normal;
@@ -171,7 +172,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 4px 7px;
-    color: var(--bg-secondary);
+    color: var(--font-primary);
     font-size: 1rem;
     font-style: normal;
     font-weight: 500;

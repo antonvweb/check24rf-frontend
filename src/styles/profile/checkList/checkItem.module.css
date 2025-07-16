@@ -4,8 +4,9 @@
     flex-direction: column;
     margin: 20px 15px 20px 0;
     border-radius: 5px;
-    background: var(--bg-primary);
+    background: #F0F3F6;
     box-shadow: var(--main-box-shadow);
+    color: #2E374F;
 }
 
 .notHaveChek {
@@ -66,7 +67,7 @@
 
 .moreFunc{
     display: flex;
-    background: var(--bg-secondary);
+    background: var(--contextMenu-bg-primary);
     box-shadow: var(--main-box-shadow);
     border: none;
     outline: none;
@@ -75,6 +76,10 @@
     cursor: pointer;
     max-height: max-content ;
     transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.moreFunc svg circle {
+    fill: var(--svg-primary);
 }
 
 .moreFunc:hover{
@@ -208,7 +213,7 @@
     padding: 11px 20px;
     border: none;
     background: var(--btn-primary);
-    color: var(--bg-secondary);
+    color: #FEFEFE;
     font-size: 1rem;
     border-radius: 5px;
     box-shadow: var(--main-box-shadow);

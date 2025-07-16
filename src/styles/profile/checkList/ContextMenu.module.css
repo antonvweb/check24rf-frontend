@@ -1,7 +1,7 @@
 .menu{
     position: fixed;
-    background-color: var(--bg-secondary);
-    border: 1px solid #ccc;
+    background-color: var(--contextMenu-bg-primary);
+    border: 1px solid var(--contextMenu-border-primary);
     border-radius: 8px;
     box-shadow: var(--main-box-shadow);
     z-index: 9999;
@@ -39,6 +39,10 @@
     background: none;
 }
 
+.menuItem svg path{
+    fill: var(--svg-primary);
+}
+
 .menuItem:hover{
-    background-color: var(--btn-bg-primary-hover);;
+    background-color: var(--contextMenu-item-primary-hover);;
 }

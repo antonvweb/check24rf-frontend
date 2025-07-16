@@ -73,7 +73,7 @@
     padding: 5px;
     border: none;
     border-radius: 6px;
-    background: var(--bg-primary);
+    background: var(--calendar-primary);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;
     margin-right: 43px;
@@ -81,7 +81,7 @@
 }
 
 .calendar:hover {
-    background: var(--btn-bg-primary-hover);
+    background: var(--calendar-primary-hover);
 }
 
 .calendar:active {
@@ -101,13 +101,12 @@
     max-width: max-content;
 }
 
-.btnKey::after {
-    content: "";
-    background: url('/keyArrow.svg') no-repeat center / contain;
-    display: inline-block;
-    width: 12px;
-    height: 8px;
-    margin-left: 9px;
+.btnKey svg{
+    margin-left: 5px;
+}
+
+.btnKey svg path{
+    stroke: var(--logo-primary);
 }
 
 .stub{

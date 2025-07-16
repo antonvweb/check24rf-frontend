@@ -144,6 +144,12 @@ export default function Navigation({ activeTab, setActiveTab }: NavigationProps)
         if (hash && ITEMS.some(i => i.id === hash)) {
             setActiveTab(hash);
         }
+        if(localStorage.getItem("theme") === "dark" ){
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        else{
+            document.documentElement.removeAttribute('data-theme')
+        }
     }, [setActiveTab]);
 
     const onClick = (id: string) => {
@@ -156,7 +162,7 @@ export default function Navigation({ activeTab, setActiveTab }: NavigationProps)
         <div className={styles.navigation}>
             {ITEMS.map(i => {
                 const isActive = i.id === activeTab;
-                const fillColor = isActive ? '#FFFFFF' : '#2E374F';
+                const fillColor = isActive ? 'var(--svg-navItemSelect-primary)' : 'var(--svg-navItem-primary)';
 
                 return (
                     <div

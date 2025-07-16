@@ -34,10 +34,10 @@ export const ReceiptView = ({ receipt, onRemove, mode }: Props) => {
             <div className={styles.haveChek}>
                 <header className={styles.top}>
                     <button type="button" className={styles.moreFunc} onClick={toggleMenu}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="6" viewBox="0 0 24 6" fill="none">
-                            <circle cx="21" cy="3" r="3" transform="rotate(90 21 3)" fill="#2E374F"/>
-                            <circle cx="12" cy="3" r="3" transform="rotate(90 12 3)" fill="#2E374F"/>
-                            <circle cx="3" cy="3" r="3" transform="rotate(90 3 3)" fill="#2E374F"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="6" viewBox="0 0 24 6">
+                            <circle cx="21" cy="3" r="3" transform="rotate(90 21 3)" />
+                            <circle cx="12" cy="3" r="3" transform="rotate(90 12 3)" />
+                            <circle cx="3" cy="3" r="3" transform="rotate(90 3 3)" />
                         </svg>
                     </button>
                     <ContextMenuSimple

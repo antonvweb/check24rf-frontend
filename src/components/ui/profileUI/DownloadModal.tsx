@@ -26,7 +26,11 @@ export const DownloadModal = ({ close ,isVisible }: PayModelProps) => {
                 <div className={styles.downloadList}>
                     <span>Способ оплаты</span>
                     <FormControl fullWidth size="medium">
-                        <InputLabel id="download-method-label">Выберите способ</InputLabel>
+                        <InputLabel id="download-method-label"
+                            sx={{
+                                color: 'var(--font-primary)',
+                            }}
+                        >Выберите способ</InputLabel>
                         <Select
                             labelId="download-method-label"
                             value={paymentMethod}
@@ -35,11 +39,11 @@ export const DownloadModal = ({ close ,isVisible }: PayModelProps) => {
                             sx={{
                                 height: '54px',
                                 borderRadius: '6px',
-                                border: '1px solid #2E374F',
-                                backgroundColor: '#FFF',
+                                border: '1px solid var(--bg-quaternary)',
+                                backgroundColor: 'var(--bg-secondary)',
                                 paddingLeft: '15px',
                                 fontSize: '1.125rem',
-                                color: '#2E374F',
+                                color: 'var(--font-primary)',
                                 fontWeight: 400,
                                 '& .MuiSelect-select': {
                                     display: 'flex',
@@ -54,9 +58,10 @@ export const DownloadModal = ({ close ,isVisible }: PayModelProps) => {
                                     sx: {
                                         mt: '10px',
                                         borderRadius: '6px',
-                                        border: '1px solid #2E374F',
-                                        backgroundColor: '#FFF',
-                                        overflow: 'hidden'
+                                        border: '1px solid var(--bg-quaternary)',
+                                        backgroundColor: 'var(--bg-secondary)',
+                                        overflow: 'hidden',
+                                        color: "var(--font-primary)"
                                     },
                                 },
                             }}
