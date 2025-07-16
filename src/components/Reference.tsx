@@ -66,8 +66,8 @@ export default function Reference() {
         >
             {showLinks && (
                 <div className={styles.dropLinks}>
-                    <a href="#">О проекте</a>
-                    <a href="#">Контакты</a>
+                    <button>О проекте</button>
+                    <button>Контакты</button>
                 </div>
             )}
             <div style={{ marginLeft: 'auto', marginBottom: 'auto', marginTop: '10px'}}>

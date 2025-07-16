@@ -46,18 +46,65 @@
     padding: 10px 12px;
 }
 
-.dropLinks a {
+.dropLinks button {
+    position: relative;
     text-decoration: none;
     font-size: 1rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-}
-
-.dropLinks a:hover {
-    text-decoration: underline;
-}
-
-.dropLinks a:visited {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
     color: var(--font-primary);
+    overflow: hidden;
+}
+
+.dropLinks button::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: var(--font-primary);
+    border-radius: 50%;
+    width: 0;
+    opacity: 0;
+    transition: none;
+    pointer-events: none;
+}
+
+.dropLinks button:hover::after {
+    animation: underlineIn 0.3s forwards;
+}
+
+.dropLinks button:not(:hover)::after {
+    animation: underlineOut 0.3s forwards;
+}
+
+@keyframes underlineIn {
+    from {
+        width: 0;
+        left: 0;
+        opacity: 1;
+    }
+    to {
+        width: 80%;
+        left: 10%;
+        opacity: 1;
+    }
+}
+
+@keyframes underlineOut {
+    from {
+        width: 80%;
+        left: 10%;
+        opacity: 1;
+    }
+    to {
+        width: 0;
+        left: 100%;
+        opacity: 0;
+    }
 }
