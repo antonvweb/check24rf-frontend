@@ -7,7 +7,7 @@ export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
     const [isPayMenuVisible, setIsPayMenuVisible] = useState(false);
 
     const handleRemoveAll = () => {
-        items.forEach(item => onRemove(item.id));
+        items?.forEach(item => onRemove(item.id));
     };
 
     useEffect(() => {
@@ -16,7 +16,7 @@ export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
 
     const openPayMenu   = () => setIsPayMenuVisible(true);
     const closePayMenu  = () => setIsPayMenuVisible(false);
-    const sumReceipts = items.length * 12;
+    const sumReceipts = 12 * items.length;
 
     return (
         <div className={styles.checkItem}>
@@ -39,7 +39,7 @@ export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
                         <span>СУММА, ₽</span>
                     </div>
                     <div className={styles.itemChecksList}>
-                        {items.map((r, i) => (
+                        {items?.map((r, i) => (
                             <div key={i} className={styles.item}>
                                 <div className={styles.salesManData}>
                                     <span className={styles.salesman}>{r.salesman}</span>

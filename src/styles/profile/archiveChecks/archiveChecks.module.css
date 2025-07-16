@@ -106,7 +106,7 @@
 }
 
 .title span{
-    color: var(--font-primary);
+    color: #FFF;
     font-size: 1rem;
     font-weight: 500;
     line-height: normal;
@@ -172,7 +172,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 4px 7px;
-    color: var(--font-primary);
+    color: #FFF;
     font-size: 1rem;
     font-style: normal;
     font-weight: 500;

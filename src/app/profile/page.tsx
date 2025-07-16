@@ -10,6 +10,7 @@ import {Account} from "@/components/Account";
 import {Notifications} from "@/components/Notifications";
 import {Support} from "@/components/Support";
 import { withAuthProtection } from "@/hoc/withAuthProtection";
+import { ThemeProvider } from '@/context/ThemeContext';
 
 function Profile() {
     const [activeTab, setActiveTab] = useState('checks');
@@ -29,24 +30,26 @@ function Profile() {
     }, []);
 
     return (
-        <div className={styles.profile}>
-            <div className={styles.content}>
-                <main className={styles.main}>
-                    <div className={styles.leftBox}>
-                        <Logo/>
-                        <main>
-                            <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
-                            <div className={styles.reklama} style={{display: activeTab === 'account' ? 'none' : 'block'}}/>
-                        </main>
-                    </div>
-                    {activeTab === 'checks' && <ActiveChecks />}
-                    {activeTab === 'archive' && <ArchiveChecks />}
-                    {activeTab === 'account' && <Account />}
-                    {activeTab === 'notif' && <Notifications />}
-                    {activeTab === 'support' && <Support />}
-                </main>
+        <ThemeProvider>
+            <div className={styles.profile}>
+                <div className={styles.content}>
+                    <main className={styles.main}>
+                        <div className={styles.leftBox}>
+                            <Logo/>
+                            <main>
+                                <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+                                <div className={styles.reklama} style={{display: activeTab === 'account' ? 'none' : 'block'}}/>
+                            </main>
+                        </div>
+                        {activeTab === 'checks' && <ActiveChecks />}
+                        {activeTab === 'archive' && <ArchiveChecks />}
+                        {activeTab === 'account' && <Account />}
+                        {activeTab === 'notif' && <Notifications />}
+                        {activeTab === 'support' && <Support />}
+                    </main>
+                </div>
             </div>
-        </div>
+        </ThemeProvider>
     );
 }
 

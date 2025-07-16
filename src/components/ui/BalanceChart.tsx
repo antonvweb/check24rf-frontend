@@ -1,13 +1,20 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, {useRef} from 'react';
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts';
 import styles from '@/styles/profile/account/account.module.css';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
+import { useTheme } from '@/context/ThemeContext';
 
 export const BalanceChart: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const { theme } = useTheme();
+
+    const colorAxisPointer = theme === 'dark' ? '#27324A' : '#64D4F8';
+    const gradientFirst = theme === 'dark' ? '#27324A' : '#64D4F8';
+    const gradientSecond = theme === 'dark' ? '#111111' : '#27324A';
 
     const labels = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
     const dataValues = [
@@ -28,11 +35,11 @@ export const BalanceChart: React.FC = () => {
         },
         tooltip: {
             trigger: 'axis',
-            backgroundColor: '#fff',
-            borderColor: '#64D4F8',
+            backgroundColor: 'var(--graphTooltip-bg-primary)',
+            borderColor: 'var(--graphBorder-primary)',
             borderWidth: 1,
             textStyle: {
-                color: '#2E374F',
+                color: 'var(--graph-font-primary)',
             },
             formatter: (params: CallbackDataParams[] | CallbackDataParams) => {
                 const point = Array.isArray(params) ? params[0] : params;
@@ -46,7 +53,7 @@ export const BalanceChart: React.FC = () => {
             axisPointer: {
                 type: 'line',
                 lineStyle: {
-                    color: '#64D4F8',
+                    color: colorAxisPointer,
                 },
             },
         },
@@ -71,10 +78,14 @@ export const BalanceChart: React.FC = () => {
                 data: dataValues,
                 smooth: true,
                 symbol: 'circle',
-                symbolSize: 6,
+                symbolSize: 3,
                 showSymbol: false,
+                animationDelay: function(idx) {
+                    return idx * 100 + 100;
+                },
+                animationEasing: 'cubicInOut',
                 lineStyle: {
-                    color: '#64D4F8',
+                    color: colorAxisPointer,
                     width: 2,
                 },
                 itemStyle: {
@@ -82,8 +93,8 @@ export const BalanceChart: React.FC = () => {
                 },
                 areaStyle: {
                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        { offset: 0, color: '#64D4F8' },
-                        { offset: 0.85, color: '#2E374F' },
+                        { offset: 0, color: gradientFirst },
+                        { offset: 0.85, color: gradientSecond },
                     ]),
                 },
             },

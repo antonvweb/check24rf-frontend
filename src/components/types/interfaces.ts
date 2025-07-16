@@ -20,6 +20,7 @@ export interface Receipt {
 
 export interface CheckItemProps {
     items: Receipt[];
+    item: Receipt | undefined;
     onRemove: (id: number) => void;
     mode?: string;
 }

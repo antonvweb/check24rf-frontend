@@ -373,7 +373,7 @@
 
 .payBtn:hover{
     background: #252c3e;
-    color: var(--bg-secondary);
+    color: var(--btn-quaternary);
 }
 
 .reklama {

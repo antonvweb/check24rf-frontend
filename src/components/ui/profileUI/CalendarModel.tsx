@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../../../styles/profile/checkList/calendarModel.module.css';
+import styles from '@/styles/profile/checkList/calendarModel.module.css';
 import { motion } from 'framer-motion';
 
 const MONTHS = [
@@ -103,7 +103,6 @@ export const CalendarModel = () => {
         },
     };
 
-
     return (
         <motion.div
             className={styles.CalendarModel}
@@ -114,13 +113,13 @@ export const CalendarModel = () => {
         >
             <div className={styles.left}>
                 <div className={styles.topMoth}>
-                    <button onClick={handlePrevMonth}>
+                    <button onClick={handlePrevMonth} className={styles.arrowBtn}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
                             <path d="M7.06201 1L1.46753 5.61451C1.22506 5.8145 1.22507 6.18597 1.46755 6.38596L7.06201 11" stroke="#2E374F" strokeLinecap="round"/>
                         </svg>
                     </button>
                     <span>{MONTHS[currentMonth]}</span>
-                    <button onClick={handleNextMonth}>
+                    <button onClick={handleNextMonth} className={styles.arrowBtn}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none" style={{ transform: 'rotate(180deg)' }}>
                             <path d="M7.06201 1L1.46753 5.61451C1.22506 5.8145 1.22507 6.18597 1.46755 6.38596L7.06201 11" stroke="#2E374F" strokeLinecap="round"/>
                         </svg>
@@ -162,7 +161,7 @@ export const CalendarModel = () => {
                 </div>
             </div>
             <div className={styles.right}>
-                <button onClick={handlePrevYears}>
+                <button onClick={handlePrevYears} className={styles.arrowBtn}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="none" style={{transform: 'rotate(180deg)' }}>
                         <path d="M1 1L5.61451 6.59448C5.8145 6.83695 6.18597 6.83694 6.38596 6.59446L11 1" stroke="#F0F3F6" strokeLinecap="round"/>
                     </svg>
@@ -178,7 +177,7 @@ export const CalendarModel = () => {
                         {y}
                     </div>
                 ))}
-                <button onClick={handleNextYears}>
+                <button onClick={handleNextYears} className={styles.arrowBtn}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="none">
                         <path d="M1 1L5.61451 6.59448C5.8145 6.83695 6.18597 6.83694 6.38596 6.59446L11 1" stroke="#F0F3F6" strokeLinecap="round"/>
                     </svg>

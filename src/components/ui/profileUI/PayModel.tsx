@@ -101,7 +101,8 @@ export const PayModel = ({ type, items, subscription, isVisible }: PayModelProps
                                         borderRadius: '6px',
                                         border: '1px solid var(--bg-quaternary)',
                                         backgroundColor: 'var(--bg-secondary)',
-                                        overflow: 'hidden'
+                                        overflow: 'hidden',
+                                        color: "var(--font-primary)"
                                     },
                                 },
                             }}
@@ -146,8 +147,16 @@ export const PayModel = ({ type, items, subscription, isVisible }: PayModelProps
                     <input type="email" placeholder={"Введите почту"}/>
                 </div>
                 <div className={styles.btns}>
-                    <button type={"button"} className={styles.addArchiveBtn}>Добавить в архив</button>
-                    <button type={"button"} className={styles.downloadBtn}>Скачать</button>
+                    {type === "checks" && Array.isArray(items) ? (
+                        <>
+                            <button type={"button"} className={styles.addArchiveBtn}>Добавить в архив</button>
+                            <button type={"button"} className={styles.downloadBtn}>Скачать</button>
+                        </>
+                    ) : !Array.isArray(items) && type === "subscribe" ? (
+                        <>
+                            <button type={"button"} className={styles.downloadBtn}>Оплатить</button>
+                        </>
+                    ) : null}
                 </div>
             </div>
         </div>

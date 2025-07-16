@@ -27,24 +27,31 @@
     --columnExpenses-bg-primary: #27324A;
     --graphModal-bg-primary: #2E374F;
     --notificationsItem-bg-primary: #FEFEFE;
-    --notificationsItemActive-bg-primary: #FEFEFE;
+    --notificationsItemActive-bg-primary: #27324A;
     --specialistSuppoer-bg-primary: #F0F3F6;
     --messageBubbleUser-bg-primary: #A7DFF1;
     --messageBubbleAdmin-bg-primary: #27324A;
     --appeals-bg-primary: #2E374F;
     --appeal-bg-primary: #3E4966;
     --appeal-bg-primary-hover: #343d55;
+    --graphTooltip-bg-primary: #fff;
+    --graphBorder-primary: #64D4F8;
+    --graphAxisPointer-primary: #64D4F8;
+    --calendarModal-primary: #2E374F;
 
     /* Шрифты */
     --font-primary: #2E374F;
     --font-secondary: #FEFEFE;
     --font-tertiary: #EBEBEB;
     --font-quaternary: #F0F3F6;
+    --graph-font-primary: #2E374F;
 
     /* Особые Шрифты */
     --logo-primary: #2E374F;
     --messageBubbleUser-font-primary: #2E374F;
     --messageBubbleAdmin-font-primary: #FEFEFE;
+    --notifications-font-primary: #EBEBEB;
+    --notificationsActive-font-primary: #2E374F;
 
     /* SVG */
     --svg-primary: #2E374F;
@@ -74,6 +81,8 @@
     --autoPayment-bg-primary-hover: #E6E6E6;
     --appealsBtn-bg-primary: #FEFEFE;
     --appealsBtn-bg-primary-hover: #E6E6E6;
+    --calendarModalDay-bg-primary: #2E374F;
+    --calendarModalDay-bg-primary-hover: #27324A;
 
     /* Ошибки и всплывающие окна */
     --alert-error: #F54447;
@@ -111,6 +120,10 @@
     --appeals-bg-primary: #565656;
     --appeal-bg-primary: #111111;
     --appeal-bg-primary-hover: #050505;
+    --graphTooltip-bg-primary: #242424;
+    --graphBorder-primary: #242424;
+    --graphAxisPointer-primary: #27324A;
+    --calendarModal-primary: #565656;
 
     /* Шрифты */
     --font-primary: #FFF;
@@ -120,6 +133,9 @@
     --logo-primary: #EBEBEB;
     --messageBubbleUser-font-primary: #FEFEFE;
     --messageBubbleAdmin-font-primary: #FEFEFE;
+    --graph-font-primary: #FEFEFE;
+    --notificationsActive-font-primary: #EBEBEB;
+    --notifications-font-primary: #EBEBEB;
 
     /* SVG */
     --svg-primary: #EBEBEB;
@@ -145,6 +161,8 @@
     --autoPayment-bg-primary-hover: #191919;
     --appealsBtn-bg-primary: #111111;
     --appealsBtn-bg-primary-hover: #050505;
+    --calendarModalDay-bg-primary: #E55E00;
+    --calendarModalDay-bg-primary-hover: #E55E00;
 
     /* Ошибки и всплывающие окна */
     --alert-error: #F54447;
@@ -257,6 +275,101 @@ button, input {
     line-height: normal;
     padding: 0;
     margin: 0;
+}
+
+.notFound{
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.backgroundImg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("/1.png") no-repeat center center;
+    background-size: cover;
+    z-index: 0;
+}
+
+.mainNotFound{
+    position: relative;
+    background: #F0F3F6;
+    z-index: 2;
+    opacity: 0.93;
+    width: 100%;
+    height: 100%;
+    padding: 13px;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.notFoundlogo{
+    margin-right: auto;
+    width: max-content;
+}
+
+.centerNotFound{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex: 1;
+    gap: 60px;
+}
+
+.notFoundTitle{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.notFoundTitle span:first-child{
+    color: #2E374F;
+    font-size: 16.8125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.notFoundTitle span:last-child{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-wrap: nowrap;
+    color: #2E374F;
+    text-align: center;
+    font-size: 1.4375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.backCite{
+    border-radius: 10px;
+    background: var(--btn-primary);
+    box-shadow: var(--main-box-shadow);
+    text-decoration: none;
+    padding: 13px 40px;
+    color: #FFF;
+    text-align: center;
+    font-size: 2.125rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    transition: background .2s ease-in-out;
+}
+
+.backCite:hover{
+    background: var(--btn-primary-hover);
 }
 
 @media (max-width: 768px) {

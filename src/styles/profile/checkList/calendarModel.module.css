@@ -12,18 +12,6 @@
     user-select: none;
 }
 
-
-
-.CalendarModel button{
-    border: none;
-    outline: none;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: transparent;
-}
-
 .left{
     display: flex;
     gap: 5px;
@@ -77,6 +65,27 @@
     color: var(--font-primary);
     position: relative;
     z-index: 1;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+}
+
+.arrowBtn{
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+}
+
+.day.daySelected{
+    color: #FFF;
 }
 
 .inRange {
@@ -95,7 +104,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--bg-quaternary);
+    background: var(--calendarModalDay-bg-primary);
     border-radius: 4px;
     z-index: -1;
 }
@@ -108,7 +117,7 @@
     justify-content: center;
     gap: 4px;
     border-radius: 0.25rem;
-    background: var(--bg-quaternary);
+    background: var(--calendarModal-primary);
     padding: 5px;
 }
 
@@ -131,10 +140,10 @@
 
 .daySelected {
     border-radius: 4px;
-    background: var(--bg-primary);
+    background: var(--calendarModalDay-bg-primary);
     box-shadow: var(--main-box-shadow)
 }
 
 .yearActive {
-    background: var(--btn-tertiary-hover);
+    background: var(--calendarModalDay-bg-primary-hover);
 }

@@ -33,7 +33,7 @@ export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksList
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     const { items, loadItems, hasMore, isLoading, sortKey, orderDir, setSortKey, setOrderDir } = useLoadReceipts({ endpoint, mode });
-    const { checkedIds, toggleItem } = useCheckedItems();
+    const { checkedIds, checkedId, toggleChecksItem, toggleCheckItem } = useCheckedItems();
 
     useEffect(() => {
         loadItems(true);
@@ -51,6 +51,14 @@ export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksList
     };
 
     const listChecked = items.filter(i => checkedIds.has(i.id));
+    const itemChecked = items.find((i) => {
+        if(i.id === checkedId) {
+            return i;
+        }
+    });
+
+    useEffect(() => {
+    }, [checkedId, itemChecked, listChecked]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -101,10 +109,12 @@ export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksList
                         {items.map((item, index) => (
                             <CheckListItem
                                 key={item.id}
-                                id={index} // ✅ передаём индекс, а не id
+                                id={index}
                                 item={item}
-                                onToggle={toggleItem}
                                 isChecked={listChecked.some(i => i.id === item.id)}
+                                isItemChecked={item.id === checkedId}
+                                onToggleChecks={toggleChecksItem}
+                                onToggleCheck={toggleCheckItem}
                                 onContextMenuOpen={handleContextMenuOpen}
                             />
                         ))}
@@ -127,7 +137,7 @@ export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksList
                                     {
                                         label: checkedIds.has(contextMenu.item!.id) ? 'Снять выбор' : 'Выбрать',
                                         onClick: () => {
-                                            toggleItem(contextMenu.item, !contextMenu.checked);
+                                            toggleChecksItem(contextMenu.item, !contextMenu.checked);
                                             handleContextMenuClose();
                                         },
                                     },
@@ -149,7 +159,7 @@ export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksList
                         )}
                     </div>
                 </div>
-                <CheckItem items={listChecked} onRemove={(id: number) => toggleItem(items.find(i => i.id === id)!, false)} mode={mode}/>
+                <CheckItem items={listChecked} item={itemChecked} onRemove={(id: number) => toggleChecksItem(items.find(i => i.id === id)!, false)} mode={mode}/>
             </main>
         </div>
     );

@@ -36,7 +36,7 @@ export function SortControls({ setSortKey, setOrderDir }: SortControlsProps) {
             <button className={styles.btnKey} id="price" onClick={() => toggleOrder("price")}>
                 <span>Стоимость</span>
                 <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1 1L5.61451 6.59448C5.8145 6.83695 6.18597 6.83694 6.38596 6.59446L11 1" stroke="#2E374F" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M1 1L5.61451 6.59448C5.8145 6.83695 6.18597 6.83694 6.38596 6.59446L11 1" stroke="#2E374F" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
             </button>
         </div>

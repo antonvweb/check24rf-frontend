@@ -9,7 +9,9 @@ interface CheckListItemProps {
     id: number;
     item: Receipt;
     isChecked: boolean;
-    onToggle: (item: Receipt, checked: boolean) => void;
+    isItemChecked: boolean;
+    onToggleChecks: (item: Receipt, checked: boolean) => void;
+    onToggleCheck: (item: Receipt) => void;
     onContextMenuOpen: (item: Receipt, checked: boolean, x: number, y: number) => void;
 }
 
@@ -19,16 +21,16 @@ function getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export const CheckListItem = ({ id, item, isChecked, onToggle, onContextMenuOpen }: CheckListItemProps) => {
+export const CheckListItem = ({ id, item, isChecked, isItemChecked, onToggleChecks, onToggleCheck, onContextMenuOpen }: CheckListItemProps) => {
     const [checked, setChecked] = useState(isChecked);
 
     useEffect(() => {
         setChecked(isChecked);
     }, [isChecked, item.logo]);
 
-    const handleChange = (value: boolean) => {
+    const handleChangeChecks = (value: boolean) => {
         setChecked(value);
-        onToggle(item, value);
+        onToggleChecks(item, value);
     };
 
     const handleContextMenu = (e: React.MouseEvent) => {
@@ -38,9 +40,9 @@ export const CheckListItem = ({ id, item, isChecked, onToggle, onContextMenuOpen
 
     return (
         <div
-            className={`${styles.listItem} ${styles.fadeIn} ${checked ? styles.selectListItem : ""}`}
+            className={`${styles.listItem} ${styles.fadeIn} ${(checked || isItemChecked) ? styles.selectListItem : ""}`}
             aria-checked={checked}
-            onClick={() => handleChange(!checked)}
+            onClick={() => onToggleCheck(item)}
             onContextMenu={handleContextMenu}
             style={{
                 animationDelay: `${id * 50}ms`,
@@ -63,7 +65,7 @@ export const CheckListItem = ({ id, item, isChecked, onToggle, onContextMenuOpen
             </div>
             <CustomCheckbox
                 checked={checked}
-                onChange={(e) => handleChange(e.target.checked)}
+                onChange={(e) => handleChangeChecks(e.target.checked)}
             />
         </div>
     );
