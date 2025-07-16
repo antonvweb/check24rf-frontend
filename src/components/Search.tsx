@@ -45,8 +45,6 @@ export default function Search() {
         }
     }
 
-
-
     return (
         <div className={styles.search}>
             <div className={styles.searchGlass}>

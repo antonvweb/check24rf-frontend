@@ -4,8 +4,13 @@ import Image from 'next/image';
 import React, { useState, useRef, useEffect } from 'react';
 
 type Message = { from: 'user' | 'specialist'; text: string };
+interface ChatBoxProps {
+    isVisible: boolean;
+    isOpen: boolean;
+    isClosing: boolean;
+}
 
-export const ChatBox = ({ isVisible }: { isVisible: boolean }) => {
+export const ChatBox = ({ isVisible, isOpen, isClosing } :ChatBoxProps) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState('');
     const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -27,9 +32,15 @@ export const ChatBox = ({ isVisible }: { isVisible: boolean }) => {
         setInputValue('');
     };
 
+    const boxClass = `
+        ${styles.chatBox}
+        ${isOpen ? styles.open : ''}
+        ${isClosing ? styles.close : ''}
+    `.trim();
+
     return (
         <div
-            className={styles.chatBox}
+            className={boxClass}
             style={{ display: isVisible ? 'flex' : 'none' }}   /* только прячем */
         >
             <div className={styles.top}>

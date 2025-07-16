@@ -13,6 +13,41 @@
     gap: 5px;
     overflow: hidden;
     min-height: 0;
+    opacity: 0;
+    transform: translateY(25px);
+    pointer-events: none;
+}
+
+
+.chatBox.open {
+    animation: openChatMenu 0.4s ease forwards;
+    pointer-events: auto;
+}
+
+.chatBox.close {
+    animation: closeChatMenu 0.4s ease forwards;
+}
+
+@keyframes openChatMenu {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes closeChatMenu {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(25px);
+    }
 }
 
 .top {
@@ -164,7 +199,7 @@
     right: 0;
     height: 41px;
     padding:11px 23px;
-    background: #A7DFF1;
+    background: var(--btn-secondary);
     border: none;
     border-radius: 6px;
     color: var(--font-primary);
@@ -175,7 +210,7 @@
 }
 
 .sendMessage button:hover {
-    background: var(--font-primary);
+    background: var(--btn-secondary-hover);
 }
 
 .sendMessage button:active {

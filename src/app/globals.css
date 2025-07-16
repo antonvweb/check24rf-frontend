@@ -315,6 +315,7 @@ button, input {
     width: max-content;
 }
 
+
 .centerNotFound{
     display: flex;
     flex-direction: column;

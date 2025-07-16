@@ -23,11 +23,12 @@
         const [sendCode, setSendCode] = useState(false);
         const router = useRouter();
         const [checked, setChecked] = useState(false);
-        const [isChatVisible, setIsChatVisible] = useState(false);
         const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
         const inputPhoneRef = useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
         const [isLoading, setIsLoading] = useState(true);
         const [isOpenPersonalData, setIsOpenPersonalData] = useState(false);
+        const [showChat, setShowChat] = useState(false);
+        const [closeChat, setCloseChat] = useState(false);
 
         const { seconds, start, reset} = useTimer(10);
         const {  handleInput,
@@ -105,8 +106,20 @@
         }, []);
 
         const toggleChat = () => {
-            setIsChatVisible(prev => !prev);
+            if (showChat) {            // если чат открыт — запускаем закрытие
+                setCloseChat(true);    // включаем анимацию закрытия
+
+                setTimeout(() => {
+                    setShowChat(false);   // скрываем чат после анимации
+                    setCloseChat(false);  // сбрасываем флаг закрытия
+                }, 400);
+            } else {                   // если чат закрыт — открываем без задержек
+                setShowChat(true);
+                setCloseChat(false);
+            }
         };
+
+
         const openOpenPersonalData   = () => setIsOpenPersonalData(true);
         const closeOpenPersonalData  = () => setIsOpenPersonalData(false);
 
@@ -180,7 +193,7 @@
                               </svg>
                           </button>
                           <p className={styles.techSupportText}>Техническая поддержка</p>
-                          <ChatBox isVisible={isChatVisible} />
+                          <ChatBox isVisible={showChat} isOpen={showChat} isClosing={closeChat} />
                       </div>
                   </div>
                   <div className={styles.formWrapper}>
@@ -228,8 +241,8 @@
                                                   }}
                                               />
                                           ))}
+                                          <ErrorCodeSuccess isCodeValid={isCodeValid}/>
                                       </form>
-                                      <ErrorCodeSuccess isCodeValid={isCodeValid}/>
                                   </div>
                               </div>
                               <div className={styles.agreements}>
