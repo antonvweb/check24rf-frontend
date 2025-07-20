@@ -38,11 +38,11 @@ jobs:
             --exclude .gitignore \
             --exclude *.log \
             --exclude .env \
-            ./ root@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}/
+            ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}/
 
       - name: Build and deploy app
         run: |
-          ssh root@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -e
 
             cd ${{ secrets.DEPLOY_PATH }}
