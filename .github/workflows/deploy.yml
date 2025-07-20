@@ -58,6 +58,6 @@ jobs:
 
             echo "🚀 Запуск приложения с PM2..."
             npm install -g pm2
-            pm2 start npm --name "check24rf" -- start -- -p ${{ secrets.APP_PORT }}
+            npx pm2 start npm --name "check24rf" -- start -- -p ${{ secrets.APP_PORT }}
             pm2 save
           EOF
