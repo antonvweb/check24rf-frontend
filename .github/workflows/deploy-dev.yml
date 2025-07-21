@@ -55,7 +55,7 @@ jobs:
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -ex
-            cd ${{ secrets.DEPLOY_PATH }}
+            cd ${{ secrets.DEPLOY_DEV_PATH }}
             npm ci
             npm run build
             pm2 delete check24rf-ip || true
