@@ -1,0 +1,59 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  NODE_ENV: production
+
+before_script:
+  - echo "⏳ Установка Node.js и зависимостей..."
+  - npm ci
+
+# Этап сборки
+build_app:
+  stage: build
+  image: node:20
+  script:
+    - echo "🔧 Сборка проекта..."
+    - npm run build
+  artifacts:
+    paths:
+      - .next
+      - public
+    expire_in: 1 hour
+
+# Этап деплоя
+deploy_app:
+  stage: deploy
+  image: node:20
+  only:
+    - main
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H "$SERVER_IP" >> ~/.ssh/known_hosts
+  script:
+    - echo "🚀 Деплой на сервер..."
+    - rsync -avz --delete \
+        --exclude node_modules \
+        --exclude .git \
+        --exclude .gitignore \
+        --exclude *.log \
+        --exclude .env \
+        ./ $SSH_USER@$SERVER_IP:$DEPLOY_PATH/
+    - ssh $SSH_USER@$SERVER_IP << EOF
+        set -ex
+        cd $DEPLOY_PATH
+        echo "📦 Установка зависимостей..."
+        npm ci
+        echo "🔧 Сборка проекта на сервере..."
+        npm run build
+        echo "🧹 Остановка старых процессов PM2..."
+        pm2 delete check24rf || true
+        echo "🚀 Запуск PM2..."
+        npx pm2 start npm --name "check24rf" -- start -- --port $APP_PORT
+        pm2 save
+      EOF
