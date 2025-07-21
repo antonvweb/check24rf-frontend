@@ -1,14 +1,13 @@
-// app/layout.tsx
 import "./globals.css";
 import React from "react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Чек24.рф",
+    title: "ЧЕК24.РФ",
     description: "Сайт в разработке",
     icons: {
-        icon: "/logo.svg",
-    },
+        icon: "/favicon.ico"
+    }
 };
 
 export default function RootLayout({

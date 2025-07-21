@@ -1,0 +1,108 @@
+.adminPanel{
+    display: flex;
+    height: 100%;
+    min-height: 100%;
+    min-width: 100%;
+    justify-content: center;
+    align-items: center;
+    position: inherit !important;
+    overflow: hidden;
+}
+
+.adminContainer{
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: auto 0;
+}
+
+.mainAdmin {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footerAdmin{
+    font-size: 2rem;
+    opacity: .5;
+    padding-bottom: 1%;
+    padding-top: 3%;
+    font-weight: 500;
+    font-style: normal;
+    line-height: normal;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: var(--bg-quaternary);
+    border-radius: 6px;
+    box-shadow: var(--main-box-shadow);
+    gap: 10px;
+    min-width: 400px;
+    width: 100%;
+}
+
+.title{
+    color: var(--font-secondary);
+    font-size: 1.25rem;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.loginForm{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.loginForm input{
+    opacity: 1;
+    height: 46px;
+    width: 100%;
+    border-radius: 10px;
+    padding-left: 15px;
+    border: none;
+    outline: none;
+    color: var(--font-primary);
+    font-size: 1.15rem;
+}
+
+.loginForm input::placeholder{
+    color: var(--font-primary);
+    font-size: 1.15rem;
+    opacity: .6;
+}
+
+.submitButton{
+    width: 100%;
+    background-color: var(--btn-primary);
+    color: var(--font-secondary);
+    font-size: 1.15rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 7px 0;
+    border-radius: 10px;
+    transition: background-color .2s ease-in-out, transform .2s ease-in-out;
+}
+
+.submitButton:hover{
+    background-color: var(--btn-primary-hover);
+}
+
+.submitButton:active{
+    transform: scale(.99);
+}
+
+

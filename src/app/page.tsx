@@ -20,7 +20,7 @@ export default function Home() {
           <div className="dev-container">
             <main className={"main-dev-container"}>
               <div className="logo">
-                <Image src={"/logo.svg"} alt={"Логотип Чек24.рф"} width={81} height={95}/>
+                <Image src={"./logo.svg"} alt={"Логотип Чек24.рф"} width={81} height={95}/>
                 <div className="title">
                   <h1>ЧЕК24.РФ</h1>
                   <p>цифровая платформа</p>
@@ -44,7 +44,7 @@ export default function Home() {
         <div className="dev-container">
           <main className={"main-dev-container"}>
             <div className="logo">
-              <Image src={"/logo.svg"} alt={"Логотип Чек24.рф"} width={81} height={95} priority/>
+              <Image src={"./logo.svg"} alt={"Логотип Чек24.рф"} width={81} height={95} priority/>
               <div className="title">
                 <h1>ЧЕК24.РФ</h1>
                 <p>цифровая платформа</p>

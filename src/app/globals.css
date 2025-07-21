@@ -221,7 +221,6 @@ button, input {
     display: flex;
     flex-direction: column;
     margin: auto 0;
-
 }
 
 .main-dev-container{
@@ -316,7 +315,7 @@ button, input {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: -1;
+    z-index: -2;
 }
 
 @supports (object-fit: cover) {
@@ -327,6 +326,16 @@ button, input {
         max-width: 100%;
         max-height: 100%;
     }
+}
+
+.bg-color{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    background: var(--bg-primary);
+    z-index: -1;
+    opacity: 0.93;
 }
 
 .notFound{
