@@ -223,7 +223,7 @@ button, input {
 }
 
 .logo img{
-    width: 6.6vw;
+    width: 140px;
     height: auto;
 }
 
@@ -384,6 +384,10 @@ button, input {
 
     .logo {
         gap: 8px;
+    }
+
+    .logo img {
+        width: 100px;
     }
 
     .wrapper {

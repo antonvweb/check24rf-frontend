@@ -1,14 +1,13 @@
-// app/layout.tsx или app/layout.js
+// app/layout.tsx
 import "./globals.css";
 import React from "react";
+import type { Metadata } from "next";
 
-export const metadata = {
-    title: "Сайт в разработке",
+export const metadata: Metadata = {
+    title: "Чек24.рф",
     description: "Сайт в разработке",
     icons: {
-        icon: "/favicon.ico",
-        shortcut: "/shortcut-icon.png",
-        apple: "/apple-touch-icon.png",
+        icon: "/logo.svg",
     },
 };
 
@@ -19,13 +18,6 @@ export default function RootLayout({
 }) {
     return (
         <html lang="ru">
-        <head>
-            <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-            />
-            <title>Чек24.рф</title>
-        </head>
         <body>{children}</body>
         </html>
     );
