@@ -387,10 +387,14 @@ button, input {
     }
 
     .logo img {
-        width: 100px;
+        width: 70px;
     }
 
     .wrapper {
         padding: 10px;
+    }
+
+    .dev-mode span{
+        font-size: .625rem;
     }
 }
