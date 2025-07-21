@@ -24,6 +24,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Debug ssh-agent
+        run: |
+          ssh-add -l || echo "No SSH identities added"
+
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
@@ -36,22 +40,22 @@ jobs:
             --exclude node_modules \
             --exclude .git \
             --exclude .gitignore \
-            --exclude *.log \
+            --exclude '*.log' \
             --exclude .env \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}/
 
       - name: Build and deploy app
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            set -e
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << EOF
+            set -ex
 
             cd ${{ secrets.DEPLOY_PATH }}
 
             echo "📦 Установка зависимостей..."
-            npm ci
+            npm ci --verbose
 
             echo "🔧 Сборка проекта..."
-            npm run build
+            npm run build --verbose
 
             echo "🧹 Удаление старых процессов PM2..."
             pm2 delete check24rf || true
@@ -59,4 +63,6 @@ jobs:
             echo "🚀 Запуск приложения с PM2..."
             npx pm2 start npm --name "check24rf" -- start -- --port ${{ secrets.APP_PORT }} --output /var/log/check24rf/out.log --error /var/log/check24rf/err.log
             pm2 save
+
+            echo "✅ Деплой завершён успешно."
           EOF
