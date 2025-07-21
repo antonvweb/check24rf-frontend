@@ -58,7 +58,7 @@ jobs:
             cd ${{ secrets.DEPLOY_DEV_PATH }}
             npm ci
             npm run build
-            pm2 delete check24rf-ip || true
+            sudo pm2 delete check24rf-ip || true
             sudo npx pm2 start npm --name "check24rf-ip" -- run start:ip
             sudo pm2 save
           EOF
