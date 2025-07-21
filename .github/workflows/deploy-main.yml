@@ -1,4 +1,4 @@
-name: Deploy to Test Server
+name: Deploy main (Production)
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📦 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: 🛠 Setup Node.js
@@ -51,29 +51,14 @@ jobs:
             --exclude .env \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}/
 
-      - name: 🚀 Build and deploy app on server
+      - name: Deploy app (main)
         run: |
-          echo "📡 Запускаем удалённые команды через SSH..."
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -ex
-
             cd ${{ secrets.DEPLOY_PATH }}
-
-            echo "📦 Установка зависимостей..."
             npm ci
-
-            echo "🔧 Сборка проекта..."
             npm run build
-
-            echo "🧹 Удаление старых процессов PM2..."
-            pm2 delete check24rf-ip || true
             pm2 delete check24rf-domain || true
-
-            echo "🚀 Запуск приложения для IP (порт 4000)..."
-            npx pm2 start npm --name "check24rf-ip" -- run start:ip
-
-            echo "🚀 Запуск приложения для домена (порт 3000)..."
             npx pm2 start npm --name "check24rf-domain" -- run start:domain
-
             pm2 save
           EOF
