@@ -6,6 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "start:ip": "next start -p 4000",
+    "start:domain": "next start -p 3000",
     "lint": "next lint"
   },
   "dependencies": {

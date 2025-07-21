@@ -54,7 +54,7 @@ jobs:
       - name: 🚀 Build and deploy app on server
         run: |
           echo "📡 Запускаем удалённые команды через SSH..."
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << EOF
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -ex
 
             cd ${{ secrets.DEPLOY_PATH }}
@@ -66,9 +66,14 @@ jobs:
             npm run build
 
             echo "🧹 Удаление старых процессов PM2..."
-            pm2 delete check24rf || true
+            pm2 delete check24rf-ip || true
+            pm2 delete check24rf-domain || true
 
-            echo "🚀 Запуск приложения с PM2..."
-            npx pm2 start npm --name "check24rf" -- start -- --port ${{ secrets.APP_PORT }}
+            echo "🚀 Запуск приложения для IP (порт 4000)..."
+            npx pm2 start npm --name "check24rf-ip" -- run start:ip
+
+            echo "🚀 Запуск приложения для домена (порт 3000)..."
+            npx pm2 start npm --name "check24rf-domain" -- run start:domain
+
             pm2 save
           EOF
