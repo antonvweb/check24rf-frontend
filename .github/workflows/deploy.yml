@@ -57,6 +57,6 @@ jobs:
             pm2 delete check24rf || true
 
             echo "🚀 Запуск приложения с PM2..."
-            npx pm2 start npm --name "check24rf" -- start -- -p ${{ secrets.APP_PORT }}
+            npx pm2 start npm --name "check24rf" -- start -- --port ${{ secrets.APP_PORT }} --output /var/log/check24rf/out.log --error /var/log/check24rf/err.log
             pm2 save
           EOF
