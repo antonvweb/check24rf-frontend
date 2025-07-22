@@ -1,44 +1,37 @@
+import api from "@/lib/axios";
+
 export async function checkAuth(): Promise<boolean> {
     try {
-        const accessToken = localStorage.getItem("jwt");
+        const response = await api.get("/api/auth/validate");
 
-        if (!accessToken) return await tryRefresh();
+        return response.status === 200;
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/validate`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-
-        if (response.ok) return true;
-
-        return await tryRefresh();
-
-    } catch (error) {
-        // Ошибка сети или другая непредвиденная ошибка
-        console.error("checkAuth error:", error);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error: unknown) {
         return false;
     }
 }
 
-async function tryRefresh(): Promise<boolean> {
+export async function tryRefresh(): Promise<boolean> {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/refresh`, {
             method: "POST",
-            credentials: "include", // Отправка HttpOnly cookie с refresh token
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({})
         });
 
         if (response.ok) {
-            const data = await response.json();
+            const data = await response.json(); // { token: "..." }
             localStorage.setItem("jwt", data.token);
             return true;
+        } else {
+            return false;
         }
-
-        return false;
-
-    } catch (error) {
-        console.error("tryRefresh error:", error);
+    } catch {
         return false;
     }
 }
+

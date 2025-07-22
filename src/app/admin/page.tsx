@@ -2,9 +2,10 @@
 
 import styles from "@/styles/admin/admin.module.css"
 import React, {useEffect, useState} from "react"
-import { useRouter } from "next/navigation"
+import {useRouter} from "next/navigation"
 import {checkAuth} from "@/utils/checkAuth";
 import Preloader from "@/components/Preloader";
+import api from "@/lib/axios"
 
 export default function AdminPage() {
     const [login, setLogin] = useState("")
@@ -12,8 +13,6 @@ export default function AdminPage() {
     const [error, setError] = useState("")
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(true);
-
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     useEffect(() => {
         const verify = async () => {
@@ -29,33 +28,27 @@ export default function AdminPage() {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`${baseUrl}/api/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ login, password }),
-                credentials: "include"
-            })
+            const { data, status } = await api.post(
+                "/api/auth/login",
+                { login, password },
+                { withCredentials: true }
+            );
 
-            if (!response.ok) {
+            if (status !== 200) {
                 throw new Error("Ошибка авторизации")
             }
 
-            const data = await response.json()
             localStorage.setItem("jwt", data.token)
 
-            // ✅ Перенаправление после успешного входа
             router.push("/admin/panel")
         } catch {
             setError("Неверный логин или пароль")
         }
     }
 
-    if(isLoading) return <Preloader />;
+    if (isLoading) return <Preloader/>;
 
-    return (
-        <div className={styles.adminPanel}>
+    return (<div className={styles.adminPanel}>
             <div className={styles.adminContainer}>
                 <main className={styles.mainAdmin}>
                     <div className={styles.content}>
@@ -73,7 +66,7 @@ export default function AdminPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            {error && <p style={{color: "red", margin: "0"}}>{error}</p>}
+                            {error && <p style={{color: "var(--alert-error)", margin: "0"}}>{error}</p>}
                             <button
                                 type="submit"
                                 className={styles.submitButton}
@@ -92,6 +85,5 @@ export default function AdminPage() {
             <picture className="bg-img">
                 <img src={"/000.png"} alt={"Задний фон"}/>
             </picture>
-        </div>
-    )
+        </div>)
 }

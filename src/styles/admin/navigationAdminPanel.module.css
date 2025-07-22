@@ -1,0 +1,44 @@
+.navigationAdminPanel{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-left: 13px;
+    margin-left: -13px;
+}
+
+.highlight{
+    position: absolute;
+    inset: 0;
+    border-radius: 0 10px 10px 0;
+    background: #2E374F;
+    box-shadow: 0 4px 4px rgba(0,0,0,.25);
+    z-index: -1;
+}
+
+.navItem{
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    padding: 8px 16px;
+    width: 185px;
+    min-width: 185px;
+    margin-left: -13px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: color .2s;
+}
+.selected{
+    color:var(--font-secondary);
+}
+
+.icon{
+    width:25px;
+    height:25px;
+    display:flex;
+    align-items:center;
+}
+
