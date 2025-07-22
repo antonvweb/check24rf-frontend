@@ -12,7 +12,8 @@ type MonitorData = {
     };
     dbStatus: string;
     backendStatus: string;
-    logs: string[];
+    backendLogs: string[];
+    frontendLogs: string[];
 };
 
 const fetchMonitorData = async (): Promise<MonitorData | null> => {
@@ -57,7 +58,9 @@ export const MetricsPanel = () => {
             <p><b>Бэкенд:</b> {data.backendStatus}</p>
             <p><b>База данных:</b> {data.dbStatus}</p>
             <h3>Последние логи:</h3>
-            <pre>{data.logs?.join('\n') ?? 'Нет логов'}</pre>
+            <pre>{data.backendLogs?.join('\n') ?? 'Нет логов'}</pre>
+            <h3>Последние логи:</h3>
+            <pre>{data.frontendLogs?.join('\n') ?? 'Нет логов'}</pre>
         </div>
     );
 }
