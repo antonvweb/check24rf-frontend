@@ -1,16 +1,31 @@
 "use client"
 
 import styles from "@/styles/admin/admin.module.css"
-import React, { useState } from "react"
+import React, {useEffect, useState} from "react"
 import { useRouter } from "next/navigation"
+import {checkAuth} from "@/utils/checkAuth";
+import Preloader from "@/components/Preloader";
 
 export default function AdminPage() {
     const [login, setLogin] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
     const router = useRouter()
+    const [isLoading, setIsLoading] = useState(true);
 
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    useEffect(() => {
+        const verify = async () => {
+            const isAuth = await checkAuth();
+            if (isAuth) {
+                router.push("/admin/panel");
+            } else {
+                setIsLoading(false);
+            }
+        };
+        verify();
+    }, [router]);
 
     const handleLogin = async () => {
         try {
@@ -19,7 +34,8 @@ export default function AdminPage() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ login, password })
+                body: JSON.stringify({ login, password }),
+                credentials: "include"
             })
 
             if (!response.ok) {
@@ -35,6 +51,8 @@ export default function AdminPage() {
             setError("Неверный логин или пароль")
         }
     }
+
+    if(isLoading) return <Preloader />;
 
     return (
         <div className={styles.adminPanel}>
