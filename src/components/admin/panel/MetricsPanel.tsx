@@ -18,6 +18,7 @@ type MonitorData = {
 const fetchMonitorData = async (): Promise<MonitorData | null> => {
     try {
         const response = await api.get("/api/monitor");
+        console.log(response);
         return response.data;
     } catch (e) {
         console.error("Ошибка мониторинга:", e);
