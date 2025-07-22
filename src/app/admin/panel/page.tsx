@@ -6,6 +6,7 @@ import {useEffect, useState} from "react"
 import {useRouter} from "next/navigation";
 import {NavigationAdminPanel} from "@/components/admin/panel/NavigationAdminPanel";
 import { MainPanel } from "@/components/admin/panel/MainPanel";
+import {MetricsPanel} from "@/components/admin/panel/MetricsPanel";
 import {jwtDecode} from "jwt-decode";
 
 interface TokenPayload {
@@ -48,16 +49,17 @@ export default function PanelPage() {
 
 
     return (
-        <div className={"adminPanel"}>
-            <div className="content">
-                <main>
-                    <div className="leftBox">
-                        <span>{userName}</span>
+        <div className={styles.adminPanel}>
+            <main className={styles.mainAdminPanel}>
+                <div className={styles.leftBox}>
+                    <span className={styles.username}>{userName}</span>
+                    <div className={styles.nav}>
                         <NavigationAdminPanel activeTab={activeTab} setActiveTab={setActiveTab}/>
                     </div>
-                    {activeTab === 'main' && <MainPanel />}
-                </main>
-            </div>
+                </div>
+                {activeTab === 'main' && <MainPanel />}
+                {activeTab === 'metrics' && <MetricsPanel />}
+            </main>
         </div>
     )
 }

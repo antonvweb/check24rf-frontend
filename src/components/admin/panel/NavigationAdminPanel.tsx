@@ -37,7 +37,7 @@ export const NavigationAdminPanel = ({ activeTab, setActiveTab }: NavigationProp
                 return (
                     <div
                         key={i.id}
-                        className={clsx(styles.navItem, { [styles.selected]: isActive })}
+                        className={clsx(styles.navItem)}
                         onClick={() => onClick(i.id)}
                     >
                         {isActive && (
