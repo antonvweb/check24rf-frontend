@@ -58,10 +58,6 @@ jobs:
             npm ci
             npm run build
             sudo pm2 delete check24rf-ip || true
-            sudo npx pm2 start npm --name "check24rf-ip" \
-            -- run start:ip \
-            -- \
-            --output /var/log/check24rf-ip.log \
-            --error /var/log/check24rf-ip.err.log  
+            sudo pm2 start ecosystem.config.js
             sudo pm2 save
           EOF
