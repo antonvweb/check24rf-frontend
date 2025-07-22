@@ -48,7 +48,6 @@ jobs:
             --exclude .git \
             --exclude .gitignore \
             --exclude *.log \
-            --exclude .env \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_DEV_PATH }}/
 
       - name: Deploy app (dev)
