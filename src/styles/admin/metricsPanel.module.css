@@ -1,5 +1,46 @@
 .metricsPanel {
+    display: flex;
+    flex-direction: column;
+    max-height: 100vw;
     position: relative;
     flex: .9;
     height: 100%;
+    justify-content: space-between;
+}
+
+.status{
+    display: flex;
+    flex-direction: row;
+}
+
+.serverStatus{
+    flex: .5;
+}
+
+.siteStatus{
+    flex: .5;
+}
+
+.logs{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    gap: 10px;
+}
+
+.front{
+    flex: .5;
+}
+
+.back{
+    flex: .5;
+}
+
+.metricsPanel pre{
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 500px;
+    width: 100%;
+    text-wrap: wrap;
 }

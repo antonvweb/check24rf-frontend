@@ -53,14 +53,27 @@ export const MetricsPanel = () => {
     return (
         <div className={styles.metricsPanel}>
             <h2>Мониторинг сервера</h2>
-            <p><b>CPU:</b> {data.cpu}%</p>
-            <p><b>RAM:</b> {data.memory.used} MB / {data.memory.total} MB</p>
-            <p><b>Бэкенд:</b> {data.backendStatus}</p>
-            <p><b>База данных:</b> {data.dbStatus}</p>
-            <h3>Последние логи:</h3>
-            <pre>{data.backendLogs?.join('\n') ?? 'Нет логов'}</pre>
-            <h3>Последние логи:</h3>
-            <pre>{data.frontendLogs?.join('\n') ?? 'Нет логов'}</pre>
+            <section className={styles.status}>
+                <div className={styles.serverStatus}>
+                    <p><b>CPU:</b> {data.cpu}%</p>
+                    <p><b>RAM:</b> {data.memory.used} MB / {data.memory.total} MB</p>
+                </div>
+                <div className={styles.siteStatus}>
+                    <p><b>Бэкенд:</b> {data.backendStatus}</p>
+                    <p><b>База данных:</b> {data.dbStatus}</p>
+                </div>
+            </section>
+            <section className={styles.logs}>
+                <div className={styles.front}>
+                    <h3>Логи forntend:</h3>
+                    <pre>{data.frontendLogs?.join('\n') ?? 'Нет логов'}</pre>
+                </div>
+                <div className={styles.back}>
+                    <h3>Логи backend:</h3>
+                    <pre>{data.backendLogs?.join('\n') ?? 'Нет логов'}</pre>
+                </div>
+            </section>
+
         </div>
     );
 }
