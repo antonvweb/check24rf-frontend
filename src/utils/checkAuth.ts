@@ -3,7 +3,6 @@ import api from "@/lib/axios";
 export async function checkAuth(): Promise<boolean> {
     try {
         const response = await api.get("/api/auth/validate");
-
         return response.status === 200;
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
