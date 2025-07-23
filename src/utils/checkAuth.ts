@@ -2,7 +2,7 @@ import api from "@/lib/axios";
 
 export async function checkAuth(): Promise<boolean> {
     try {
-        const response = await api.get("/api/auth/validate");
+        const response = await api.get("/auth/validate");
         return response.status === 200;
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -13,7 +13,7 @@ export async function checkAuth(): Promise<boolean> {
 
 export async function tryRefresh(): Promise<boolean> {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/refresh`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`, {
             method: "POST",
             credentials: "include",
             headers: {
