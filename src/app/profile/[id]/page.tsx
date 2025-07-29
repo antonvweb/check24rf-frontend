@@ -1,7 +1,7 @@
 'use client'
 
 import {useEffect, useState} from 'react';
-import styles from '../../styles/profile/profile.module.css';
+import styles from '../../../styles/profile/profile.module.css';
 import { ActiveChecks } from "@/components/ActiveChecks";
 import Logo from "@/components/Logo";
 import Navigation from "@/components/Navigation";

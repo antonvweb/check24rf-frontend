@@ -11,6 +11,29 @@ export async function checkAuth(): Promise<boolean> {
     }
 }
 
+export async function sendCodeApi(phoneNumber: string): Promise<void> {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({phoneNumber: phoneNumber})
+        });
+
+        if (response.ok) {
+            console.log("Yes");
+        }
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.log(error.message);
+        } else {
+            console.log("Unknown error", error);
+        }
+    }
+}
+
 export async function tryRefresh(): Promise<boolean> {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`, {

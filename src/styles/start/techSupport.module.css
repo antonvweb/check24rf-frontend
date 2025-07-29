@@ -1,0 +1,50 @@
+.techSupport {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: clamp(15px, 2vw, 30px);
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.techSupportButton {
+    background: var(--btn-bg-primary);
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    padding: clamp(8px, 1vh, 15px) clamp(6px, 0.5vw, 12px) clamp(3px, 0.22vw, 6px);
+    cursor: pointer;
+    transition: background .2s ease-in-out, transform .2s ease-in-out;
+    flex-shrink: 0;
+}
+
+.techSupportButton:hover {
+    background: var(--btn-bg-primary-hover);
+}
+
+.techSupportText {
+    color: var(--font-secondary);
+    font-size: 1.25vw;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+}
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .techSupportText {
+        font-size: 1.15vw;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 2559px) {
+    .techSupportText {
+        font-size: 1.2vw;
+    }
+}
+
+@media (min-width: 2560px) {
+    .techSupportText {
+        font-size: 1vw;
+    }
+}

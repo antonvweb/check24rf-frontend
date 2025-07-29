@@ -1,6 +1,10 @@
 "use client";
 
 import React, {useEffect, useRef, useState} from "react";
+import {authApiMethods} from "@/components/API/authApiMethods";
+import {useAuthFormContext} from "@/context/AuthFormProvider";
+import {setAuthToken} from "@/utils/storage";
+import {useRouter} from "next/navigation";
 
 export function useCodeInput(){
     const [isCodeValid, setIsCodeValid] = useState(true);
@@ -8,6 +12,17 @@ export function useCodeInput(){
     const [code, setCode] = useState<string>('');
     const [successTimer, setSuccessTimer] = useState(0);
     const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+    const {phone} = useAuthFormContext()
+    const router = useRouter();
+    const [userId, setUserId] = useState<string>();
+
+    useEffect(() => {
+        if (successTimer === 0 && isCodeSuccess) {
+            setAuthToken();
+            router.prefetch(`/profile/${userId}`);
+            router.push(`/profile/${userId}`);
+        }
+    }, [successTimer, isCodeSuccess, router, userId]);
 
     const focusNextInput = (index: number) => {
         const nextInput = inputsRef.current[index + 1];
@@ -56,22 +71,50 @@ export function useCodeInput(){
     };
 
     useEffect(() => {
-        const exeptionCode = localStorage.getItem('code');
         if (code === '' || code.length !== 6) {
             setIsCodeValid(true);
             setIsCodeSuccess(false);
             return;
         }
 
-        if (code === exeptionCode) {
-            setIsCodeValid(true);
-            setIsCodeSuccess(true);
-            setSuccessTimer(3);
-        } else {
-            setIsCodeValid(false);
-            setIsCodeSuccess(false);
+        const loginUser :() => Promise<boolean | null | undefined> = async () => {
+            try {
+                const {data, status} = await authApiMethods.loginUser(phone);
+
+                if(status === 200) {
+                    localStorage.setItem('accessToken', data.token);
+                    setUserId(data.userId);
+                    console.log(data);
+                    return true;
+                }
+            } catch (error){
+                console.error("Ошибка при входе", error);
+                return false;
+            }
         }
-    }, [code]);
+
+        const verify = async () => {
+            try {
+                const { status } = await authApiMethods.verifyCode(phone, code);
+
+                if(status === 200) {
+                    if(await loginUser()){
+                        setIsCodeValid(true);
+                        setIsCodeSuccess(true);
+                        setSuccessTimer(3);
+                    }
+                }
+            } catch (error) {
+                setIsCodeValid(false);
+                setIsCodeSuccess(false);
+                console.error('Ошибка при валидации кода:', error);
+            }
+        };
+
+        verify();
+
+    }, [code, phone]);
+
 
     return {
         handleInput,

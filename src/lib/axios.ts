@@ -1,5 +1,4 @@
 import axios from "axios";
-import { tryRefresh } from "@/utils/checkAuth"; // путь к вашей функции
 
 // Базовая настройка
 const api = axios.create({
@@ -20,36 +19,6 @@ api.interceptors.request.use(
         return config;
     },
     (error) => Promise.reject(error)
-);
-
-// Добавляем обработку 401 ошибки
-api.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-        const originalRequest = error.config;
-
-        // Предотвращаем бесконечные циклы
-        if (error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
-
-            const refreshed = await tryRefresh();
-            if (refreshed) {
-                const newToken = localStorage.getItem("jwt");
-                if (newToken) {
-                    originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-                }
-                return api(originalRequest); // Повторяем оригинальный запрос
-            } else {
-                // Очистка и возможный редирект
-                localStorage.removeItem("jwt");
-                if (typeof window !== "undefined") {
-                    window.location.href = "/admin"; // редирект на страницу входа
-                }
-            }
-        }
-
-        return Promise.reject(error);
-    }
 );
 
 export default api;

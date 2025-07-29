@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import Logo from "@/components/Logo";
-import styles from "@/styles/start/start.module.css";
 import React from "react";
 
 export default function NotFound() {
     return (
         <div className="notFound">
-            <div className={styles.backgroundImg}/>
+            <picture className="bg-img">
+                <img src={"/000.png"} alt={"Задний фон"}/>
+            </picture>
             <main className={"mainNotFound"}>
                 <div className="notFoundlogo">
                     <Logo/>

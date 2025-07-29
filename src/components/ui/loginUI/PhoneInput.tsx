@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { formatPhoneRussianNumber, formatPhoneNumber } from '@/utils/formatPhoneNumber';
 import {ErrorPhoneValid} from "@/components/ui/loginUI/errorModule/ErrorPhoneValid";
-import styles from "@/styles/start/start.module.css";
+import styles from "@/styles/start/authForm.module.css";
 
 interface PhoneInputProps {
     phone: string;
