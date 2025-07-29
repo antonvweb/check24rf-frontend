@@ -1,9 +1,6 @@
 // @hooks/useAuthForm.ts
-import React, {useReducer, useCallback, useRef, useEffect} from 'react';
-import { safeLocalStorage } from '@/utils/storage';
-import { TEST_CODE } from '@/components/types/constants';
+import React, {useReducer, useCallback, useRef} from 'react';
 import {useTimer} from "@/hooks/useTimer";
-import api from "@/lib/axios";
 import {authApiMethods} from "@/components/API/authApiMethods";
 
 export interface AuthState {
