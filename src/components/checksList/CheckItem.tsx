@@ -8,7 +8,6 @@ export const CheckItem = ({ items, item, onRemove, mode }: CheckItemProps) => {
     if (items?.length !== 0) return <MultiListPlaceholder items={items} onRemove={onRemove} mode={mode} item={item} />;
 
     if (item !== null && item !== undefined && items?.length === 0) {
-        console.log(item)
         return <ReceiptView receipt={item} onRemove={onRemove} mode={mode} />;
     }
 

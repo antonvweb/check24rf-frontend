@@ -18,6 +18,9 @@ export function useCheckedItems() {
     }
 
     function toggleCheckItem(item: Receipt) {
+        if(checkedIds.size !== 0) {
+            setCheckedIds(new Set());
+        }
         setCheckedId(prev => (prev === item.id ? null : item.id));
     }
 

@@ -9,15 +9,21 @@ import { CodeInput } from "@/components/start/CodeInput";
 import { AgreementsSection } from "@/components/start/AgreementSection";
 import { TechSupport } from "@/components/start/TechSupport";
 import { initializeTheme } from "@/utils/theme";
-import { useImageLoader } from "@/hooks/useImageLoader";
+import { useImageLoader } from "@/hooks/start/useImageLoader";
 import {AuthFormProvider} from "@/context/AuthFormProvider";
+import {useUserStatus} from "@/hooks/start/useUserStatus";
 
 export default function Start() {
     const isLoading = useImageLoader();
+    const { checkUserActive } = useUserStatus();
 
     useEffect(() => {
         initializeTheme();
     }, []);
+
+    useEffect(() => {
+        checkUserActive();
+    }, [checkUserActive]);
 
     if (isLoading) return <Preloader />;
 

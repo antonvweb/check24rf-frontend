@@ -36,14 +36,11 @@ export const useCaptcha = (): UseCaptchaReturn => {
             return false;
         }
 
-        console.log("Captcha token:", token);
-
         setIsVerifying(true);
         setError(null);
 
         try {
             const data = await captchaApi.verifyCaptcha(token);
-            console.log(data);
             if (data) {
                 setCaptchaToken(token);
                 setIsCaptchaVerified(true);

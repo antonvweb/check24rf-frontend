@@ -24,3 +24,18 @@ export interface CheckItemProps {
     onRemove: (id: number) => void;
     mode?: string;
 }
+
+export interface User {
+    phoneNumber: string;
+    phoneNumberAlt: string;
+    email: string;
+    emailAlt: string;
+    telegramChatId: string;
+    createdAt: string;
+    isActive: boolean;
+}
+
+export interface userPaySubscribe {
+    userToken: string;
+    monthPeriod: string | null;
+}

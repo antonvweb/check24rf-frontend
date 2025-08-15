@@ -102,6 +102,17 @@
     flex: 77.66%;
 }
 
+.mySubscribe{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.isNotSubscribed{
+
+}
+
 .autoPayment{
     display: flex;
     flex-direction: row;
@@ -117,7 +128,6 @@
     font-weight: 600;
     line-height: normal;
     transition: background 0.2s ease-in-out;
-    cursor: pointer;
 }
 
 .autoPayment svg{
@@ -241,14 +251,31 @@
     background: var(--bg-secondary);
     box-shadow: var(--main-box-shadow);
     border-radius: 15px;
+    --progress-width: 100%;
 }
+
+.isNotSubscribedForExpenses{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.isNotSubscribedForExpenses span{
+    font-size: 1.25rem;
+    font-weight: 400;
+    opacity: .8;
+    max-width: 50%;
+    text-align: center;
+}
+
 
 .progressBar:after {
     content: "";
     position: absolute;
     top: 2px;
     left: 3px;
-    width: 80%;
+    width: var(--progress-width);
     height: 8px;
     border-radius: 15px;
     background: var(--font-primary);

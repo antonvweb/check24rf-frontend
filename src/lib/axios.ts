@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 
 // Базовая настройка
 const api = axios.create({
@@ -20,5 +20,20 @@ api.interceptors.request.use(
     },
     (error) => Promise.reject(error)
 );
+
+export const isAxiosError = (error: unknown): error is AxiosError => {
+    return typeof error === 'object' && error !== null && 'response' in error;
+};
+
+// Функция для безопасного получения сообщения об ошибке
+export const getErrorMessage = (error: unknown): string => {
+    if (error instanceof Error) {
+        return error.message;
+    }
+    if (typeof error === 'string') {
+        return error;
+    }
+    return 'Неизвестная ошибка';
+};
 
 export default api;

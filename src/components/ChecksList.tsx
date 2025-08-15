@@ -9,7 +9,7 @@ import Search from "@/components/Search";
 import Reference from "@/components/Reference";
 import ChangeTheme from "@/components/ChangeTheme";
 import {useLoadReceipts} from "@/components/API/useLoadReceipts";
-import {useCheckedItems} from "@/hooks/useCheckedItems";
+import {useCheckedItems} from "@/hooks/start/useCheckedItems";
 import {SortControls} from "@/components/ui/profileUI/SortControls";
 import { AnimatePresence } from 'framer-motion';
 
@@ -23,10 +23,9 @@ type MenuState = {
 interface ChecksListProps {
     endpoint: string;
     mode: string;
-    onArchiveToggle: (id: number) => Promise<void>;
 }
 
-export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksListProps) {
+export default function ChecksList({endpoint, mode}: ChecksListProps) {
     const [contextMenu, setContextMenu] = useState<MenuState>(null);
     const [isContextMenuVisible, setContextMenuVisible] = useState(false);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -127,40 +126,33 @@ export default function ChecksList({endpoint, mode, onArchiveToggle}: ChecksList
                                 {isLoading ? "Загрузка..." : "Загрузить ещё"}
                             </button>
                         )}
-                        {contextMenu && contextMenu.item && (
-                            <ContextMenu
-                                isVisible={isContextMenuVisible}
-                                x={contextMenu.x}
-                                y={contextMenu.y}
-                                onClose={handleContextMenuClose}
-                                actions={[
-                                    {
-                                        label: checkedIds.has(contextMenu.item!.id) ? 'Снять выбор' : 'Выбрать',
-                                        onClick: () => {
-                                            toggleChecksItem(contextMenu.item, !contextMenu.checked);
-                                            handleContextMenuClose();
-                                        },
-                                    },
-                                    {
-                                        label: "Скачать",
-                                        onClick: () => {
-                                            handleContextMenuClose();
-                                        },
-                                    },
-                                    {
-                                        label: mode === 'active' ? "Архивировать" : "Убрать из архива",
-                                        onClick: () => {
-                                            onArchiveToggle(contextMenu.item.id);
-                                            handleContextMenuClose();
-                                        },
-                                    }
-                                ]}
-                            />
-                        )}
                     </div>
                 </div>
                 <CheckItem items={listChecked} item={itemChecked} onRemove={(id: number) => toggleChecksItem(items.find(i => i.id === id)!, false)} mode={mode}/>
             </main>
+            {contextMenu && contextMenu.item && (
+                <ContextMenu
+                    isVisible={isContextMenuVisible}
+                    x={contextMenu.x}
+                    y={contextMenu.y}
+                    onClose={handleContextMenuClose}
+                    actions={[
+                        {
+                            label: checkedIds.has(contextMenu.item!.id) ? 'Снять выбор' : 'Выбрать',
+                            onClick: () => {
+                                toggleChecksItem(contextMenu.item, !contextMenu.checked);
+                                handleContextMenuClose();
+                            },
+                        },
+                        {
+                            label: "Скачать",
+                            onClick: () => {
+                                handleContextMenuClose();
+                            },
+                        }
+                    ]}
+                />
+            )}
         </div>
     );
 }

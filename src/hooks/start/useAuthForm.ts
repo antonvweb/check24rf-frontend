@@ -1,6 +1,6 @@
 // @hooks/useAuthForm.ts
 import React, {useReducer, useCallback, useRef} from 'react';
-import {useTimer} from "@/hooks/useTimer";
+import {useTimer} from "@/hooks/start/useTimer";
 import {authApiMethods} from "@/components/API/authApiMethods";
 
 export interface AuthState {
@@ -11,6 +11,8 @@ export interface AuthState {
     checked: boolean;
     isCaptchaVerified: boolean;
     isOpenPersonalData: boolean;
+    isSubscribed: boolean;
+    progress: number;
 }
 
 export type AuthAction =
@@ -22,7 +24,9 @@ export type AuthAction =
     | { type: 'SET_CAPTCHA_VERIFIED'; payload: boolean }
     | { type: 'SET_PERSONAL_DATA_MODAL'; payload: boolean }
     | { type: 'RESET_FORM' }
-    | { type: 'START_CODE_SENDING' };
+    | { type: 'START_CODE_SENDING' }
+    | { type: 'SET_IS_SUBSCRIBE'; payload: boolean }
+    | { type: 'SET_PROGRESS'; payload: number };
 
 const initialState: AuthState = {
     phone: '',
@@ -32,6 +36,8 @@ const initialState: AuthState = {
     checked: false,
     isCaptchaVerified: false,
     isOpenPersonalData: false,
+    isSubscribed: false,
+    progress: 1,
 };
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
@@ -75,6 +81,14 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
             };
             break;
 
+        case 'SET_IS_SUBSCRIBE':
+            newState = { ...state, isSubscribed: action.payload };
+            break;
+
+        case 'SET_PROGRESS':
+            newState = { ...state, progress: action.payload };
+            break;
+
         case 'RESET_FORM':
             newState = {
                 ...initialState,
@@ -91,9 +105,9 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 };
 
 export const useAuthForm = () => {
-    const { start } = useTimer(10);
+    const { start, seconds, reset } = useTimer(10);
     const [state, dispatch] = useReducer(authReducer, initialState);
-    const inputPhoneRef = useRef<HTMLInputElement>(null);
+    const inputPhoneRef = useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
 
     const setPhone = useCallback((phone: string) => {
         dispatch({ type: 'SET_PHONE', payload: phone });
@@ -102,6 +116,14 @@ export const useAuthForm = () => {
     const setIsPhoneValid = useCallback((isValid: boolean) => {
         dispatch({ type: 'SET_PHONE_VALID', payload: isValid });
     }, []);
+
+    const setIsSubscribed = useCallback((subscribed: boolean) => {
+        dispatch({ type: 'SET_IS_SUBSCRIBE', payload: subscribed });
+    }, [])
+
+    const setProgress = useCallback((progress: number) => {
+        dispatch({ type: 'SET_PROGRESS', payload: progress });
+    }, [])
 
     const setIsVisible = useCallback((isVisible: boolean) => {
         dispatch({ type: 'SET_VISIBLE', payload: isVisible });
@@ -137,11 +159,11 @@ export const useAuthForm = () => {
             return;
         }
         try {
-            const data = await authApiMethods.sendCode(state.phone);
-            console.log(data);
-            dispatch({ type: 'START_CODE_SENDING' });
-            start();
-            console.log('Отправка формы для телефона:', state.phone);
+            const {status} = await authApiMethods.sendCode(state.phone);
+            if(status === 200){
+                dispatch({ type: 'START_CODE_SENDING' });
+                start();
+            }
         } catch (error) {
             console.error('Ошибка при отправке формы:', error);
             dispatch({ type: 'SET_SEND_CODE', payload: false });
@@ -172,6 +194,7 @@ export const useAuthForm = () => {
         // Состояние
         ...state,
         inputPhoneRef,
+        seconds,
 
         // Действия
         setPhone,
@@ -182,6 +205,9 @@ export const useAuthForm = () => {
         setIsCaptchaVerified,
         openPersonalDataModal,
         closePersonalDataModal,
+        setIsSubscribed,
+        setProgress,
+        resetTimer: reset,
 
         // Обработчики
         handleFormPhoneSubmit,

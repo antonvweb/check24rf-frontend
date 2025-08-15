@@ -3,8 +3,7 @@ import PhoneInput from "@/components/ui/loginUI/PhoneInput";
 import {CustomButtonSendCode} from "@/components/ui/loginUI/CustomButtonSendCode"
 import React, {useRef} from "react";
 import {useAuthFormContext} from "@/context/AuthFormProvider";
-import {useTimer} from "@/hooks/useTimer";
-import {useResetSendCode} from "@/hooks/useResetSendCode";
+import {useResetSendCode} from "@/hooks/start/useResetSendCode";
 
 
 export const AuthForm = () => {
@@ -20,11 +19,9 @@ export const AuthForm = () => {
         isPhoneValid,
         setPhone,
         setIsPhoneValid,
-        handleFormPhoneSubmit
-
+        handleFormPhoneSubmit,
+        seconds
     } = useAuthFormContext();
-
-    const { seconds } = useTimer(10);
 
     return (
         <div className={styles.authForm}>
@@ -32,7 +29,7 @@ export const AuthForm = () => {
             <div className={styles.numberPhone}>
                 <span className={styles.numberPhoneLabel}>Номер телефона</span>
                 <form onSubmit={handleFormPhoneSubmit} className={styles.numberPhoneForm}>
-                    <PhoneInput phone={phone} setPhone={setPhone} inputRef={inputPhoneRef} setIsPhoneValid={setIsPhoneValid} />
+                    <PhoneInput phone={phone} setPhone={setPhone} inputPhoneRef={inputPhoneRef} setIsPhoneValid={setIsPhoneValid} />
                     <CustomButtonSendCode sendCode={sendCode} timer={seconds} checked={checked} isPhoneValid={isPhoneValid} isCaptchaVerified={isCaptchaVerified} />
                 </form>
             </div>

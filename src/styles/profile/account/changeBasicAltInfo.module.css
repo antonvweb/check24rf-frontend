@@ -1,0 +1,86 @@
+.changeBasicAltInfo{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: var(--payModel-bg-primary);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--main-box-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 27px;
+    font-weight: 400;
+    font-size: 1rem;
+    color: var(--font-primary);
+    justify-content: center;
+}
+
+.top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.closeButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.top span{
+    font-size: 1.25rem;
+}
+
+.changeForm{
+    width: 100%;
+    min-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.changeInput{
+    height: 54px;
+    border-radius: 6px;
+    border: 1px solid var(--bg-quaternary);
+    background: var(--bg-secondary);
+    padding-left: 15px;
+    font-size: 1.125rem;
+    color: var(--font-primary);
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    outline: none;
+}
+
+changeInput::placeholder{
+    color: var(--font-primary);
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.changeButton{
+    border-radius: 6px;
+    outline: none;
+    border: none;
+    padding: 13px;
+    color: var(--font-secondary);
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    cursor: pointer;
+    width: 100%;
+    background: var(--btn-primary);
+    transition: background .2s ease-in-out, transform .2s ease-in-out;
+}
+
+.changeButton:hover{
+    background: var(--btn-primary-hover);
+}

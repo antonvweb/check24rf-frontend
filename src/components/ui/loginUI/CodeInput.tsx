@@ -12,17 +12,22 @@ export function useCodeInput(){
     const [code, setCode] = useState<string>('');
     const [successTimer, setSuccessTimer] = useState(0);
     const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
-    const {phone} = useAuthFormContext()
+    const {phone, setPhone} = useAuthFormContext()
     const router = useRouter();
     const [userId, setUserId] = useState<string>();
+
+    // Добавляем ref для отслеживания, был ли уже отправлен запрос
+    const isVerifyingRef = useRef(false);
+    const verifiedCodeRef = useRef<string | null>(null);
 
     useEffect(() => {
         if (successTimer === 0 && isCodeSuccess) {
             setAuthToken();
+            setPhone('');
             router.prefetch(`/profile/${userId}`);
             router.push(`/profile/${userId}`);
         }
-    }, [successTimer, isCodeSuccess, router, userId]);
+    }, [successTimer, isCodeSuccess, router, userId, setPhone]);
 
     const focusNextInput = (index: number) => {
         const nextInput = inputsRef.current[index + 1];
@@ -74,10 +79,22 @@ export function useCodeInput(){
         if (code === '' || code.length !== 6) {
             setIsCodeValid(true);
             setIsCodeSuccess(false);
+            // Сбрасываем флаги при изменении кода
+            isVerifyingRef.current = false;
+            verifiedCodeRef.current = null;
             return;
         }
 
-        const loginUser :() => Promise<boolean | null | undefined> = async () => {
+        // Проверяем, не был ли уже отправлен запрос для этого кода
+        if (isVerifyingRef.current || verifiedCodeRef.current === code) {
+            return;
+        }
+
+        // Устанавливаем флаг, что запрос отправляется
+        isVerifyingRef.current = true;
+        verifiedCodeRef.current = code;
+
+        const loginUser = async (): Promise<boolean | null | undefined> => {
             try {
                 const {data, status} = await authApiMethods.loginUser(phone);
 
@@ -108,13 +125,15 @@ export function useCodeInput(){
                 setIsCodeValid(false);
                 setIsCodeSuccess(false);
                 console.error('Ошибка при валидации кода:', error);
+                // Сбрасываем флаги при ошибке, чтобы можно было повторить
+                isVerifyingRef.current = false;
+                verifiedCodeRef.current = null;
             }
         };
 
         verify();
 
     }, [code, phone]);
-
 
     return {
         handleInput,

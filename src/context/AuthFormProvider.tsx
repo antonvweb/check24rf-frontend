@@ -1,5 +1,5 @@
 import React, {createContext, ReactNode, useContext} from 'react';
-import {useAuthForm} from "@/hooks/useAuthForm";
+import {useAuthForm} from "@/hooks/start/useAuthForm";
 
 // Создаем контекст
 const AuthFormContext = createContext<ReturnType<typeof useAuthForm> | null>(null);

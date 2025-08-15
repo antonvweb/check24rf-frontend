@@ -1,7 +1,7 @@
 import styles from "@/styles/start/techSupport.module.css";
 import {ChatBox} from "@/components/techSupport/ChatBox";
 import React from "react";
-import {useChatToggle} from "@/hooks/useChatToggle";
+import {useChatToggle} from "@/hooks/start/useChatToggle";
 
 
 export const TechSupport = () => {

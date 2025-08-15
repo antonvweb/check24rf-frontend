@@ -1,9 +1,8 @@
 import styles from '@/styles/profile/checkList/payModel.module.css'
-import { Receipt } from "@/components/types/interfaces";
+import {Receipt, userPaySubscribe} from "@/components/types/interfaces";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import {useState} from "react";
 import {Box} from "@mui/system";
-import {userPaySubscribe} from "@/components/Account";
 
 interface PayModelProps {
     type: "checks" | "subscribe";
@@ -43,9 +42,7 @@ export const PayModel = ({ type, items, subscription, isVisible }: PayModelProps
                 :
                     (
                         <div className={styles.item}>
-                            <span className={styles.buyer}>{subscription?.user}</span>
                             <span className={styles.salesman}>{subscription?.monthPeriod}</span>
-                            <span className={styles.price}>{subscription?.price.toFixed(2)} Руб.</span>
                         </div>
                     )
                 }
@@ -60,7 +57,6 @@ export const PayModel = ({ type, items, subscription, isVisible }: PayModelProps
                     ) : !Array.isArray(items) && type === "subscribe" ? (
                         <>
                             <span>Сумма: </span>
-                            <span>{subscription?.price.toFixed(2)} ₽</span>
                         </>
                     ) : null}
                 </div>

@@ -38,32 +38,39 @@ export const CodeInput = () => {
                 id="codeForm"
                 className={styles.codeInputs + " " + (isCodeValid ? "" : styles.codeInputError)}
             >
-                {[0, 1, 2, 3, 4, 5].map((index) => (
-                    <input
-                        key={index}
-                        type="text"
-                        maxLength={1}
-                        ref={(el) => {
-                            inputsRef.current[index] = el;
-                        }}
-                        onChange={(e) => handleInput(e, index)}
-                        onKeyDown={(e) => handleKeyDownCode(e, index)}
-                        readOnly={!isVisible}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        spellCheck={false}
-                        inputMode="numeric"
-                        value={code[index] || ''}
-                        className={styles.codeInput}
-                        style={{
-                            border: isCodeSuccess
-                                ? '1px solid #74ff69'
-                                : `1px solid ${isCodeValid ? '#151515' : '#ff4141'}`,
-                            transition: 'border 0.3s ease',
-                            opacity: !isVisible ? 0.5 : 1,
-                        }}
-                    />
-                ))}
+                {[0, 1, 2, 3, 4, 5].map((index) => {
+                    const hasValue = code[index] && code[index].trim() !== '';
+                    const borderColor = isCodeSuccess
+                        ? '#74ff69'
+                        : hasValue
+                            ? 'var(--graphBorder-primary)'
+                            : '#151515';
+
+                    return (
+                        <input
+                            key={index}
+                            type="text"
+                            maxLength={1}
+                            ref={(el) => {
+                                inputsRef.current[index] = el;
+                            }}
+                            onChange={(e) => handleInput(e, index)}
+                            onKeyDown={(e) => handleKeyDownCode(e, index)}
+                            readOnly={!isVisible}
+                            autoComplete="off"
+                            autoCorrect="off"
+                            spellCheck={false}
+                            inputMode="numeric"
+                            value={code[index] || ''}
+                            className={styles.codeInput}
+                            style={{
+                                border: `1px solid ${borderColor}`,
+                                transition: 'border 0.3s ease',
+                                opacity: !isVisible ? 0.5 : 1,
+                            }}
+                        />
+                    );
+                })}
                 <ErrorCodeSuccess isCodeValid={isCodeValid}/>
             </form>
         </div>

@@ -42,18 +42,17 @@ export const CheckListItem = ({ id, item, isChecked, isItemChecked, onToggleChec
         <div
             className={`${styles.listItem} ${styles.fadeIn} ${(checked || isItemChecked) ? styles.selectListItem : ""}`}
             aria-checked={checked}
-            onClick={() => onToggleCheck(item)}
-            onContextMenu={handleContextMenu}
             style={{
                 animationDelay: `${id * 50}ms`,
             }}
+            onContextMenu={(e: React.MouseEvent) => {e.preventDefault()}}
         >
             {!item.logo ? (
                 <RandomSvgLogo id={getRandomInt(0, 3)} />
             ) : (
                 <Image src={"/yandex_taxi_1.png"} alt={`${item.salesman} logo`} width={28} height={28} />
             )}
-            <div className={styles.characteristic}>
+            <div className={styles.characteristic} onClick={() => onToggleCheck(item)} onContextMenu={handleContextMenu}>
                 <p>{item.date}</p>
                 <div className="name">
                     <p>{item.salesman}</p>

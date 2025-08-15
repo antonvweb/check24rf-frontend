@@ -1,16 +1,13 @@
 import {useEffect} from "react";
-import {useTimer} from "@/hooks/useTimer";
 import {useAuthFormContext} from "@/context/AuthFormProvider";
 
-
 export const useResetSendCode = () => {
-    const { seconds, reset} = useTimer(10);
-    const {resetSendCode}  = useAuthFormContext();
+    const {resetSendCode, seconds, resetTimer}  = useAuthFormContext();
 
     useEffect(() => {
         if (seconds === 0) {
             resetSendCode();
-            reset();
+            resetTimer();
         }
-    }, [reset, resetSendCode, seconds]);
+    }, [resetTimer, resetSendCode, seconds]);
 }

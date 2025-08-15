@@ -1,5 +1,6 @@
 import React, {useEffect, useRef} from "react";
 import styles from '@/styles/profile/checkList/ContextMenu.module.css'
+import { createPortal } from 'react-dom';
 
 interface ContextMenuProps {
     isVisible: boolean;
@@ -24,7 +25,8 @@ const svgForActions = [
 ]
 
 export const ContextMenu = ({isVisible, x, y, onClose, actions }: ContextMenuProps) => {
-    const menuRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLUListElement | null>(null);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -41,12 +43,17 @@ export const ContextMenu = ({isVisible, x, y, onClose, actions }: ContextMenuPro
         };
     }, [isVisible, onClose]);
 
-    return (
+    if (!isVisible) return null;
+
+    return createPortal(
         <ul
+            ref={menuRef}
             className={`${styles.menu} ${isVisible ? styles.open : ""}`}
             style={{
+                position: 'fixed', // Важно для портала
                 top: y,
                 left: x,
+                zIndex: 9999, // Высокий z-index
             }}
         >
             {actions.map((action, idx) => (
@@ -62,6 +69,7 @@ export const ContextMenu = ({isVisible, x, y, onClose, actions }: ContextMenuPro
                     {action.label}
                 </li>
             ))}
-        </ul>
+        </ul>,
+        document.body
     );
 };
