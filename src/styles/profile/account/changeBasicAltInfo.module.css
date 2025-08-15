@@ -57,7 +57,7 @@
     outline: none;
 }
 
-changeInput::placeholder{
+.changeInput::placeholder{
     color: var(--font-primary);
     font-size: 1.125rem;
     font-style: normal;
