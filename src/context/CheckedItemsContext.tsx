@@ -1,19 +1,37 @@
-// useCheckedItems.ts
-import {useCallback, useState} from 'react';
+import React, { createContext, useContext, useCallback, useState } from 'react';
 import { ReceiptDto } from "@/api/types/typesMcoService";
 import { generateReceiptId } from "@/api/types/typesMcoService";
 
-export function useCheckedItems() {
+interface CheckedItemsContextType {
+    checkedIds: Set<number>;
+    checkedItems: ReceiptDto[];
+    toggleChecksItem: (item: ReceiptDto) => void;
+    isChecked: (item: ReceiptDto) => boolean;
+    clearCheckedItems: () => void;
+}
+
+const CheckedItemsContext = createContext<CheckedItemsContextType | null>(null);
+
+export const CheckedItemsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [checkedIds, setCheckedIds] = useState<Set<number>>(new Set());
     const [checkedItems, setCheckedItems] = useState<ReceiptDto[]>([]);
+    const isProcessingRef = React.useRef(false);
 
     const toggleChecksItem = useCallback((item: ReceiptDto) => {
+        // Предотвращаем двойной вызов
+        if (isProcessingRef.current) {
+            console.log('Already processing toggle, skipping');
+            return;
+        }
+
+        isProcessingRef.current = true;
+
         console.log('toggleChecksItem called with item:', item);
 
-        setCheckedIds(prev => {
-            const itemId = item.id || generateReceiptId(item);
-            console.log('Processing toggle for ID:', itemId, 'Current checkedIds:', Array.from(prev));
+        const itemId = item.id || generateReceiptId(item);
+        console.log('Processing toggle for ID:', itemId);
 
+        setCheckedIds(prev => {
             const next = new Set(prev);
             if (next.has(itemId)) {
                 console.log('Removing item:', itemId);
@@ -24,13 +42,12 @@ export function useCheckedItems() {
                         return iId !== itemId;
                     });
                     console.log('New checkedItems after removal:', newItems);
+                    isProcessingRef.current = false;
                     return newItems;
                 });
             } else {
                 console.log('Adding item:', itemId);
                 next.add(itemId);
-
-                // Проверяем, существует ли элемент перед добавлением
                 setCheckedItems(prevItems => {
                     const itemExists = prevItems.some(i => {
                         const iId = i.id || generateReceiptId(i);
@@ -39,11 +56,13 @@ export function useCheckedItems() {
 
                     if (itemExists) {
                         console.log('Item already exists, skipping addition');
+                        isProcessingRef.current = false;
                         return prevItems;
                     }
 
                     const newItems = [...prevItems, item];
                     console.log('New checkedItems after addition:', newItems);
+                    isProcessingRef.current = false;
                     return newItems;
                 });
             }
@@ -64,11 +83,25 @@ export function useCheckedItems() {
         setCheckedItems([]);
     }
 
-    return {
+    const value: CheckedItemsContextType = {
         checkedIds,
         checkedItems,
         toggleChecksItem,
         isChecked,
         clearCheckedItems
     };
-}
+
+    return (
+        <CheckedItemsContext.Provider value={value}>
+            {children}
+        </CheckedItemsContext.Provider>
+    );
+};
+
+export const useCheckedItemsContext = (): CheckedItemsContextType => {
+    const context = useContext(CheckedItemsContext);
+    if (!context) {
+        throw new Error('useCheckedItemsContext must be used within CheckedItemsProvider');
+    }
+    return context;
+};

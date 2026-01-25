@@ -2,8 +2,6 @@ import styles from "@/styles/profile/account/account.module.css";
 import {PayModel} from "@/components/ui/profileUI/PayModel";
 import React, {useEffect, useState} from "react";
 import {userPaySubscribe} from "@/components/types/interfaces";
-import {useAuthFormContext} from "@/context/AuthFormProvider";
-import {subscribeApiMethods} from "@/components/API/authApiMethods";
 
 const periods = [
     { label: "1 мес.", value: "1m" },
@@ -15,20 +13,14 @@ const periods = [
 export const Subscribe = () => {
     const [isPayMenuVisible, setIsPayMenuVisible] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState<string>("1m");
-    const {
-        isSubscribed,
-        progress,
-    } = useAuthFormContext();
 
     const handleSelectPeriod = (period: string) => {
         console.log("Выбрано:", period); // ✅ Проверка
         setSelectedPeriod(period);
     };
 
-    const openPayMenu   = () => {
-        const result = subscribeApiMethods.getTypes();
-        console.log(result);
-    };
+    const openPayMenu  = () => setIsPayMenuVisible(true);
+
     const closePayMenu  = () => setIsPayMenuVisible(false);
 
     const token = localStorage.getItem("userToken") ?? "";
@@ -66,20 +58,20 @@ export const Subscribe = () => {
                         <div className={styles.column}>
                             <div className={styles.row}>
                                 <span>Дата начала</span>
-                                <span>{isSubscribed ? "23.06.2025" : "--.--.----"}</span>
+                                <span>--.--.----</span>
                             </div>
                             <div className={styles.row}>
                                 <span>Дата окончания</span>
-                                <span>{isSubscribed ? "23.07.2025" : "--.--.----"}</span>
+                                <span>--.--.----</span>
                             </div>
                         </div>
                         <div
                             className={styles.progressBar}
-                            style={{ '--progress-width': isSubscribed ? `${progress}%` : "1%" } as React.CSSProperties}
+                            style={{ '--progress-width': "1%" } as React.CSSProperties}
                         />
                     </div>
                     <div className={styles.extend}>
-                        <span>{isSubscribed ? "Продлить на" : "Приобрести на"}</span>
+                        <span>Приобрести на</span>
                         {periods.map(({ label, value }) => (
                             <button
                                 key={value}
@@ -102,9 +94,9 @@ export const Subscribe = () => {
             </div>
             <div className={styles.autoPayment}
                  style={{
-                    cursor: isSubscribed ? "pointer" : "not-allowed",
-                    pointerEvents: isSubscribed ? "auto" : "none",
-                    opacity: isSubscribed ? 1 : 0.5, // для визуального эффекта
+                    cursor: "pointer",
+                    pointerEvents: "auto",
+                    opacity: 1, // для визуального эффекта
                 }}
             >
                 <span>Отключить автоплатёж</span>

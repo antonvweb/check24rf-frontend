@@ -1,3 +1,5 @@
+import {ReceiptDto} from "@/api/types/typesMcoService";
+
 export interface SalesRow {
     id: number;
     saleId: number;
@@ -19,8 +21,8 @@ export interface Receipt {
 }
 
 export interface CheckItemProps {
-    items: Receipt[];
-    item: Receipt | undefined;
+    items: ReceiptDto[];
+    item: ReceiptDto | undefined;
     onRemove: (id: number) => void;
     mode?: string;
 }

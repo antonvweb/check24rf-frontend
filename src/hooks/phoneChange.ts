@@ -1,15 +1,21 @@
+'use client'
+
 import React, {useState} from "react";
 import {formatPhoneNumber, formatPhoneRussianNumber} from "@/utils/start/formatPhoneNumber";
+import {useAuth} from "@/context/contextAuth";
 
 interface PhoneChangeProps {
-    phone: string;
-    setPhone: (phone: string) => void;
-    inputPhoneRef: React.RefObject<HTMLInputElement>;
-    setIsPhoneValid: (isValid: boolean) => void;
+    inputPhoneRef: React.RefObject<HTMLInputElement | null>;
 }
 
-export const usePhoneChange = ({phone, setPhone, setIsPhoneValid, inputPhoneRef} :PhoneChangeProps) => {
+export const usePhoneChange = ({inputPhoneRef} :PhoneChangeProps) => {
     const [isRussianPhoneValid, setIsRussianPhoneValid] = useState<boolean | null>(null);
+
+    const {
+        phone,
+        setPhone,
+        setIsPhoneValid
+    } = useAuth();
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const raw = e.target.value;
@@ -23,16 +29,19 @@ export const usePhoneChange = ({phone, setPhone, setIsPhoneValid, inputPhoneRef}
         const formatted = formatPhoneNumber(firstDigit ? firstDigit + digits : digits);
         const isValid = digits.length === 10 && formatPhoneRussianNumber(digits);
 
+        console.log(formatted);
         setPhone(formatted);
         setIsRussianPhoneValid(isValid);
         setIsPhoneValid(isValid);
 
         // Вычисляем новую позицию курсора
         requestAnimationFrame(() => {
-            if (inputPhoneRef.current) {
-                const nextIndex = formatted.indexOf('X');
-                const cursorPos = nextIndex === -1 ? formatted.length : nextIndex;
-                inputPhoneRef.current.setSelectionRange(cursorPos, cursorPos);
+            if(inputPhoneRef) {
+                if (inputPhoneRef.current) {
+                    const nextIndex = formatted.indexOf('X');
+                    const cursorPos = nextIndex === -1 ? formatted.length : nextIndex;
+                    inputPhoneRef.current.setSelectionRange(cursorPos, cursorPos);
+                }
             }
         });
     };

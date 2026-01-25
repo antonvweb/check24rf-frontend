@@ -1,9 +1,8 @@
+'use client'
+
 import styles from "@/styles/profile/account/changeBasicAltInfo.module.css"
-import {changeAltData} from "@/utils/profile/account/changeAltNumberPhone";
-import React, {useState} from "react";
 import {ErrorPhoneValid} from "@/components/ui/loginUI/errorModule/ErrorPhoneValid";
-import {useAuthFormContext} from "@/context/AuthFormProvider";
-import {usePhoneChange} from "@/hooks/phoneChange";
+import {useAuth} from "@/context/contextAuth";
 
 type ChangeType = "phone" | "email";
 
@@ -13,24 +12,10 @@ interface ChangeBasicAltInfoProps {
 }
 
 export const ChangeBasicAltInfo = ({type, onClose}:ChangeBasicAltInfoProps) => {
-    const [inputValue, setInputValue] = useState("");
-    const {phone, setPhone, setIsPhoneValid, inputPhoneRef} = useAuthFormContext();
-    const { handlePhoneChange, handleKeyDown, isRussianPhoneValid } = usePhoneChange({
-        phone,
-        setPhone,
-        setIsPhoneValid,
-        inputPhoneRef
-    });
 
-    const handleChange = async () => {
-        const value = type === "phone" ? phone : inputValue;
-        if (!type || value.trim() === "") return;
-
-        const result = await changeAltData(value.trim(), type);
-        console.log("Результат изменения:", result);
-
-        onClose();
-    }
+    const {
+        phone
+    } = useAuth();
 
     return (
         <div className={styles.changeBasicAltInfo}>
@@ -47,21 +32,17 @@ export const ChangeBasicAltInfo = ({type, onClose}:ChangeBasicAltInfoProps) => {
             </div>
             <form className={styles.changeForm} onSubmit={(e) => {
                 e.preventDefault();
-                handleChange();
             }}>
                 <input
                     className={styles.changeInput}
                     type={type === "phone" ? "tel" : "email"}
-                    value={type === "phone" ? phone : inputValue}
-                    onChange={type === "phone" ? handlePhoneChange : (e) => setInputValue(e.target.value)}
                     placeholder={
                         type === "phone"
                             ? "+7 (XXX) XXX-XX-XX"
                             : "example@example.com"
                     }
-                    onKeyDown={type === "phone" ? handleKeyDown : undefined}
                 />
-                <ErrorPhoneValid isPhoneValid={phone.replace(/\D/g, '').replace(/^7|8/, '').slice(0, 10).length === 10} isRussianPhoneValid={isRussianPhoneValid}/>
+                <ErrorPhoneValid isPhoneValid={phone.replace(/\D/g, '').replace(/^7|8/, '').slice(0, 10).length === 10} isRussianPhoneValid={true}/>
                 <button
                     type="submit"
                     className={styles.changeButton}

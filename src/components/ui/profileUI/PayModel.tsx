@@ -1,12 +1,13 @@
 import styles from '@/styles/profile/checkList/payModel.module.css'
-import {Receipt, userPaySubscribe} from "@/components/types/interfaces";
+import {userPaySubscribe} from "@/components/types/interfaces";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import {useState} from "react";
 import {Box} from "@mui/system";
+import {ReceiptDto} from "@/api/types/typesMcoService";
 
 interface PayModelProps {
     type: "checks" | "subscribe";
-    items?: Receipt[];               // для чеков
+    items?: ReceiptDto[];               // для чеков
     subscription?: userPaySubscribe; // для подписки (отдельный пропс)
     isVisible: boolean;
 }
@@ -30,12 +31,11 @@ export const PayModel = ({ type, items, subscription, isVisible }: PayModelProps
                     (
                         items?.map((r, i) => (
                             <div key={i} className={styles.item}>
-                                <span className={styles.buyer}>{r.date}</span>
+                                <span className={styles.buyer}>{r.rawJson.dateTime}</span>
                                 <div className={styles.salesManData}>
-                                    <span className={styles.salesman}>{r.salesman}</span>
-                                    <span className={styles.ooo}>{r.ooo}</span>
+                                    <span className={styles.salesman}>{r.rawJson.user}</span>
                                 </div>
-                                <span className={styles.price}>{r.price.toFixed(2)} Руб.</span>
+                                <span className={styles.price}>{r.totalSum} Руб.</span>
                             </div>
                         ))
                     )
@@ -52,7 +52,7 @@ export const PayModel = ({ type, items, subscription, isVisible }: PayModelProps
                     {type === "checks" && Array.isArray(items) ? (
                         <>
                             <span>Сумма выбранных чеков</span>
-                            <span>{items.reduce((acc, r) => acc + r.price, 0).toFixed(2)} ₽</span>
+                            <span>{12 * items.length} ₽</span>
                         </>
                     ) : !Array.isArray(items) && type === "subscribe" ? (
                         <>

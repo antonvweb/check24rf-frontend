@@ -3,7 +3,9 @@ import Checkbox from '@mui/material/Checkbox';
 import {styled} from '@mui/material/styles';
 
 type CustomCheckboxProps = {
-    checked: boolean; onChange: (event: React.ChangeEvent<HTMLInputElement>) => void; ariaLabel?: string;
+    checked: boolean;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    ariaLabel?: string;
     color?: string;
 };
 
@@ -53,25 +55,49 @@ const CheckedIcon = styled(BaseIcon)({
 export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
                                                                   checked,
                                                                   onChange,
-                                                                  ariaLabel = 'custom checkbox',
                                                                   color = 'var(--checkbox-fill)',
                                                               }) => {
+    const [isProcessing, setIsProcessing] = React.useState(false);
+
+    const handleChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        // Предотвращаем двойной вызов
+        if (isProcessing) return;
+
+        setIsProcessing(true);
+        console.log('CustomCheckbox onChange triggered');
+
+        // Вызываем оригинальный обработчик
+        onChange(event);
+
+        // Сбрасываем флаг после микротаска
+        setTimeout(() => {
+            setIsProcessing(false);
+        }, 0);
+    }, [onChange, isProcessing]);
+
+    const handleClick = React.useCallback((event: React.MouseEvent) => {
+        // Останавливаем всплытие события
+        event.stopPropagation();
+        event.nativeEvent.stopImmediatePropagation();
+    }, []);
+
     return (
-        <Checkbox
-            checked={checked}
-            onChange={onChange}
-            icon={
-                <UncheckedIcon color={color}>
-                    <CheckSvg color={color} />
-                </UncheckedIcon>
-            }
-            checkedIcon={
-                <CheckedIcon color={color}>
-                    <CheckSvg color={color} />
-                </CheckedIcon>
-            }
-            inputProps={{ 'aria-label': ariaLabel }}
-        />
+        <div onClick={handleClick}>
+            <Checkbox
+                checked={checked}
+                onChange={handleChange}
+                onClick={handleClick}
+                icon={
+                    <UncheckedIcon color={color}>
+                        <CheckSvg color={color} />
+                    </UncheckedIcon>
+                }
+                checkedIcon={
+                    <CheckedIcon color={color}>
+                        <CheckSvg color={color} />
+                    </CheckedIcon>
+                }
+            />
+        </div>
     );
 };
-

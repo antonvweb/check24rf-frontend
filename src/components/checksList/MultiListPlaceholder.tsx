@@ -7,7 +7,7 @@ export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
     const [isPayMenuVisible, setIsPayMenuVisible] = useState(false);
 
     const handleRemoveAll = () => {
-        items?.forEach(item => onRemove(item.id));
+        items?.forEach(item => onRemove(item.id as number));
     };
 
     useEffect(() => {
@@ -42,11 +42,10 @@ export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
                         {items?.map((r, i) => (
                             <div key={i} className={styles.item}>
                                 <div className={styles.salesManData}>
-                                    <span className={styles.salesman}>{r.salesman}</span>
-                                    <span className={styles.ooo}>{r.ooo}</span>
+                                    <span className={styles.salesman}>{r.rawJson.user}</span>
                                 </div>
-                                <span className={styles.buyer}>{r.buyer}</span>
-                                <span className={styles.price}>{r.price.toFixed(2)} ₽</span>
+                                <span className={styles.buyer}>{r.rawJson.buyerAddress}</span>
+                                <span className={styles.price}>{r.totalSum.toFixed(2)} ₽</span>
                             </div>
                         ))}
                     </div>

@@ -1,15 +1,37 @@
-// components/CheckItem.tsx
-import {CheckItemProps} from "@/components/types/interfaces";
+// CheckItem.tsx - финальная версия
 import {EmptyState} from "@/components/checksList/EmptyState";
 import {ReceiptView} from "@/components/checksList/ReceiptView";
 import {MultiListPlaceholder} from "@/components/checksList/MultiListPlaceholder";
+import {ReceiptDto} from "@/api/types/typesMcoService";
 
-export const CheckItem = ({ items, item, onRemove, mode }: CheckItemProps) => {
-    if (items?.length !== 0) return <MultiListPlaceholder items={items} onRemove={onRemove} mode={mode} item={item} />;
+interface CheckItemDtoProps {
+    items: ReceiptDto[];
+    item: ReceiptDto | undefined;
+    onRemove: (id: number) => void;
+    mode?: string;
+}
 
-    if (item !== null && item !== undefined && items?.length === 0) {
-        return <ReceiptView receipt={item} onRemove={onRemove} mode={mode} />;
+export const CheckItem = ({ items, item, onRemove, mode }: CheckItemDtoProps) => {
+    console.log('CheckItem props:', { items, item, itemsLength: items?.length });
+
+    // Если выбрано несколько чеков
+    if (items.length > 1) {
+        return <MultiListPlaceholder
+            items={items}
+            onRemove={onRemove}
+            mode={mode}
+            item={item}
+        />;
     }
 
+    if (items.length === 1) {
+        return <ReceiptView
+            receipt={items[0]} // Берем из items, а не из item
+            onRemove={onRemove}
+            mode={mode}
+        />;
+    }
+
+    // Если ничего не выбрано
     return <EmptyState />;
 };

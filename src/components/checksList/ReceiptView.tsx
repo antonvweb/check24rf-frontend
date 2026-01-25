@@ -1,21 +1,26 @@
 
 import styles from '@/styles/profile/checkList/checkItem.module.css';
-import {Receipt} from "@/components/types/interfaces";
 import {ContextMenuSimple} from "@/components/ui/profileUI/ContextMenuSimple";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {DownloadModal} from "@/components/ui/profileUI/DownloadModal";
+import {ReceiptDto} from "@/api/types/typesMcoService";
 
 interface Props {
-    receipt: Receipt;
+    receipt: ReceiptDto;
     onRemove: (id: number) => void;
     mode?: string;
 }
 
 export const ReceiptView = ({ receipt, onRemove, mode }: Props) => {
+    console.log('ReceiptView rendered with receipt:', receipt);
     const [isMenuVisible, setIsMenuVisible] = useState(false);
     const [isOpenDownloadModal, setIsOpenDownloadModal] = useState(false);
 
     const toggleMenu = () => setIsMenuVisible(p => !p);
+
+    useEffect(() => {
+        console.log(receipt);
+    })
 
     const handleDownload = () => {
         openOpenDownloadModal();
@@ -28,6 +33,22 @@ export const ReceiptView = ({ receipt, onRemove, mode }: Props) => {
 
     const openOpenDownloadModal   = () => setIsOpenDownloadModal(true);
     const closeOpenDownloadModal  = () => setIsOpenDownloadModal(false);
+
+    const formatMoney = (value?: number) =>
+        value ? (value / 100).toFixed(2) : '0.00';
+
+    const formatDate = (iso: string) =>
+        new Date(iso).toLocaleString('ru-RU');
+
+    const taxationMap: Record<number, string> = {
+        1: 'ОСН',
+        2: 'УСН (доход)',
+        3: 'УСН (доход-расход)',
+        4: 'ЕНВД',
+        5: 'ЕСХН',
+        6: 'ПСН',
+    };
+
 
     return (
         <div className={styles.checkItem}>
@@ -52,7 +73,7 @@ export const ReceiptView = ({ receipt, onRemove, mode }: Props) => {
                         <span>ПРИХОД</span>
                     </div>
 
-                    <button type="button" className={styles.closeBtn} onClick={() => onRemove(receipt.id)}>
+                    <button type="button" className={styles.closeBtn} onClick={() => onRemove(receipt.id as number)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
                             <path d="M2 2L24 24" stroke="#2E374F" strokeWidth="3" strokeLinecap="round"/>
                             <path d="M24 2L2 24" stroke="#2E374F" strokeWidth="3" strokeLinecap="round"/>
@@ -61,110 +82,132 @@ export const ReceiptView = ({ receipt, onRemove, mode }: Props) => {
                 </header>
 
                 <div className={styles.characteristics}>
+
+                    {/* ТОВАРЫ */}
                     <section className={styles.section1}>
                         <div className={styles.top}>
                             <span>ПРЕДМЕТ РАСЧЁТА</span>
                             <span>КОЛ-ВО</span>
                             <span>СУММА, ₽</span>
                         </div>
+
                         <div className={styles.name}>
-                            {receipt.rows.map((r, i) => (
+                            {receipt.rawJson.items.map((item, i) => (
                                 <div key={i} className={styles.data}>
-                                    <span>{i + 1}. {r.title}</span>
-                                    <span>{r.qty}</span>
-                                    <span>{r.sum.toFixed(2)}</span>
+                                    <span>{i + 1}. {item.name}</span>
+                                    <span>{item.quantity}</span>
+                                    <span>{formatMoney(item.sum)}</span>
                                 </div>
                             ))}
                         </div>
                     </section>
 
+                    {/* ИТОГИ */}
                     <section className={styles.section2}>
                         <div className={styles.result}>
                             <span>ИТОГ:</span>
-                            <span>{receipt.price.toFixed(2)}</span>
+                            <span>{receipt.totalSum.toFixed(2)}</span>
                         </div>
+
                         <div className={styles.data}>
                             <span>Наличные</span>
-                            <span>0,00</span>
+                            <span>{formatMoney(receipt.rawJson.cashTotalSum)}</span>
                         </div>
+
                         <div className={styles.data}>
                             <span>Безналичные</span>
-                            <span>{receipt.price.toFixed(2)}</span>
+                            <span>{formatMoney(receipt.rawJson.ecashTotalSum)}</span>
                         </div>
+
                         <div className={styles.data}>
                             <span>Предоплата (аванс)</span>
-                            <span>0,00</span>
+                            <span>{formatMoney(receipt.rawJson.prepaidSum)}</span>
                         </div>
                     </section>
 
+                    {/* РЕКВИЗИТЫ */}
                     <section className={styles.section3}>
                         <div className={styles.left}>
                             <div className={styles.data}>
                                 <span>ИНН</span>
-                                <span>{receipt.inn}</span>
+                                <span>{receipt.userInn}</span>
                             </div>
+
                             <div className={styles.data}>
-                                <span>№ Смены</span>
-                                <span>96</span>
+                                <span>№ смены</span>
+                                <span>{receipt.rawJson.shiftNumber}</span>
                             </div>
+
                             <div className={styles.data}>
                                 <span>Чек №</span>
-                                <span>786</span>
+                                <span>{receipt.rawJson.fiscalDocumentNumber}</span>
                             </div>
                         </div>
+
                         <div className={styles.right}>
                             <div className={styles.data}>
-                                <span>№ Авто</span>
-                                <span>{receipt.buyer}</span>
+                                <span>Телефон покупателя</span>
+                                <span>{receipt.phone}</span>
                             </div>
+
                             <div className={styles.data}>
                                 <span>СНО</span>
-                                <span>ОСН</span>
+                                <span>{taxationMap[receipt.rawJson.taxationType]}</span>
                             </div>
                         </div>
                     </section>
 
+                    {/* ФИСКАЛЬНЫЕ ДАННЫЕ */}
                     <section className={styles.section4}>
                         <div className={styles.data}>
-                            <span>Дата/Время</span>
-                            <span>{receipt.date}</span>
+                            <span>Дата / Время</span>
+                            <span>{formatDate(receipt.receiptDateTime)}</span>
                         </div>
+
                         <div className={styles.data}>
-                            <span>ФД №:</span>
-                            <span>66751</span>
+                            <span>ФД №</span>
+                            <span>{receipt.rawJson.fiscalDocumentNumber}</span>
                         </div>
+
                         <div className={styles.data}>
-                            <span>Версия ФФД:</span>
-                            <span>1.2</span>
+                            <span>Версия ФФД</span>
+                            <span>{receipt.rawJson.fiscalDocumentFormatVer}</span>
                         </div>
+
                         <div className={styles.data}>
-                            <span>ФН:</span>
-                            <span>738044081157303</span>
+                            <span>ФН</span>
+                            <span>{receipt.rawJson.fiscalDriveNumber}</span>
                         </div>
+
                         <div className={styles.data}>
-                            <span>РН ККТ:</span>
-                            <span>0007409073058882</span>
+                            <span>РН ККТ</span>
+                            <span>{receipt.rawJson.kktRegId}</span>
                         </div>
+
                         <div className={styles.data}>
-                            <span>ФП:</span>
-                            <span>3602869548</span>
+                            <span>ФП</span>
+                            <span>{receipt.rawJson.fiscalSign}</span>
                         </div>
+
                         <div className={styles.data}>
-                            <span>Кассир:</span>
-                            <span>--</span>
+                            <span>Кассир</span>
+                            <span>{receipt.rawJson.operator || '—'}</span>
                         </div>
+
                         <div className={styles.data}>
-                            <span>Место расчетов:</span>
-                            <span>taxi.yandex.ru</span>
+                            <span>Место расчётов</span>
+                            <span>{receipt.rawJson.retailPlace}</span>
                         </div>
+
                         <div className={styles.data}>
-                            <span>Адрес расчетов:</span>
-                            <span>141281, Россия, Московская обл., г. Ивантеевка ул. Заречная, д. 1</span>
+                            <span>Адрес расчётов</span>
+                            <span>{receipt.rawJson.retailPlaceAddress}</span>
                         </div>
                     </section>
 
-                    <div className={styles.qrCode}/>
+                    <div className={styles.qrCode} />
                 </div>
+
 
                 <button type="button" className={styles.download} onClick={handleDownload}>Скачать</button>
             </div>

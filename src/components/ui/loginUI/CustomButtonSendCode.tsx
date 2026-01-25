@@ -1,24 +1,27 @@
 import Button from "@mui/material/Button";
 import React from "react";
+import {useAuth} from "@/context/contextAuth";
 
-interface CustomButtonSendCodeProps {
-    sendCode: boolean;
-    isPhoneValid: boolean;
-    checked: boolean;
-    isCaptchaVerified: boolean;
-    timer: number;
-}
+export const CustomButtonSendCode = () => {
+    const {
+        codeSent,
+        isPhoneValid,
+        agreedToTerms,
+        seconds
+    } = useAuth();
 
-export const CustomButtonSendCode = ({sendCode, isPhoneValid, checked, isCaptchaVerified, timer}:CustomButtonSendCodeProps ) => {
+    const { captchaToken } = useAuth();
+
+    const isDisabled = !isPhoneValid || !agreedToTerms || (captchaToken === null) || codeSent;
+
     return (
         <Button
             type="submit"
+            disabled={isDisabled}
             sx={{
                 width: '35%',
                 borderRadius: '6px',
-                background: (isPhoneValid && checked && isCaptchaVerified && !sendCode)
-                    ? '#A7DFF1'
-                    : '#d3d3d3',
+                background: isDisabled ? '#d3d3d3' : '#A7DFF1',
                 backdropFilter: 'blur(18px)',
                 border: 'none',
                 outline: 'none',
@@ -27,12 +30,13 @@ export const CustomButtonSendCode = ({sendCode, isPhoneValid, checked, isCaptcha
                 lineHeight: 'normal',
                 textTransform: 'none',
                 color: '#000',
-                cursor: (isPhoneValid && checked && isCaptchaVerified && !sendCode)
-                    ? 'pointer'
-                    : 'not-allowed',
+                cursor: isDisabled ? 'not-allowed' : 'pointer',
+                '&:hover': {
+                    background: isDisabled ? '#d3d3d3' : '#8fc9db',
+                }
             }}
         >
-            {sendCode ? timer : 'Отправить код'}
+            {codeSent ? seconds : 'Отправить код'}
         </Button>
-    )
-}
+    );
+};

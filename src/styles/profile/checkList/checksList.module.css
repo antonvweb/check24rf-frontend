@@ -8,6 +8,52 @@
     min-height: 100%;
 }
 
+.noAccess{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+}
+
+.noAccessWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #2e374f; /* светлый фон для блока */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 20px;
+    font-weight: 700;
+}
+
+.noAccessText {
+    font-size: 22px;
+    color: var(--font-secondary);
+    margin-bottom: 16px;
+}
+
+.noAccessBtn {
+    color: var(--font-primary);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: var(--btn-secondary);
+}
+
+.noAccessBtn:hover {
+    background-color: var(--btn-secondary-hover);
+}
+
+.haveAccess{
+
+}
+
 .mainCheckList {
     display: flex;
     flex-direction: row;

@@ -3,39 +3,53 @@
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Preloader from "@/components/Preloader";
+import { useAuth } from "@/context/contextAuth";
 
-function isLoggedInValid(): boolean {
-    try {
-        const stored = localStorage.getItem("isLoggedIn");
-        if (!stored) return false;
-
-        const { value, expiresAt } = JSON.parse(stored);
-        return value === true && Date.now() < expiresAt;
-    } catch {
-        return false;
-    }
-}
-
-// HOC с правильной типизацией
 export function withAuthProtection<T extends object>(
     WrappedComponent: React.ComponentType<T>
 ): React.FC<T> {
     return function ProtectedComponent(props: T) {
         const router = useRouter();
         const pathname = usePathname();
-        const [isLoading, setIsLoading] = useState(true);
+        const { isTokenValid, checkAuth, isLoading: authLoading } = useAuth();
+        const [isChecking, setIsChecking] = useState(true);
 
         useEffect(() => {
-            const isValid = isLoggedInValid();
+            const checkAuthStatus = async () => {
+                const token = typeof window !== "undefined" ? localStorage.getItem("jwt") : null;
+                const isValid = isTokenValid(token);
 
-            if (!isValid && pathname !== "/") {
-                router.replace("/start");
-            } else {
-                setIsLoading(false);
-            }
-        }, [pathname, router]);
+                const isStartPage = pathname === "/start" || pathname === "/";
 
-        if (isLoading) {
+                if (isStartPage) {
+                    // Публичная страница (логин)
+                    if (isValid) {
+                        // Если уже авторизован - редирект на профиль
+                        router.replace("/profile");
+                    } else {
+                        setIsChecking(false);
+                    }
+                } else {
+                    // Защищенная страница
+                    if (!isValid) {
+                        // Токен невалиден - редирект на логин
+                        router.replace("/start");
+                    } else {
+                        // Токен валиден - проверяем пользователя
+                        const authSuccess = await checkAuth();
+                        if (!authSuccess) {
+                            router.replace("/start");
+                        } else {
+                            setIsChecking(false);
+                        }
+                    }
+                }
+            };
+
+            checkAuthStatus();
+        }, [pathname, isTokenValid, checkAuth, router]);
+
+        if (isChecking || authLoading) {
             return <Preloader />;
         }
 

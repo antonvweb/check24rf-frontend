@@ -1,14 +1,7 @@
 import {useEffect, useState} from "react";
-import {useUserStatus} from "@/hooks/start/useUserStatus";
 
 export const useImageLoader = () => {
     const [isLoading, setIsLoading] = useState(true);
-
-    const { checkUserActive } = useUserStatus();
-
-    useEffect(() => {
-        checkUserActive();
-    }, [checkUserActive]);
 
     useEffect(() => {
         const handleLoad = () => setIsLoading(false);

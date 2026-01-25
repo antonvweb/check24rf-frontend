@@ -1,22 +1,23 @@
+'use client'
+
 import React from 'react';
 import {ErrorPhoneValid} from "@/components/ui/loginUI/errorModule/ErrorPhoneValid";
 import styles from "@/styles/start/authForm.module.css";
 import {usePhoneChange} from "@/hooks/phoneChange";
+import {useAuth} from "@/context/contextAuth";
 
 interface PhoneInputProps {
-    phone: string;
-    setPhone: (phone: string) => void;
-    inputPhoneRef: React.RefObject<HTMLInputElement>;
-    setIsPhoneValid: (isValid: boolean) => void;
+    inputPhoneRef: React.RefObject<HTMLInputElement | null>;
 }
 
-export default function PhoneInput({phone, setPhone, inputPhoneRef, setIsPhoneValid}: PhoneInputProps) {
+export default function PhoneInput({inputPhoneRef}: PhoneInputProps) {
     const { handlePhoneChange, handleKeyDown, isRussianPhoneValid } = usePhoneChange({
-        phone,
-        setPhone,
-        setIsPhoneValid,
         inputPhoneRef
     });
+
+    const {
+        phone,
+    } = useAuth();
 
     return (
         <>

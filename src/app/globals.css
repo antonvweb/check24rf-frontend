@@ -87,6 +87,7 @@
     /* Ошибки и всплывающие окна */
     --alert-error: #F54447;
     --alert-success: #6EFF78;
+    --alert-success-hover: #46c550;
     --alert-info: #F0F3F6;
 }
 
@@ -167,6 +168,7 @@
     /* Ошибки и всплывающие окна */
     --alert-error: #F54447;
     --alert-success: #6EFF78;
+    --alert-success-hover: #46c550;
     --alert-info: #F0F3F6;
 }
 

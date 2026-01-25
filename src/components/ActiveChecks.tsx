@@ -1,10 +1,12 @@
 import ChecksList from "@/components/ChecksList";
+import { CheckedItemsProvider } from "@/context/CheckedItemsContext";
 
 export const ActiveChecks = () => {
     return (
-        <ChecksList
-            endpoint="http://217.199.252.124:8080/api/getCheckList"
-            mode="active"
-        />
+        <CheckedItemsProvider>
+            <ChecksList
+                mode="active"
+            />
+        </CheckedItemsProvider>
     )
 }

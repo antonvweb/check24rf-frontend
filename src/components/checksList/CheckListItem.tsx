@@ -1,72 +1,74 @@
-import Image from "next/image";
+// CheckListItem.tsx
 import styles from "../../styles/profile/checkList/checkListItem.module.css";
 import { CustomCheckbox } from "@/components/ui/CustomCheckbox";
-import React, { useState, useEffect } from "react";
-import { Receipt } from "@/components/types/interfaces";
-import { RandomSvgLogo } from "@/components/ui/svgLogo/SvgLogoTypes";
+import React, { useCallback, useRef } from "react";
+import {generateReceiptId, ReceiptDto} from "@/api/types/typesMcoService";
+import {RandomSvgLogo} from "@/components/ui/svgLogo/SvgLogoTypes";
+import { useCheckedItemsContext } from "@/context/CheckedItemsContext";
 
 interface CheckListItemProps {
     id: number;
-    item: Receipt;
-    isChecked: boolean;
-    isItemChecked: boolean;
-    onToggleChecks: (item: Receipt, checked: boolean) => void;
-    onToggleCheck: (item: Receipt) => void;
-    onContextMenuOpen: (item: Receipt, checked: boolean, x: number, y: number) => void;
+    item: ReceiptDto;
+    onContextMenuOpen: (item: ReceiptDto, x: number, y: number) => void;
 }
 
-function getRandomInt(min: number, max: number): number {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+export const CheckListItem = ({ id, item, onContextMenuOpen }: CheckListItemProps) => {
+    const { toggleChecksItem, isChecked } = useCheckedItemsContext();
+    const isProcessingRef = useRef(false);
 
-export const CheckListItem = ({ id, item, isChecked, isItemChecked, onToggleChecks, onToggleCheck, onContextMenuOpen }: CheckListItemProps) => {
-    const [checked, setChecked] = useState(isChecked);
+    const handleCheckboxChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
 
-    useEffect(() => {
-        setChecked(isChecked);
-    }, [isChecked, item.logo]);
+        // Предотвращаем двойной вызов
+        if (isProcessingRef.current) {
+            console.log('Already processing, skipping');
+            return;
+        }
 
-    const handleChangeChecks = (value: boolean) => {
-        setChecked(value);
-        onToggleChecks(item, value);
-    };
+        isProcessingRef.current = true;
+
+        console.log('CheckListItem handleCheckboxChange, item:', item);
+        console.log('Generated ID:', item.id || generateReceiptId(item));
+
+        // Вызываем toggle сразу
+        toggleChecksItem(item);
+
+        // Сбрасываем флаг после небольшой задержки
+        setTimeout(() => {
+            isProcessingRef.current = false;
+        }, 100);
+    }, [item, toggleChecksItem]);
 
     const handleContextMenu = (e: React.MouseEvent) => {
         e.preventDefault();
-        onContextMenuOpen(item, checked, e.clientX, e.clientY);
+        onContextMenuOpen(item, e.clientX, e.clientY);
     };
+
+    const itemId = item.id || generateReceiptId(item);
+    const checked = isChecked(item);
+    console.log(`CheckListItem ${itemId} isChecked:`, checked);
 
     return (
         <div
-            className={`${styles.listItem} ${styles.fadeIn} ${(checked || isItemChecked) ? styles.selectListItem : ""}`}
-            aria-checked={checked}
-            style={{
-                animationDelay: `${id * 50}ms`,
-            }}
-            onContextMenu={(e: React.MouseEvent) => {e.preventDefault()}}
+            className={`${styles.listItem} ${styles.fadeIn} ${checked ? styles.selectListItem : ""}`}
+            style={{ animationDelay: `${(id % 20) * 50}ms` }}
+            onContextMenu={handleContextMenu}
         >
-            {!item.logo ? (
-                <RandomSvgLogo id={getRandomInt(0, 3)} />
-            ) : (
-                <Image src={"/yandex_taxi_1.png"} alt={`${item.salesman} logo`} width={28} height={28} />
-            )}
-            <div className={styles.characteristic} onClick={() => onToggleCheck(item)} onContextMenu={handleContextMenu}>
-                <p>{item.date}</p>
+            <RandomSvgLogo id={Math.floor(Math.random() * 4)} />
+            <div className={styles.characteristic}>
+                <p>{new Date(item.receiveDate).toLocaleDateString()}</p>
                 <div className="name">
-                    <p>{item.salesman}</p>
-                    <p>{item.ooo}</p>
+                    <p>{item.rawJson.user}</p>
+                    <p>ИНН: {item.userInn}</p>
                 </div>
-                <p>{item.buyer}</p>
-                <p>{item.inn}</p>
-                <p>{item.price} Руб.</p>
+                <p>{item.rawJson.buyerAddress || 'Адрес не указан'}</p>
+                <p>{item.totalSum.toFixed(2)} ₽</p>
             </div>
             <CustomCheckbox
                 checked={checked}
-                onChange={(e) => handleChangeChecks(e.target.checked)}
+                onChange={handleCheckboxChange}
             />
         </div>
     );
 };
-

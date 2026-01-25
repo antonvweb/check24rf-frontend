@@ -1,6 +1,9 @@
 import "./globals.css";
 import React from "react";
 import type { Metadata } from "next";
+import { AuthProvider } from "@/context/contextAuth";
+import { UserProvider } from "@/context/UserContext";
+import {McoProvider} from "@/context/McoContext";
 
 export const metadata: Metadata = {
     title: "ЧЕК24.РФ",
@@ -17,7 +20,15 @@ export default function RootLayout({
 }) {
     return (
         <html lang="ru">
-        <body>{children}</body>
+            <body>
+                <AuthProvider>
+                    <McoProvider>
+                        <UserProvider>
+                            {children}
+                        </UserProvider>
+                    </McoProvider>
+                </AuthProvider>
+            </body>
         </html>
     );
 }

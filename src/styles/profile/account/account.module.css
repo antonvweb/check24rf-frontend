@@ -296,7 +296,7 @@
     border-radius: 5px;
     background: var(--changeBtns-bg-primary);
     color: var(--font-primary);
-    font-size: .9rem;
+    font-size: .8rem;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
@@ -524,7 +524,6 @@
     }
 
     .changeBtns button {
-        font-size: 0.65rem;
         padding: 5px 11px;
     }
 
@@ -606,7 +605,6 @@
     }
 
     .changeBtns button {
-        font-size: .9rem;
         padding: 5px 11px;
     }
 
@@ -662,10 +660,6 @@
 
     .info {
         padding: 0 40px;
-    }
-
-    .changeBtns button{
-        font-size: 1.45rem;
     }
 
     .row{

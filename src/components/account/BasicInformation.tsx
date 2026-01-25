@@ -1,29 +1,15 @@
 import styles from "@/styles/profile/account/account.module.css";
-import {useGetUserWithActiveCheck} from "@/hooks/profile/useGetUser";
 import {useEffect, useState} from "react";
-import {User} from "@/components/types/interfaces";
 import {ChangeBasicAltInfo} from "@/components/account/ChangeBasicAltInfo";
+import {useUser} from "@/context/UserContext";
+import {formatPhone} from "@/hooks/profile/usePhoneFormat";
 
 type ChangeType = "phone" | "email";
 
 export const BasicInformation = () => {
-    const {getUser} = useGetUserWithActiveCheck();
-    const [userData, setUserData] = useState<User | null>(null);
     const [isChangeModuleVisible, setIsChangeModuleVisible] = useState(false);
     const [changeType, setChangeType] = useState<ChangeType | null>(null);
-
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const user = await getUser();
-                setUserData(user);
-            } catch (err) {
-                console.error(err instanceof Error ? err.message : 'Ошибка загрузки пользователя');
-            }
-        };
-        fetchUser();
-    }, [getUser]);
+    const { currentUser } = useUser();
 
 
     const openChangeMenu = (type: ChangeType) => {
@@ -55,27 +41,37 @@ export const BasicInformation = () => {
                     <div className={styles.column}>
                         <div className={styles.mainInfo}>
                             <span>Номер телефона</span>
-                            <span>{userData?.phoneNumber}</span>
+                            <span>{formatPhone(currentUser?.phoneNumber as string)}</span>
                         </div>
                         <div className={styles.secondInfo}>
                             <span>Дополнительный</span>
-                            <span>{userData?.phoneNumberAlt !== null ? userData?.phoneNumberAlt : "Не установлено"}</span>
+                            <span>{currentUser?.phoneNumberAlt ? formatPhone(currentUser?.phoneNumberAlt as string) : "Не установлено"}</span>
                         </div>
                     </div>
                     <div className={styles.column}>
                         <div className={styles.mainInfo}>
                             <span>Основной Email</span>
-                            <span>{userData?.email !== null ? userData?.email : "Не установлено"}</span>
+                            <span>{currentUser?.email ? currentUser?.email : "Не установлено"}</span>
                         </div>
                         <div className={styles.secondInfo}>
                             <span>Дополнительный</span>
-                            <span>{userData?.emailAlt !== null ? userData?.emailAlt : "Не установлено"}</span>
+                            <span>{currentUser?.emailAlt ? currentUser?.emailAlt : "Не установлено"}</span>
                         </div>
                     </div>
                 </div>
                 <div className={styles.changeBtns}>
                     <button type={"button"} onClick={() => openChangeMenu("phone")}>Сменить дополнительный номер</button>
                     <button type={"button"}  onClick={() => openChangeMenu("email")}>Сменить дополнительный Email</button>
+                    {currentUser?.partnerConnected && (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                window.open("https://dr.stm-labs.ru/partners", "_blank", "noopener,noreferrer");
+                            }}
+                        >
+                            Отозвать доступ
+                        </button>
+                    )}
                 </div>
             </div>
             {isChangeModuleVisible && (
