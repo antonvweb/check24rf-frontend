@@ -16,9 +16,9 @@ export const CheckListItem = ({ id, item, onContextMenuOpen }: CheckListItemProp
     const { toggleChecksItem, isChecked } = useCheckedItemsContext();
     const isProcessingRef = useRef(false);
 
-    const handleCheckboxChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        e.stopPropagation();
-        e.nativeEvent.stopImmediatePropagation();
+    const handleCheckboxChange = useCallback((e?: React.ChangeEvent<HTMLInputElement>) => {
+        e?.stopPropagation();
+        e?.nativeEvent?.stopImmediatePropagation();
 
         // Предотвращаем двойной вызов
         if (isProcessingRef.current) {
@@ -54,6 +54,7 @@ export const CheckListItem = ({ id, item, onContextMenuOpen }: CheckListItemProp
             className={`${styles.listItem} ${styles.fadeIn} ${checked ? styles.selectListItem : ""}`}
             style={{ animationDelay: `${(id % 20) * 50}ms` }}
             onContextMenu={handleContextMenu}
+            onClick={() => handleCheckboxChange()}
         >
             <RandomSvgLogo id={Math.floor(Math.random() * 4)} />
             <div className={styles.characteristic}>
