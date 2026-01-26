@@ -164,7 +164,6 @@ export function UserProvider({ children }: UserProviderProps) {
         updateCurrentUser,
         checkIsActive,
 
-        // Методы для работы со списком
         clearError,
     };
 
