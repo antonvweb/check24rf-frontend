@@ -121,10 +121,10 @@ export default function ChecksList({mode}: ChecksListProps) {
                                 <div className={styles.stub}/>
                             </div>
                             <div className={styles.list}>
-                                {receiptsWithId.map((item) => (
+                                {receiptsWithId.map((item, index) => (
                                     <CheckListItem
                                         key={item.id} // Используем сгенерированный ID
-                                        id={item.id as number}
+                                        id={index}
                                         item={item}
                                         onContextMenuOpen={handleContextMenuOpen}
                                     />

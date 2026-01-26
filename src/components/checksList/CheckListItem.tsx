@@ -29,7 +29,7 @@ export const CheckListItem = ({ id, item, onContextMenuOpen }: CheckListItemProp
         isProcessingRef.current = true;
 
         console.log('CheckListItem handleCheckboxChange, item:', item);
-        console.log('Generated ID:', item.id || generateReceiptId(item));
+        console.log('Generated ID:', item.id || generateReceiptId());
 
         // Вызываем toggle сразу
         toggleChecksItem(item);
@@ -45,7 +45,7 @@ export const CheckListItem = ({ id, item, onContextMenuOpen }: CheckListItemProp
         onContextMenuOpen(item, e.clientX, e.clientY);
     };
 
-    const itemId = item.id || generateReceiptId(item);
+    const itemId = item.id || generateReceiptId();
     const checked = isChecked(item);
     console.log(`CheckListItem ${itemId} isChecked:`, checked);
 

@@ -84,23 +84,16 @@ export interface ReceiptDto {
     rawJson: RawReceiptJson;      // полный распарсенный JSON чека
 }
 
-export function generateReceiptId(receipt: Omit<ReceiptDto, 'id'>): number {
-    // Используем уникальные поля для создания стабильного ID
-    const str = `${receipt.fiscalSign}_${receipt.fiscalDocumentNumber}_${receipt.fiscalDriveNumber}`;
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32-bit integer
-    }
-    return Math.abs(hash);
+let currentId = 0;
+
+export function generateReceiptId(): number {
+    return currentId++;
 }
 
-// Хелпер для добавления ID к массиву чеков
 export function addIdsToReceipts(receipts: Omit<ReceiptDto, 'id'>[]): ReceiptDto[] {
     return receipts.map(receipt => ({
         ...receipt,
-        id: generateReceiptId(receipt)
+        id: generateReceiptId()
     }));
 }
 

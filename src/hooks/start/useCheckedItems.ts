@@ -11,7 +11,7 @@ export function useCheckedItems() {
         console.log('toggleChecksItem called with item:', item);
 
         setCheckedIds(prev => {
-            const itemId = item.id || generateReceiptId(item);
+            const itemId = item.id || generateReceiptId();
             console.log('Processing toggle for ID:', itemId, 'Current checkedIds:', Array.from(prev));
 
             const next = new Set(prev);
@@ -20,7 +20,7 @@ export function useCheckedItems() {
                 next.delete(itemId);
                 setCheckedItems(prevItems => {
                     const newItems = prevItems.filter(i => {
-                        const iId = i.id || generateReceiptId(i);
+                        const iId = i.id || generateReceiptId();
                         return iId !== itemId;
                     });
                     console.log('New checkedItems after removal:', newItems);
@@ -33,7 +33,7 @@ export function useCheckedItems() {
                 // Проверяем, существует ли элемент перед добавлением
                 setCheckedItems(prevItems => {
                     const itemExists = prevItems.some(i => {
-                        const iId = i.id || generateReceiptId(i);
+                        const iId = i.id || generateReceiptId();
                         return iId === itemId;
                     });
 
@@ -52,7 +52,7 @@ export function useCheckedItems() {
     }, []);
 
     const isChecked = useCallback((item: ReceiptDto): boolean => {
-        const itemId = item.id || generateReceiptId(item);
+        const itemId = item.id || generateReceiptId();
         const checked = checkedIds.has(itemId);
         console.log(`isChecked for ID ${itemId}:`, checked);
         return checked;

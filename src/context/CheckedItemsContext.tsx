@@ -28,7 +28,7 @@ export const CheckedItemsProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
         console.log('toggleChecksItem called with item:', item);
 
-        const itemId = item.id || generateReceiptId(item);
+        const itemId = item.id || generateReceiptId();
         console.log('Processing toggle for ID:', itemId);
 
         setCheckedIds(prev => {
@@ -38,7 +38,7 @@ export const CheckedItemsProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 next.delete(itemId);
                 setCheckedItems(prevItems => {
                     const newItems = prevItems.filter(i => {
-                        const iId = i.id || generateReceiptId(i);
+                        const iId = i.id || generateReceiptId();
                         return iId !== itemId;
                     });
                     console.log('New checkedItems after removal:', newItems);
@@ -50,7 +50,7 @@ export const CheckedItemsProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 next.add(itemId);
                 setCheckedItems(prevItems => {
                     const itemExists = prevItems.some(i => {
-                        const iId = i.id || generateReceiptId(i);
+                        const iId = i.id || generateReceiptId();
                         return iId === itemId;
                     });
 
@@ -71,7 +71,7 @@ export const CheckedItemsProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }, []);
 
     const isChecked = useCallback((item: ReceiptDto): boolean => {
-        const itemId = item.id || generateReceiptId(item);
+        const itemId = item.id || generateReceiptId();
         const checked = checkedIds.has(itemId);
         console.log(`isChecked for ID ${itemId}:`, checked);
         return checked;

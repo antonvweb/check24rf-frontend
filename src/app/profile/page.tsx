@@ -20,7 +20,12 @@ import {useUser} from "@/context/UserContext";
 function Profile() {
     const [activeTab, setActiveTab] = useState('checks');
     const isDataLoading = useImageLoader();
-    const {isLoading} = useUser();
+    const {isLoading, fetchCurrentUser} = useUser();
+
+    // Инициализируем загрузку данных пользователя при монтировании профиля
+    useEffect(() => {
+        fetchCurrentUser();
+    }, [fetchCurrentUser]);
 
     useEffect(() => {
         initializeTheme();

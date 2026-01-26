@@ -5,7 +5,7 @@ import React, {
     useContext,
     useState,
     useCallback,
-    ReactNode, useEffect, useRef,
+    ReactNode,
 } from "react";
 import { AxiosError } from "axios";
 import { userService } from "@/api/service/userService";
@@ -49,8 +49,6 @@ export function UserProvider({ children }: UserProviderProps) {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
-    const hasFetchedUser = useRef(false);
     
     const { getUserReceipts } = useMco();
 
@@ -138,23 +136,6 @@ export function UserProvider({ children }: UserProviderProps) {
         }
     }, [handleError]);   // ← currentUser убираем из зависимостей
 
-    useEffect(() => {
-        (async () => {
-            setIsLoading(true);
-            // Загружаем пользователя если его еще нет
-            if (!currentUser && !hasFetchedUser.current) {
-                hasFetchedUser.current = true;
-                const success = await fetchCurrentUser();
-                if (!success) {
-                    return false;
-                }
-                else{
-                    setIsLoading(false);
-                }
-            }
-        })();
-    }, [currentUser, fetchCurrentUser]);
-    
     // ============================================================================
     // Методы для работы со списком пользователей
     // ============================================================================

@@ -11,7 +11,7 @@ export function withAuthProtection<T extends object>(
     return function ProtectedComponent(props: T) {
         const router = useRouter();
         const pathname = usePathname();
-        const { isTokenValid, checkAuth, isLoading: authLoading } = useAuth();
+        const { isTokenValid, checkAuth, isLoading: authLoading, accessToken } = useAuth();
         const [isChecking, setIsChecking] = useState(true);
 
         useEffect(() => {
@@ -47,7 +47,7 @@ export function withAuthProtection<T extends object>(
             };
 
             checkAuthStatus();
-        }, [pathname, isTokenValid, checkAuth, router]);
+        }, [pathname, isTokenValid, checkAuth, router, accessToken]);
 
         if (isChecking || authLoading) {
             return <Preloader />;
