@@ -10,14 +10,14 @@ import React, {
     ReactNode,
 } from "react";
 import { jwtDecode } from "jwt-decode";
-// import { AxiosError } from "axios";
-//
-// import { authService } from "@/api/service/authService";
-// import api from "@/api/axios";
+import { AxiosError } from "axios";
 
-// interface CaptchaVerifyResponse {
-//     captchaToken: string;
-// }
+import { authService } from "@/api/service/authService";
+import api from "@/api/axios";
+
+interface CaptchaVerifyResponse {
+    captchaToken: string;
+}
 
 interface AuthContextType {
     isAuthenticated: boolean;
@@ -130,26 +130,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
             return false;
         }
 
-        // BACKEND DISABLED: Закомментирован запрос на бекенд
-        // try {
-        //     const cleanPhone = phone.replace(/\D/g, "");
-        //     const response = await authService.sendCode({ identifier: cleanPhone });
-        //
-        //     if (response.success) {
-        //         setCodeSent(true);
-        //         startTimer();
-        //         return true;
-        //     }
-        //     return false;
-        // } catch (err) {
-        //     console.error("Ошибка отправки кода:", err);
-        //     return false;
-        // }
+        try {
+            const cleanPhone = phone.replace(/\D/g, "");
+            const response = await authService.sendCode({ identifier: cleanPhone });
 
-        // MOCK: Имитация успешной отправки кода
-        setCodeSent(true);
-        startTimer();
-        return true;
+            if (response.success) {
+                setCodeSent(true);
+                startTimer();
+                return true;
+            }
+            return false;
+        } catch (err) {
+            console.error("Ошибка отправки кода:", err);
+            return false;
+        }
     }, [isPhoneValid, agreedToTerms, captchaToken, codeSent, phone, startTimer]);
 
     // ============================================================================
@@ -159,61 +153,42 @@ export function AuthProvider({ children }: AuthProviderProps) {
         const codeString = code.join("");
         if (codeString.length !== 6) return false;
 
-        // BACKEND DISABLED: Закомментирован запрос на бекенд
-        // try {
-        //     const cleanPhone = phone.replace(/\D/g, "");
-        //     const response = await authService.verifyCode({
-        //         identifier: cleanPhone,
-        //         code: codeString,
-        //         captchaToken: captchaToken || undefined,
-        //     });
-        //
-        //     if (response.success && response.data?.accessToken) {
-        //         const { accessToken: newToken } = response.data;
-        //         localStorage.setItem("jwt", newToken);
-        //         setAccessToken(newToken);
-        //         setIsAuthenticated(true);
-        //         return true;
-        //     }
-        //     return false;
-        // } catch (err) {
-        //     console.error("Ошибка верификации:", err);
-        //     return false;
-        // }
+        try {
+            const cleanPhone = phone.replace(/\D/g, "");
+            const response = await authService.verifyCode({
+                identifier: cleanPhone,
+                code: codeString,
+                captchaToken: captchaToken || undefined,
+            });
 
-        // MOCK: Проверка кода 123456
-        if (codeString === "123456") {
-            // Создаём фейковый JWT токен (валидный на 24 часа)
-            const fakeToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJtb2NrLXVzZXItMTIzIiwiZXhwIjoyMDAwMDAwMDAwfQ.mock";
-            localStorage.setItem("jwt", fakeToken);
-            setAccessToken(fakeToken);
-            setIsAuthenticated(true);
-            return true;
+            if (response.success && response.data?.accessToken) {
+                const { accessToken: newToken } = response.data;
+                localStorage.setItem("jwt", newToken);
+                setAccessToken(newToken);
+                setIsAuthenticated(true);
+                return true;
+            }
+            return false;
+        } catch (err) {
+            console.error("Ошибка верификации:", err);
+            return false;
         }
-        return false;
     }, [code, phone, captchaToken]);
 
     // ============================================================================
     // Выход
     // ============================================================================
     const logout = useCallback(async () => {
-        // BACKEND DISABLED: Закомментирован запрос на бекенд
-        // try {
-        //     await authService.logout();
-        // } catch (err) {
-        //     console.warn("Logout error:", err);
-        // } finally {
-        //     localStorage.removeItem("jwt");
-        //     setAccessToken(null);
-        //     setIsAuthenticated(false);
-        //     resetForm();
-        // }
-
-        // MOCK: Просто очищаем локальное состояние
-        localStorage.removeItem("jwt");
-        setAccessToken(null);
-        setIsAuthenticated(false);
-        resetForm();
+        try {
+            await authService.logout();
+        } catch (err) {
+            console.warn("Logout error:", err);
+        } finally {
+            localStorage.removeItem("jwt");
+            setAccessToken(null);
+            setIsAuthenticated(false);
+            resetForm();
+        }
     }, []);
 
     // ============================================================================
@@ -248,44 +223,37 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setIsVerifyingCaptcha(true);
         setCaptchaError(null);
 
-        // BACKEND DISABLED: Закомментирован запрос на бекенд
-        // try {
-        //     const response = await api.post<CaptchaVerifyResponse>("/api/auth/verify-captcha", {
-        //         captchaToken: token,
-        //     });
-        //
-        //     if (response.status === 200) {
-        //         setCaptchaToken(token);
-        //         setIsCaptchaVerified(true);
-        //         return true;
-        //     }
-        //
-        //     setCaptchaError("Каптча не прошла проверку");
-        //     setIsCaptchaVerified(false);
-        //     return false;
-        // } catch (err) {
-        //     console.error("Ошибка проверки каптчи:", err);
-        //
-        //     let message = "Неизвестная ошибка при проверке каптчи";
-        //     if (err instanceof AxiosError) {
-        //         message =
-        //             err.response?.data?.error ||
-        //             err.response?.data?.message ||
-        //             "Ошибка сети при проверке каптчи";
-        //     }
-        //
-        //     setCaptchaError(message);
-        //     setIsCaptchaVerified(false);
-        //     return false;
-        // } finally {
-        //     setIsVerifyingCaptcha(false);
-        // }
+        try {
+            const response = await api.post<CaptchaVerifyResponse>("/api/auth/verify-captcha", {
+                captchaToken: token,
+            });
 
-        // MOCK: Имитация успешной проверки капчи
-        setCaptchaToken(token);
-        setIsCaptchaVerified(true);
-        setIsVerifyingCaptcha(false);
-        return true;
+            if (response.status === 200) {
+                setCaptchaToken(token);
+                setIsCaptchaVerified(true);
+                return true;
+            }
+
+            setCaptchaError("Каптча не прошла проверку");
+            setIsCaptchaVerified(false);
+            return false;
+        } catch (err) {
+            console.error("Ошибка проверки каптчи:", err);
+
+            let message = "Неизвестная ошибка при проверке каптчи";
+            if (err instanceof AxiosError) {
+                message =
+                    err.response?.data?.error ||
+                    err.response?.data?.message ||
+                    "Ошибка сети при проверке каптчи";
+            }
+
+            setCaptchaError(message);
+            setIsCaptchaVerified(false);
+            return false;
+        } finally {
+            setIsVerifyingCaptcha(false);
+        }
     }, []);
 
     const resetCaptcha = useCallback(() => {
