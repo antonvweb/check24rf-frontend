@@ -123,7 +123,7 @@ export default function ChecksList({mode}: ChecksListProps) {
                             <div className={styles.list}>
                                 {receiptsWithId.map((item, index) => (
                                     <CheckListItem
-                                        key={item.id} // Используем сгенерированный ID
+                                        key={item.id}
                                         id={index}
                                         item={item}
                                         onContextMenuOpen={handleContextMenuOpen}
