@@ -32,33 +32,77 @@ jobs:
       - name: 🧱 Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          # Добавляем с указанием порта
+          ssh-keyscan -H -p ${{ secrets.SSH_PORT || '2222' }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
         continue-on-error: false
 
       - name: 🔌 Test SSH connection
         run: |
-          echo "🔗 Пробуем подключиться к серверу..."
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "echo ✅ SSH connection established"
+          echo "🔗 Пробуем подключиться к серверу на порту ${{ secrets.SSH_PORT || '2222' }}..."
+          ssh -v -o StrictHostKeyChecking=no \
+            -p ${{ secrets.SSH_PORT || '2222' }} \
+            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
+            "echo '✅ SSH connection established on port ${{ secrets.SSH_PORT || '2222' }}'"
 
       - name: 🔄 Sync project to server
         run: |
-          echo "📤 Копируем файлы на сервер..."
+          echo "📤 Копируем файлы на сервер (порт ${{ secrets.SSH_PORT || '2222' }})..."
           rsync -avz --delete \
+            -e "ssh -p ${{ secrets.SSH_PORT || '2222' }}" \
             --exclude node_modules \
             --exclude .git \
             --exclude .gitignore \
             --exclude *.log \
             --exclude .env \
+            --exclude .github \
+            --exclude README.md \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}/
 
-      - name: Deploy app (main)
+      - name: 🚀 Deploy app (production)
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh -p ${{ secrets.SSH_PORT || '2222' }} \
+            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -ex
+            
+            # Переходим в директорию
             cd ${{ secrets.DEPLOY_PATH }}
-            npm ci
-            npm run build
-            pm2 delete check24rf-domain || true
-            sudo pm2 start ecosystem.config.js
-            sudo pm2 save
+            
+            # Проверяем наличие package.json
+            if [ ! -f "package.json" ]; then
+              echo "❌ package.json not found!"
+              exit 1
+            fi
+            
+            # Устанавливаем зависимости
+            echo "📦 Installing dependencies..."
+            npm ci --omit=dev || npm install --production
+            
+            # Собираем проект
+            echo "🏗️ Building project..."
+            if [ -f "package.json" ] && grep -q '"build"' package.json; then
+              npm run build
+            else
+              echo "⚠️ No build script found, skipping..."
+            fi
+            
+            # Запускаем/перезапускаем PM2
+            echo "🔄 Restarting PM2 services..."
+            if [ -f "ecosystem.config.js" ]; then
+              pm2 delete check24rf-domain 2>/dev/null || true
+              pm2 start ecosystem.config.js --env production
+              pm2 save
+              pm2 list
+            else
+              echo "❌ ecosystem.config.js not found!"
+              exit 1
+            fi
           EOF
+
+      - name: ✅ Health check
+        run: |
+          echo "🏥 Проверяем статус приложения..."
+          sleep 5
+          ssh -p ${{ secrets.SSH_PORT || '2222' }} \
+            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
+            "pm2 show check24rf-domain || pm2 list" || true
