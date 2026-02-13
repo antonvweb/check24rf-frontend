@@ -32,32 +32,65 @@ jobs:
       - name: 🧱 Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          # 👇 ВАЖНО: добавляем порт 2222
+          ssh-keyscan -H -p ${{ secrets.SSH_PORT || '2222' }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
         continue-on-error: false
 
       - name: 🔌 Test SSH connection
         run: |
-          echo "🔗 Пробуем подключиться к серверу..."
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "echo ✅ SSH connection established"
+          echo "🔗 Пробуем подключиться к серверу на порту ${{ secrets.SSH_PORT || '2222' }}..."
+          # 👇 ВАЖНО: указываем порт
+          ssh -p ${{ secrets.SSH_PORT || '2222' }} \
+              -o StrictHostKeyChecking=no \
+              ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
+              "echo ✅ SSH connection established on port ${{ secrets.SSH_PORT || '2222' }}"
 
       - name: 🔄 Sync project to server
         run: |
-          echo "📤 Копируем файлы на сервер..."
+          echo "📤 Копируем файлы на сервер (порт ${{ secrets.SSH_PORT || '2222' }})..."
+          # 👇 ВАЖНО: указываем порт в rsync через -e
           rsync -avz --delete \
+            -e "ssh -p ${{ secrets.SSH_PORT || '2222' }}" \
             --exclude node_modules \
             --exclude .git \
             --exclude .gitignore \
             --exclude *.log \
+            --exclude .env \
+            --exclude .github \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_DEV_PATH }}/
 
-      - name: Deploy app (dev)
+      - name: 🚀 Deploy app (dev)
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          # 👇 ВАЖНО: указываем порт
+          ssh -p ${{ secrets.SSH_PORT || '2222' }} \
+              ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -ex
             cd ${{ secrets.DEPLOY_DEV_PATH }}
+          
+            # Проверяем наличие package.json
+            if [ ! -f "package.json" ]; then
+              echo "❌ package.json not found!"
+              exit 1
+            fi
+          
+            # Устанавливаем зависимости
+            echo "📦 Installing dependencies..."
             npm ci
-            npm run build
-            pm2 delete check24rf-domain || true
-            pm2 start ecosystem.config.js
+          
+            # Собираем проект
+            echo "🏗️ Building project..."
+            if grep -q '"build"' package.json; then
+              npm run build
+            else
+              echo "⚠️ No build script found, skipping..."
+            fi
+          
+            # Запускаем/перезапускаем PM2
+            echo "🔄 Restarting PM2..."
+            pm2 delete check24rf-domain 2>/dev/null || true
+            pm2 start ecosystem.config.js --env dev
             pm2 save
+          
+            echo "📊 PM2 status:"
+            pm2 list
           EOF
