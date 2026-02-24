@@ -1,0 +1,64 @@
+name: Deploy main (Production)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🛠 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 🔐 Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: 🧪 Debug ssh-agent
+        run: |
+          echo "🔍 Проверка добавленных SSH-ключей:"
+          ssh-add -l || echo "❌ Ключи не добавлены"
+
+      - name: 🧱 Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+        continue-on-error: false
+
+      - name: 🔌 Test SSH connection
+        run: |
+          echo "🔗 Пробуем подключиться к серверу..."
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "echo ✅ SSH connection established"
+
+      - name: 🔄 Sync project to server
+        run: |
+          echo "📤 Копируем файлы на сервер..."
+          rsync -avz --delete \
+            --exclude node_modules \
+            --exclude .git \
+            --exclude .gitignore \
+            --exclude *.log \
+            --exclude .env \
+            ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}/
+
+      - name: Deploy app (main)
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            set -ex
+            cd ${{ secrets.DEPLOY_PATH }}
+            npm ci
+            npm run build
+            pm2 delete check24rf-domain || true
+            sudo pm2 start ecosystem.config.js
+            sudo pm2 save
+          EOF
