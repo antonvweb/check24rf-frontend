@@ -1,8 +1,12 @@
 import axios, { AxiosError } from "axios";
+import { tokenManager } from "@/utils/tokenManager";
+import { logger } from "@/utils/logger";
+// import { csrfTokenManager } from "@/utils/csrfTokenManager"; // Раскомментировать при готовности бэкенда
 
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     withCredentials: true,
+    timeout: 30000, // 30 секунд timeout на запросы
     headers: {
         "Content-Type": "application/json"
     }
@@ -29,18 +33,33 @@ const processQueue = (error: AxiosError | null, token: string | null = null) => 
 // Request interceptor
 api.interceptors.request.use(
     (config) => {
-        const token = typeof window !== "undefined" ? localStorage.getItem("jwt") : null;
+        // Получаем токен из tokenManager (в памяти)
+        const token = tokenManager.getAccessToken();
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
+        
+        // CSRF Token (раскомментировать при готовности бэкенда)
+        // const csrfToken = csrfTokenManager?.getToken();
+        // if (csrfToken && config.method && ['post', 'put', 'patch', 'delete'].includes(config.method.toLowerCase())) {
+        //     config.headers['X-CSRF-Token'] = csrfToken;
+        // }
+        
+        logger.debug('API Request:', config.method?.toUpperCase(), config.url);
         return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+        logger.error('Request interceptor error:', error);
+        return Promise.reject(error);
+    }
 );
 
 // Response interceptor
 api.interceptors.response.use(
-    response => response,
+    response => {
+        logger.debug('API Response:', response.status, response.config.url);
+        return response;
+    },
     async error => {
         const originalRequest = error.config;
 
@@ -50,7 +69,7 @@ api.interceptors.response.use(
             processQueue(error, null);
 
             // Очищаем токен и редиректим
-            localStorage.removeItem('jwt');
+            tokenManager.clearToken();
             if (typeof window !== "undefined") {
                 window.location.href = "/start";
             }
@@ -88,19 +107,23 @@ api.interceptors.response.use(
                     throw new Error("No access token in refresh response");
                 }
 
-                localStorage.setItem('jwt', accessToken);
+                // Сохраняем токен в tokenManager (в памяти)
+                tokenManager.setAccessToken(accessToken);
+                
                 api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
                 originalRequest.headers.Authorization = `Bearer ${accessToken}`;
 
                 processQueue(null, accessToken);
                 isRefreshing = false;
 
+                logger.info('Token refreshed successfully');
                 return api(originalRequest);
             } catch (refreshErr) {
                 processQueue(refreshErr as AxiosError, null);
                 isRefreshing = false;
 
-                localStorage.removeItem('jwt');
+                // Очищаем токен при ошибке refresh
+                tokenManager.clearToken();
                 if (typeof window !== "undefined") {
                     window.location.href = "/start";
                 }
@@ -108,6 +131,7 @@ api.interceptors.response.use(
             }
         }
 
+        logger.error('API Error:', error.response?.status, error.message, originalRequest.url);
         return Promise.reject(error);
     }
 );

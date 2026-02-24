@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Preloader from "@/components/Preloader";
 import { useAuth } from "@/context/contextAuth";
+import { tokenManager } from "@/utils/tokenManager";
 
 export function withAuthProtection<T extends object>(
     WrappedComponent: React.ComponentType<T>
@@ -16,7 +17,8 @@ export function withAuthProtection<T extends object>(
 
         useEffect(() => {
             const checkAuthStatus = async () => {
-                const token = typeof window !== "undefined" ? localStorage.getItem("jwt") : null;
+                // Используем tokenManager вместо localStorage для безопасности
+                const token = tokenManager.getAccessToken();
                 const isValid = isTokenValid(token);
 
                 const isStartPage = pathname === "/start" || pathname === "/";

@@ -64,7 +64,6 @@ export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
         if (isProcessing) return;
 
         setIsProcessing(true);
-        console.log('CustomCheckbox onChange triggered');
 
         // Вызываем оригинальный обработчик
         onChange(event);

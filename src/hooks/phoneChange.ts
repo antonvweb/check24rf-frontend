@@ -29,7 +29,6 @@ export const usePhoneChange = ({inputPhoneRef} :PhoneChangeProps) => {
         const formatted = formatPhoneNumber(firstDigit ? firstDigit + digits : digits);
         const isValid = digits.length === 10 && formatPhoneRussianNumber(digits);
 
-        console.log(formatted);
         setPhone(formatted);
         setIsRussianPhoneValid(isValid);
         setIsPhoneValid(isValid);

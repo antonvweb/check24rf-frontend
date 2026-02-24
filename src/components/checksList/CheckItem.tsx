@@ -12,8 +12,6 @@ interface CheckItemDtoProps {
 }
 
 export const CheckItem = ({ items, item, onRemove, mode }: CheckItemDtoProps) => {
-    console.log('CheckItem props:', { items, item, itemsLength: items?.length });
-
     // Если выбрано несколько чеков
     if (items.length > 1) {
         return <MultiListPlaceholder

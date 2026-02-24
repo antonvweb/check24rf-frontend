@@ -20,33 +20,26 @@ export const CheckedItemsProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const toggleChecksItem = useCallback((item: ReceiptDto) => {
         // Предотвращаем двойной вызов
         if (isProcessingRef.current) {
-            console.log('Already processing toggle, skipping');
             return;
         }
 
         isProcessingRef.current = true;
 
-        console.log('toggleChecksItem called with item:', item);
-
         const itemId = item.id || generateReceiptId();
-        console.log('Processing toggle for ID:', itemId);
 
         setCheckedIds(prev => {
             const next = new Set(prev);
             if (next.has(itemId)) {
-                console.log('Removing item:', itemId);
                 next.delete(itemId);
                 setCheckedItems(prevItems => {
                     const newItems = prevItems.filter(i => {
                         const iId = i.id || generateReceiptId();
                         return iId !== itemId;
                     });
-                    console.log('New checkedItems after removal:', newItems);
                     isProcessingRef.current = false;
                     return newItems;
                 });
             } else {
-                console.log('Adding item:', itemId);
                 next.add(itemId);
                 setCheckedItems(prevItems => {
                     const itemExists = prevItems.some(i => {
@@ -55,13 +48,11 @@ export const CheckedItemsProvider: React.FC<{ children: React.ReactNode }> = ({ 
                     });
 
                     if (itemExists) {
-                        console.log('Item already exists, skipping addition');
                         isProcessingRef.current = false;
                         return prevItems;
                     }
 
                     const newItems = [...prevItems, item];
-                    console.log('New checkedItems after addition:', newItems);
                     isProcessingRef.current = false;
                     return newItems;
                 });
@@ -72,13 +63,10 @@ export const CheckedItemsProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     const isChecked = useCallback((item: ReceiptDto): boolean => {
         const itemId = item.id || generateReceiptId();
-        const checked = checkedIds.has(itemId);
-        console.log(`isChecked for ID ${itemId}:`, checked);
-        return checked;
+        return checkedIds.has(itemId);
     }, [checkedIds]);
 
     function clearCheckedItems() {
-        console.log('Clearing all checked items');
         setCheckedIds(new Set());
         setCheckedItems([]);
     }

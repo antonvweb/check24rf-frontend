@@ -12,14 +12,13 @@ interface Props {
 }
 
 export const ReceiptView = ({ receipt, onRemove, mode }: Props) => {
-    console.log('ReceiptView rendered with receipt:', receipt);
     const [isMenuVisible, setIsMenuVisible] = useState(false);
     const [isOpenDownloadModal, setIsOpenDownloadModal] = useState(false);
 
     const toggleMenu = () => setIsMenuVisible(p => !p);
 
     useEffect(() => {
-        console.log(receipt);
+        // Логирование отключено для безопасности
     })
 
     const handleDownload = () => {

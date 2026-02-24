@@ -1,4 +1,4 @@
-// apiUser.ts
+// userService.ts
 import type {
     User,
     UserCreateRequest,
@@ -7,10 +7,11 @@ import type {
     UserMeResponse,
     UserSearchParams,
 } from "@/api/types/typeApiUser";
+import type { ApiResponse } from "@/api/types/common";
+import type { ReceiptPageResponse } from "@/api/types/typesMcoService";
 import api from "@/api/axios";
 
-// Базовый путь (можно вынести в env или константу)
-const BASE_URL = "/api/users"; // предполагаем, что api уже имеет baseURL
+const BASE_URL = "/api/users";
 
 export const userService = {
     // Создание пользователя (админ/спец права)
@@ -22,18 +23,25 @@ export const userService = {
     // Текущий пользователь (/me)
     getCurrentUser: async (): Promise<User> => {
         const response = await api.get<UserMeResponse>(`${BASE_URL}/me`);
-        return response.data.data;
+        // Обрабатываем формат ответа { success, message, data }
+        if ('data' in response.data && response.data.data) {
+            return response.data.data;
+        }
+        return response.data as unknown as User;
     },
 
     // Пользователь по ID
     getUserById: async (userId: string): Promise<User> => {
-        const response = await api.get<User>(`${BASE_URL}/${userId}`);
-        return response.data;
+        const response = await api.get<ApiResponse<User>>(`${BASE_URL}/${userId}`);
+        // Обрабатываем формат ответа { success, message, data }
+        if ('data' in response.data && response.data.data) {
+            return response.data.data;
+        }
+        return response.data as unknown as User;
     },
 
     // Поиск по телефону/email
     searchUsers: async (params: UserSearchParams): Promise<User[]> => {
-        // Предполагаем, что возвращается массив (если пагинированный — измени тип)
         const response = await api.get<User[]>(`${BASE_URL}/search`, {
             params: {
                 query: params.query,
@@ -51,6 +59,26 @@ export const userService = {
     // Удаление пользователя
     deleteUser: async (userId: string): Promise<void> => {
         await api.delete(`${BASE_URL}/${userId}`);
+    },
+
+    // ──────────────────────────────────────────────
+    // Receipts endpoints (по документации API)
+    // ──────────────────────────────────────────────
+
+    /**
+     * Получить чеки пользователя по userId
+     * GET /api/users/{userId}/receipts
+     */
+    getUserReceipts: async (
+        userId: string,
+        page: number = 0,
+        size: number = 20
+    ): Promise<ApiResponse<ReceiptPageResponse>> => {
+        const response = await api.get<ApiResponse<ReceiptPageResponse>>(
+            `${BASE_URL}/${userId}/receipts`,
+            { params: { page, size } }
+        );
+        return response.data;
     },
 
     // ──────────────────────────────────────────────

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s \"C:\\\\Users\\\\Антон Волков\\\\WebstormProjects\\\\skuchaupoirine\\\\src\")",
+      "Bash(wc:*)"
+    ]
+  }
+}

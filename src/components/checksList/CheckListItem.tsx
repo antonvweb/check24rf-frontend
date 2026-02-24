@@ -2,8 +2,8 @@
 import styles from "../../styles/profile/checkList/checkListItem.module.css";
 import { CustomCheckbox } from "@/components/ui/CustomCheckbox";
 import React, { useCallback, useRef } from "react";
-import {generateReceiptId, ReceiptDto} from "@/api/types/typesMcoService";
-import {RandomSvgLogo} from "@/components/ui/svgLogo/SvgLogoTypes";
+import { ReceiptDto } from "@/api/types/typesMcoService";
+import { RandomSvgLogo } from "@/components/ui/svgLogo/SvgLogoTypes";
 import { useCheckedItemsContext } from "@/context/CheckedItemsContext";
 
 interface CheckListItemProps {
@@ -22,14 +22,10 @@ export const CheckListItem = ({ id, item, onContextMenuOpen }: CheckListItemProp
 
         // Предотвращаем двойной вызов
         if (isProcessingRef.current) {
-            console.log('Already processing, skipping');
             return;
         }
 
         isProcessingRef.current = true;
-
-        console.log('CheckListItem handleCheckboxChange, item:', item);
-        console.log('Generated ID:', item.id || generateReceiptId());
 
         // Вызываем toggle сразу
         toggleChecksItem(item);
@@ -45,9 +41,7 @@ export const CheckListItem = ({ id, item, onContextMenuOpen }: CheckListItemProp
         onContextMenuOpen(item, e.clientX, e.clientY);
     };
 
-    const itemId = item.id || generateReceiptId();
     const checked = isChecked(item);
-    console.log(`CheckListItem ${itemId} isChecked:`, checked);
 
     return (
         <div

@@ -5,9 +5,7 @@ export function useTimer(initialSeconds: number) {
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const start = () => {
-        console.log('⏱ Таймер стартует');
         if (intervalRef.current !== null) {
-            console.log('⏹ Уже запущен — return');
             return;
         }
 

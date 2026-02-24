@@ -1,40 +1,94 @@
 // mcoService.ts
-import api from "@/api/axios"; // твой axios-инстанс с интерсепторами и withCredentials
-import {
-    ApiResponse,
+import api from "@/api/axios";
+import type {
     BindUserData,
     BindRequestStatus,
     SendNotificationPayload,
-    SendNotificationData, BindEvent, UnboundUser, ReceiptsStats, ReceiptPageResponse,
+    SendNotificationData,
+    BindEvent,
+    UnboundUser,
+    ReceiptsStats,
+    ReceiptPageResponse,
+    UnbindUserRequest,
 } from "@/api/types/typesMcoService";
+import type { ApiResponse } from "@/api/types/common";
+import { MCO_LIMITS, MCO_MARKERS, MCO_PERMISSION_GROUPS } from "@/api/constants/mco";
+import { retry } from "@/utils/retry";
+import { isPhoneValid, normalizePhone } from "@/utils/validation/phone";
+import { logger } from "@/utils/logger";
 
 const BASE_URL = "/api/mco";
+
+/**
+ * Валидация номера телефона перед отправкой
+ */
+const validatePhoneOrThrow = (phone: string): string => {
+    if (!isPhoneValid(phone)) {
+        throw new Error("Некорректный номер телефона");
+    }
+    return normalizePhone(phone) ?? phone;
+};
 
 export const mcoService = {
     // ─── User Binding ───────────────────────────────────────────────
 
     bindUser: async (
         phone: string,
-        permissionGroups: string = "DEFAULT"
+        permissionGroups: string = MCO_PERMISSION_GROUPS.DEFAULT
     ): Promise<ApiResponse<BindUserData>> => {
-        console.log(phone, permissionGroups);
-        const response = await api.post<ApiResponse<BindUserData>>(
-            `${BASE_URL}/bind-user`,
-            null,
-            { params: { phone, permissionGroups } }
-        );
-        return response.data;
+        const validPhone = validatePhoneOrThrow(phone);
+
+        return retry(async () => {
+            const response = await api.post<ApiResponse<BindUserData>>(
+                `${BASE_URL}/bind-user`,
+                null,
+                { params: { phone: validPhone, permissionGroups } }
+            );
+            return response.data;
+        }, {
+            maxRetries: 2,
+            onRetry: (attempt, error) => {
+                logger.warn(`bindUser retry attempt ${attempt}:`, error);
+            }
+        });
     },
 
     bindUsersBatch: async (
         phones: string[]
     ): Promise<ApiResponse<{ requestId?: string }>> => {
-        if (phones.length > 100) {
-            throw new Error("Максимум 100 номеров в пакетном запросе");
+        if (phones.length > MCO_LIMITS.BATCH_BIND_MAX) {
+            throw new Error(`Максимум ${MCO_LIMITS.BATCH_BIND_MAX} номеров в пакетном запросе`);
         }
-        const response = await api.post<ApiResponse<{ requestId?: string }>>(
-            `${BASE_URL}/bind-users-batch`,
-            phones
+
+        // Валидируем все номера
+        const validPhones = phones.map(phone => {
+            const normalized = normalizePhone(phone);
+            if (!normalized) {
+                throw new Error(`Некорректный номер телефона: ${phone.slice(-4)}`);
+            }
+            return normalized;
+        });
+
+        return retry(async () => {
+            const response = await api.post<ApiResponse<{ requestId?: string }>>(
+                `${BASE_URL}/bind-users-batch`,
+                validPhones
+            );
+            return response.data;
+        });
+    },
+
+    // ─── Unbind User ────────────────────────────────────────────────
+
+    unbindUser: async (
+        phoneNumber: string,
+        unbindReason: string
+    ): Promise<ApiResponse<void>> => {
+        const validPhone = validatePhoneOrThrow(phoneNumber);
+
+        const response = await api.post<ApiResponse<void>>(
+            `${BASE_URL}/unbind-user`,
+            { phoneNumber: validPhone, unbindReason } as UnbindUserRequest
         );
         return response.data;
     },
@@ -44,43 +98,52 @@ export const mcoService = {
     getBindRequestStatus: async (
         requestId: string
     ): Promise<ApiResponse<BindRequestStatus>> => {
-        const response = await api.get<ApiResponse<BindRequestStatus>>(
-            `${BASE_URL}/bind-request-status`,
-            { params: { requestId } }
-        );
-        return response.data;
+        return retry(async () => {
+            const response = await api.get<ApiResponse<BindRequestStatus>>(
+                `${BASE_URL}/bind-request-status`,
+                { params: { requestId } }
+            );
+            return response.data;
+        });
     },
 
     getBindRequestsStatuses: async (
         requestIds: string[]
     ): Promise<ApiResponse<Record<string, BindRequestStatus>>> => {
-        if (requestIds.length > 50) {
-            throw new Error("Максимум 50 requestId в одном запросе");
+        if (requestIds.length > MCO_LIMITS.STATUSES_MAX) {
+            throw new Error(`Максимум ${MCO_LIMITS.STATUSES_MAX} requestId в одном запросе`);
         }
-        const response = await api.post<
-            ApiResponse<Record<string, BindRequestStatus>>
-        >(`${BASE_URL}/bind-requests-statuses`, requestIds);
-        return response.data;
+
+        return retry(async () => {
+            const response = await api.post<
+                ApiResponse<Record<string, BindRequestStatus>>
+            >(`${BASE_URL}/bind-requests-statuses`, requestIds);
+            return response.data;
+        });
     },
 
     getBindEvents: async (
-        marker: string = "S_FROM_END"
+        marker: string = MCO_MARKERS.FROM_END
     ): Promise<ApiResponse<BindEvent>> => {
-        const response = await api.get(
-            `${BASE_URL}/bind-events`,
-            { params: { marker } }
-        );
-        return response.data;
+        return retry(async () => {
+            const response = await api.get(
+                `${BASE_URL}/bind-events`,
+                { params: { marker } }
+            );
+            return response.data;
+        });
     },
 
     getUnboundUsers: async (
-        marker: string = "S_FROM_END"
+        marker: string = MCO_MARKERS.FROM_END
     ): Promise<ApiResponse<UnboundUser>> => {
-        const response = await api.get(
-            `${BASE_URL}/unbound-users`,
-            { params: { marker } }
-        );
-        return response.data;
+        return retry(async () => {
+            const response = await api.get(
+                `${BASE_URL}/unbound-users`,
+                { params: { marker } }
+            );
+            return response.data;
+        });
     },
 
     // ─── Receipts ───────────────────────────────────────────────────
@@ -88,28 +151,41 @@ export const mcoService = {
     syncUserReceipts: async (
         phone: string
     ): Promise<ApiResponse<{ syncedCount?: number }>> => {
-        const response = await api.get(
-            `${BASE_URL}/receipts/sync`,
-            { params: { phone } }
-        );
-        return response.data;
+        const validPhone = validatePhoneOrThrow(phone);
+
+        return retry(async () => {
+            const response = await api.get(
+                `${BASE_URL}/receipts/sync`,
+                { params: { phone: validPhone } }
+            );
+            return response.data;
+        }, {
+            maxRetries: 3, // Больше попыток для синхронизации
+            initialDelay: 2000
+        });
     },
 
     getUserReceipts: async (
         phone: string,
         page: number = 0,
-        size: number = 20
+        size: number = MCO_LIMITS.DEFAULT_PAGE_SIZE
     ): Promise<ApiResponse<ReceiptPageResponse>> => {
-        const response = await api.get(
-            `${BASE_URL}/receipts/user`,
-            { params: { phone, page, size } }
-        );
-        return response.data;
+        const validPhone = validatePhoneOrThrow(phone);
+
+        return retry(async () => {
+            const response = await api.get(
+                `${BASE_URL}/receipts/user`,
+                { params: { phone: validPhone, page, size } }
+            );
+            return response.data;
+        });
     },
 
     getReceiptsStats: async (): Promise<ApiResponse<ReceiptsStats>> => {
-        const response = await api.get(`${BASE_URL}/receipts/stats`);
-        return response.data;
+        return retry(async () => {
+            const response = await api.get(`${BASE_URL}/receipts/stats`);
+            return response.data;
+        });
     },
 
     // ─── Notifications ──────────────────────────────────────────────
@@ -117,9 +193,12 @@ export const mcoService = {
     sendNotification: async (
         payload: SendNotificationPayload
     ): Promise<ApiResponse<SendNotificationData>> => {
+        // Валидируем телефон в payload
+        const validPhone = validatePhoneOrThrow(payload.phoneNumber);
+
         const response = await api.post<ApiResponse<SendNotificationData>>(
             `${BASE_URL}/send-notification`,
-            payload
+            { ...payload, phoneNumber: validPhone }
         );
         return response.data;
     },
@@ -132,7 +211,7 @@ export const mcoService = {
     },
 };
 
-// Опционально: пример составного метода (если часто используется)
+// Составной метод с retry логикой
 export const bindAndCheckStatus = async (
     phone: string
 ): Promise<{ bindResult: ApiResponse<BindUserData>; status?: ApiResponse<BindRequestStatus> }> => {
@@ -142,7 +221,6 @@ export const bindAndCheckStatus = async (
         throw new Error("Не удалось получить requestId после привязки");
     }
 
-    // Можно добавить небольшую задержку или polling, здесь просто один запрос
     const status = await mcoService.getBindRequestStatus(bindResult.data.requestId);
 
     return { bindResult, status };

@@ -1,11 +1,9 @@
 // typesMcoService.ts
+// Типы для MCO API
 
-export interface ApiResponse<T> {
-    success: boolean;
-    message: string;
-    data: T | null;
-    timestamp: string; // ISO string
-}
+// ============================================================================
+// Основные типы
+// ============================================================================
 
 export type BindUserData = {
     requestId: string;
@@ -24,7 +22,9 @@ export interface BindRequestStatus {
     errorMessage?: string | null;
 }
 
-// receipt-page.interface.ts
+// ============================================================================
+// Чеки (Receipts)
+// ============================================================================
 
 /**
  * Полная структура ответа пагинированного списка чеков
@@ -149,39 +149,52 @@ export interface ReceiptItem {
     providerInn?: string;
 }
 
+// ============================================================================
+// Bind Events
+// ============================================================================
+
 export interface BindEvent {
-    requestId: string;
-    phoneNumber: string;
-    status: string;
-    timestamp: string;
-    error?: string;
+    events: BindEventData[];
+    nextMarker: string;
+    eventsCount: number;
 }
 
-export interface BindEventsPage {
-    events: BindEvent[];
-    nextMarker: string | null;
+interface BindEventData {
+    requestId: string;
+    result: string;
+    userIdentifier: string;
+    responseTime: string;
 }
+
+// ============================================================================
+// Unbound Users
+// ============================================================================
 
 export interface UnboundUser {
-    phoneNumber: string;
+    unboundUsers: UnboundUserData[];
     unboundAt: string;
+    reason?: string;
 }
 
-export interface UnboundUsersPage {
-    users: UnboundUser[];
-    nextMarker: string | null;
+interface UnboundUserData {
+    requestId: string;
+    userIdentifier: string;
+    responseTime: string;
 }
 
-export interface ReceiptsPage {
-    receipts: Receipt[];
-    nextMarker: string | null;
+export interface UnbindUserRequest {
+    phoneNumber: string;
+    unbindReason: string;
 }
+
+// ============================================================================
+// Receipts Stats & Notifications
+// ============================================================================
 
 export interface ReceiptsStats {
     totalCount: number;
     uniqueUsersCount: number;
     lastSyncTime?: string;
-    // другие поля по необходимости
 }
 
 export interface SendNotificationPayload {
@@ -199,39 +212,29 @@ export type SendNotificationData = {
     status: string;
 };
 
-// typeMcoService.ts (дополнить / создать)
+// ============================================================================
+// Legacy типы (для обратной совместимости)
+// ============================================================================
 
-export interface BindEvent {
+/**
+ * @deprecated Используйте BindEvent вместо BindEventsPage
+ */
+export interface BindEventsPage {
     events: BindEventData[];
-    nextMarker: string;
-    eventsCount: number;
+    nextMarker: string | null;
 }
 
-interface BindEventData {
-    requestId: string;
-    result: string;
-    userIdentifier: string;
-    responseTime: string;
+/**
+ * @deprecated Используйте UnboundUser вместо UnboundUsersPage
+ */
+export interface UnboundUsersPage {
+    users: UnboundUserData[];
+    nextMarker: string | null;
 }
 
-export interface UnboundUser {
-    unboundUsers: UnboundUserData[];
-    unboundAt: string;
-    reason?: string;
-}
-
-interface UnboundUserData{
-    requestId: string;
-    userIdentifier: string;
-    responseTime: string;
-}
-
-export interface UnbindUserRequest {
-    phoneNumber: string;
-    unbindReason: string;
-}
-
-
+/**
+ * @deprecated Используйте ReceiptDto вместо Receipt
+ */
 export interface Receipt {
     id: string;
     userId: string;
@@ -253,13 +256,10 @@ export interface Receipt {
     updatedAt: string;
 }
 
+/**
+ * @deprecated Используйте ApiResponse<ReceiptDto[]>
+ */
 export interface UserReceipts {
-    success: string;
-    message: string;
-    data: Receipt[];
-}
-
-export interface ReceiptsStats {
     success: string;
     message: string;
     data: Receipt[];

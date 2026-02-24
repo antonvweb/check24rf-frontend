@@ -2,6 +2,7 @@ import styles from "@/styles/profile/account/account.module.css";
 import {PayModel} from "@/components/ui/profileUI/PayModel";
 import React, {useEffect, useState} from "react";
 import {userPaySubscribe} from "@/components/types/interfaces";
+import {tokenManager} from "@/utils/tokenManager";
 
 const periods = [
     { label: "1 мес.", value: "1m" },
@@ -15,7 +16,6 @@ export const Subscribe = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<string>("1m");
 
     const handleSelectPeriod = (period: string) => {
-        console.log("Выбрано:", period); // ✅ Проверка
         setSelectedPeriod(period);
     };
 
@@ -23,7 +23,8 @@ export const Subscribe = () => {
 
     const closePayMenu  = () => setIsPayMenuVisible(false);
 
-    const token = localStorage.getItem("userToken") ?? "";
+    // Используем tokenManager вместо localStorage для безопасности
+    const token = tokenManager.getAccessToken() ?? "";
 
     const user: userPaySubscribe = {
         userToken: token,

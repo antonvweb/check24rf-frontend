@@ -14,6 +14,8 @@ import { AxiosError } from "axios";
 
 import { authService } from "@/api/service/authService";
 import api from "@/api/axios";
+import { tokenManager } from "@/utils/tokenManager";
+import { logger } from "@/utils/logger";
 
 interface CaptchaVerifyResponse {
     captchaToken: string;
@@ -96,9 +98,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Простая проверка аутентификации (БЕЗ refresh)
     // ============================================================================
     const checkAuth = useCallback(async (): Promise<boolean> => {
-        const token = localStorage.getItem("jwt");
+        // Получаем токен из tokenManager (в памяти)
+        const token = tokenManager.getAccessToken();
 
         if (!token || !isTokenValid(token)) {
+            tokenManager.clearToken();
             setAccessToken(null);
             setIsAuthenticated(false);
             return false;
@@ -106,9 +110,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         // Токен валиден
         setAccessToken(token);
-
+        setIsAuthenticated(true);
+        logger.info('Auth check: token is valid');
         return true;
     }, [isTokenValid]);
+
+    // ============================================================================
+    // Сброс капчи (объявляем рано для использования в resetForm)
+    // ============================================================================
+    const resetCaptcha = useCallback(() => {
+        setCaptchaToken(null);
+        setIsCaptchaVerified(false);
+        setCaptchaError(null);
+        setIsVerifyingCaptcha(false);
+    }, []);
+
+    // ============================================================================
+    // Сброс формы (объявляем рано для использования в logout)
+    // ============================================================================
+    const resetForm = useCallback(() => {
+        setPhone("");
+        setCode(Array(6).fill(""));
+        setIsPhoneValid(false);
+        setAgreedToTerms(false);
+        setCodeSent(false);
+        resetTimer();
+        resetCaptcha();
+    }, [resetTimer, resetCaptcha]);
 
     // ============================================================================
     // Инициализация при монтировании - ТОЛЬКО ПРОВЕРКА
@@ -141,7 +169,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             }
             return false;
         } catch (err) {
-            console.error("Ошибка отправки кода:", err);
+            logger.error("Ошибка отправки кода:", err);
             return false;
         }
     }, [isPhoneValid, agreedToTerms, captchaToken, codeSent, phone, startTimer]);
@@ -163,14 +191,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             if (response.success && response.data?.accessToken) {
                 const { accessToken: newToken } = response.data;
-                localStorage.setItem("jwt", newToken);
+                // Сохраняем токен в tokenManager (в памяти)
+                tokenManager.setAccessToken(newToken);
                 setAccessToken(newToken);
                 setIsAuthenticated(true);
+                logger.info('User authenticated successfully');
                 return true;
             }
             return false;
         } catch (err) {
-            console.error("Ошибка верификации:", err);
+            logger.error("Ошибка верификации:", err);
             return false;
         }
     }, [code, phone, captchaToken]);
@@ -182,27 +212,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
             await authService.logout();
         } catch (err) {
-            console.warn("Logout error:", err);
+            logger.warn("Logout error:", err);
         } finally {
-            localStorage.removeItem("jwt");
+            // Очищаем токен из tokenManager
+            tokenManager.clearToken();
             setAccessToken(null);
             setIsAuthenticated(false);
             resetForm();
+            logger.info('User logged out');
         }
-    }, []);
+    }, [resetForm]);
 
     // ============================================================================
-    // Сброс формы
+    // Таймер обратного отсчета
     // ============================================================================
-    const resetForm = useCallback(() => {
-        setPhone("");
-        setCode(Array(6).fill(""));
-        setIsPhoneValid(false);
-        setAgreedToTerms(false);
-        setCodeSent(false);
-        resetTimer();
-        resetCaptcha();
-    }, [resetTimer]);
+    useEffect(() => {
+        if (seconds > 0) {
+            const timer = setTimeout(() => setSeconds(s => s - 1), 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [seconds]);
 
     useEffect(() => {
         if (seconds === 0 && codeSent) {
@@ -238,7 +267,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setIsCaptchaVerified(false);
             return false;
         } catch (err) {
-            console.error("Ошибка проверки каптчи:", err);
+            logger.error("Ошибка проверки каптчи:", err);
 
             let message = "Неизвестная ошибка при проверке каптчи";
             if (err instanceof AxiosError) {
@@ -256,23 +285,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     }, []);
 
-    const resetCaptcha = useCallback(() => {
-        setCaptchaToken(null);
-        setIsCaptchaVerified(false);
-        setCaptchaError(null);
-        setIsVerifyingCaptcha(false);
-    }, []);
-
     // ============================================================================
-    // Таймер обратного отсчета
+    // Значение контекста
     // ============================================================================
-    useEffect(() => {
-        if (seconds > 0) {
-            const timer = setTimeout(() => setSeconds(s => s - 1), 1000);
-            return () => clearTimeout(timer);
-        }
-    }, [seconds]);
-
     const value: AuthContextType = {
         isAuthenticated,
         isLoading,
