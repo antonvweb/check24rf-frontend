@@ -32,6 +32,10 @@ jobs:
       - name: 🧱 Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
+          if [ -z "${{ secrets.SERVER_IP }}" ]; then
+            echo "❌ SERVER_IP secret is not set"
+            exit 1
+          fi
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
         continue-on-error: false
 

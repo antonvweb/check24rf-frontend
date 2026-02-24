@@ -32,6 +32,10 @@ jobs:
       - name: 🧱 Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
+          if [ -z "${{ secrets.SERVER_IP }}" ]; then
+            echo "❌ SERVER_IP secret is not set"
+            exit 1
+          fi
           # 👇 ВАЖНО: добавляем порт 2222
           ssh-keyscan -H -p ${{ secrets.SSH_PORT || '2222' }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
         continue-on-error: false
