@@ -38,3 +38,11 @@ export const formatPhoneNumber = (value: string): string => {
     return result;
 };
 
+/**
+ * Очищает номер телефона от всех нецифровых символов и удаляет + в начале
+ * Пример: "+7 (999) 123-45-67" → "79991234567"
+ */
+export const cleanPhoneNumber = (phone: string): string => {
+    return phone.replace(/\D/g, '');
+};
+

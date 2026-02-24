@@ -18,6 +18,7 @@ import {
     SendNotificationPayload,
     SendNotificationData, ReceiptPageResponse,
 } from "@/api/types/typesMcoService";
+import { cleanPhoneNumber } from "@/utils/start/formatPhoneNumber";
 
 // ============================================================================
 // Типы
@@ -124,7 +125,7 @@ export function McoProvider({ children }: McoProviderProps) {
         setError(null);
 
         try {
-            const response = await mcoService.bindUser(phone, permissionGroups);
+            const response = await mcoService.bindUser(cleanPhoneNumber(phone), permissionGroups);
 
             if (response.success && response.data) {
                 setBindData(response.data);
@@ -167,7 +168,7 @@ export function McoProvider({ children }: McoProviderProps) {
         setError(null);
 
         try {
-            const bindResult = await mcoService.bindUser(phone);
+            const bindResult = await mcoService.bindUser(cleanPhoneNumber(phone));
 
             if (!bindResult.success || !bindResult.data?.requestId) {
                 setError(bindResult.message || "Не удалось привязать пользователя");
@@ -294,7 +295,7 @@ export function McoProvider({ children }: McoProviderProps) {
         setError(null);
 
         try {
-            const response = await mcoService.syncUserReceipts(phone);
+            const response = await mcoService.syncUserReceipts(cleanPhoneNumber(phone));
 
             if (response.success) {
                 return response.data?.syncedCount ?? 0;
@@ -315,7 +316,7 @@ export function McoProvider({ children }: McoProviderProps) {
         setError(null);
 
         try {
-            const response = await mcoService.getUserReceipts(phone);
+            const response = await mcoService.getUserReceipts(cleanPhoneNumber(phone));
 
             if (response.success && response.data) {
                 setUserReceipts(response.data);

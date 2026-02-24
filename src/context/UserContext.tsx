@@ -14,6 +14,7 @@ import type {
     UserUpdateRequest,
 } from "@/api/types/typeApiUser";
 import {useMco} from "@/context/McoContext";
+import { cleanPhoneNumber } from "@/utils/start/formatPhoneNumber";
 
 // ============================================================================
 // Типы
@@ -84,7 +85,7 @@ export function UserProvider({ children }: UserProviderProps) {
             const user = await userService.getCurrentUser();
             setCurrentUser(user);
             if(user){
-                await getUserReceipts(user?.phoneNumber);
+                await getUserReceipts(cleanPhoneNumber(user?.phoneNumber));
             }
             return true;
         } catch (err) {

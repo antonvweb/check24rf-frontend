@@ -14,6 +14,7 @@ import {useUser} from "@/context/UserContext";
 import {CheckListItem} from "@/components/checksList/CheckListItem";
 import {addIdsToReceipts, ReceiptDto} from "@/api/types/typesMcoService";
 import { useCheckedItemsContext } from "@/context/CheckedItemsContext";
+import { cleanPhoneNumber } from "@/utils/start/formatPhoneNumber";
 
 type MenuState = {
     x: number;
@@ -85,7 +86,7 @@ export default function ChecksList({mode}: ChecksListProps) {
                                     onClick={async () => {
                                         if (!currentUser?.phoneNumber) return;
 
-                                        const result = await bindAndCheck(currentUser.phoneNumber);
+                                        const result = await bindAndCheck(cleanPhoneNumber(currentUser.phoneNumber));
                                         if (result) {
                                             showToast("success", "Запрос успешно отправлен");
                                             window.open("https://dr.stm-labs.ru/partners", "_blank", "noopener,noreferrer");
