@@ -94,8 +94,6 @@ export const mcoService = {
         );
         return response.data;
     },
-
-
     getUserReceipts: async (
         phone: string,
         page: number = 0,
