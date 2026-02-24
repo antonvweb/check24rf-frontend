@@ -1,4 +1,4 @@
-name: Deploy main (Production)
+name: Deploy dev (Test)
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 📦 Checkout code
         uses: actions/checkout@v4
 
       - name: 🛠 Setup Node.js
@@ -32,32 +32,27 @@ jobs:
       - name: 🧱 Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          SERVER_IP="${{ secrets.SERVER_IP }}"
-          SSH_PORT="${{ secrets.SSH_PORT || '2222' }}"
-          echo "🔍 SERVER_IP: $SERVER_IP, PORT: $SSH_PORT"
-          if [ -z "$SERVER_IP" ]; then
+          if [ -z "${{ secrets.SERVER_IP }}" ]; then
             echo "❌ SERVER_IP secret is not set"
             exit 1
           fi
-          # Указываем порт 2222
-          ssh-keyscan -H -p "$SSH_PORT" "$SERVER_IP" >> ~/.ssh/known_hosts 2>&1 || {
-            echo "⚠️ ssh-keyscan failed, retrying..."
-            sleep 2
-            ssh-keyscan -H -p "$SSH_PORT" "$SERVER_IP" >> ~/.ssh/known_hosts 2>&1
-          }
+          # 👇 ВАЖНО: добавляем порт 2222
+          ssh-keyscan -H -p ${{ secrets.SSH_PORT || '2222' }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
         continue-on-error: false
 
       - name: 🔌 Test SSH connection
         run: |
-          echo "🔗 Пробуем подключиться к серверу (порт ${{ secrets.SSH_PORT || '2222' }})..."
+          echo "🔗 Пробуем подключиться к серверу на порту ${{ secrets.SSH_PORT || '2222' }}..."
+          # 👇 ВАЖНО: указываем порт
           ssh -p ${{ secrets.SSH_PORT || '2222' }} \
               -o StrictHostKeyChecking=no \
               ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
-              "echo ✅ SSH connection established"
+              "echo ✅ SSH connection established on port ${{ secrets.SSH_PORT || '2222' }}"
 
       - name: 🔄 Sync project to server
         run: |
           echo "📤 Копируем файлы на сервер (порт ${{ secrets.SSH_PORT || '2222' }})..."
+          # 👇 ВАЖНО: указываем порт в rsync через -e
           rsync -avz --delete \
             -e "ssh -p ${{ secrets.SSH_PORT || '2222' }}" \
             --exclude node_modules \
@@ -65,17 +60,41 @@ jobs:
             --exclude .gitignore \
             --exclude *.log \
             --exclude .env \
-            ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}/
+            --exclude .github \
+            ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_DEV_PATH }}/
 
-      - name: Deploy app (main)
+      - name: 🚀 Deploy app (dev)
         run: |
+          # 👇 ВАЖНО: указываем порт
           ssh -p ${{ secrets.SSH_PORT || '2222' }} \
               ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -ex
-            cd ${{ secrets.DEPLOY_PATH }}
+            cd ${{ secrets.DEPLOY_DEV_PATH }}
+          
+            # Проверяем наличие package.json
+            if [ ! -f "package.json" ]; then
+              echo "❌ package.json not found!"
+              exit 1
+            fi
+          
+            # Устанавливаем зависимости
+            echo "📦 Installing dependencies..."
             npm ci
-            npm run build
-            pm2 delete check24rf-domain || true
-            pm2 start ecosystem.config.js
+          
+            # Собираем проект
+            echo "🏗️ Building project..."
+            if grep -q '"build"' package.json; then
+              npm run build
+            else
+              echo "⚠️ No build script found, skipping..."
+            fi
+          
+            # Запускаем/перезапускаем PM2
+            echo "🔄 Restarting PM2..."
+            pm2 delete check24rf-domain 2>/dev/null || true
+            pm2 start ecosystem.config.js --env dev
             pm2 save
+          
+            echo "📊 PM2 status:"
+            pm2 list
           EOF
