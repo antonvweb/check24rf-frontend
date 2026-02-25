@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { AxiosError } from "axios";
 import { mcoService } from "@/api/service/mcoService";
+import { useMcoWebSocket } from "@/hooks/useMcoWebSocket";
 import {
     BindUserData,
     BindRequestStatus,
@@ -16,7 +17,13 @@ import {
     UnboundUser,
     ReceiptsStats,
     SendNotificationPayload,
-    SendNotificationData, ReceiptPageResponse,
+    SendNotificationData,
+    ReceiptPageResponse,
+    BindStatusMessage,
+    NewReceiptsMessage,
+    UnbindMessage,
+    ErrorMessage,
+    WebSocketConnectionStatus,
 } from "@/api/types/typesMcoService";
 import { cleanPhoneNumber } from "@/utils/start/formatPhoneNumber";
 
@@ -35,6 +42,16 @@ interface McoContextType {
     receiptsStats: ReceiptsStats | null;
     notificationResult: SendNotificationData | null;
     healthStatus: "UP" | "DOWN" | null;
+
+    // WebSocket состояния
+    wsStatus: WebSocketConnectionStatus;
+    wsIsConnected: boolean;
+    wsLastBindStatus: BindStatusMessage | null;
+    wsLastNewReceipts: NewReceiptsMessage | null;
+    wsLastUnbind: UnbindMessage | null;
+    wsLastError: ErrorMessage | null;
+    wsReconnectAttempts: number;
+    wsMessagesReceived: number;
 
     isLoading: boolean;
     error: string | null;
@@ -60,6 +77,16 @@ interface McoContextType {
 
     // Health
     checkHealth: () => Promise<boolean>;
+
+    // WebSocket методы
+    wsSubscribe: (requestId: string, phone: string) => void;
+    wsDisconnect: () => void;
+    wsReconnect: () => void;
+    wsClearMessages: () => void;
+
+    // WebSocket тестирование
+    wsTestNotification: (phone: string, count: number, totalAmount: string) => Promise<boolean>;
+    wsTestUnbind: (phone: string, reason: string) => Promise<boolean>;
 
     // Утилиты
     clearError: () => void;
@@ -92,6 +119,50 @@ export function McoProvider({ children }: McoProviderProps) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    // ── WebSocket ──────────────────────────────────────────────────
+    const {
+        status: wsStatus,
+        isConnected: wsIsConnected,
+        lastBindStatus: wsLastBindStatus,
+        lastNewReceipts: wsLastNewReceipts,
+        lastUnbind: wsLastUnbind,
+        lastError: wsLastError,
+        reconnectAttempts: wsReconnectAttempts,
+        messagesReceived: wsMessagesReceived,
+        subscribe: wsSubscribe,
+        disconnect: wsDisconnect,
+        reconnect: wsReconnect,
+        clearMessages: wsClearMessages,
+    } = useMcoWebSocket({
+        autoConnect: true,
+        onBindStatus: (data) => {
+            console.log('[McoContext] BIND_STATUS:', data);
+            // Автоматически обновляем bindStatus при получении события
+            if (data.status === 'REQUEST_APPROVED') {
+                setBindStatus({
+                    requestId: data.requestId,
+                    status: 'SUCCESS',
+                    phoneNumber: data.phone,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                });
+            }
+        },
+        onNewReceipts: (data) => {
+            console.log('[McoContext] NEW_RECEIPTS:', data);
+            // Здесь можно добавить автоматическую синхронизацию чеков
+        },
+        onUnbind: (data) => {
+            console.log('[McoContext] UNBIND:', data);
+            // Очищаем данные при отключении пользователя
+            setBindData(null);
+            setBindStatus(null);
+        },
+        onError: (data) => {
+            console.error('[McoContext] ERROR:', data.message);
+        },
+    });
 
     // ============================================================================
     // Вспомогательная функция обработки ошибок
@@ -411,6 +482,68 @@ export function McoProvider({ children }: McoProviderProps) {
     }, [handleError]);
 
     // ============================================================================
+    // WebSocket тестирование
+    // ============================================================================
+
+    const wsTestNotification = useCallback(async (
+        phone: string,
+        count: number,
+        totalAmount: string
+    ): Promise<boolean> => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const response = await mcoService.testWebSocketNotification(
+                cleanPhoneNumber(phone),
+                count,
+                totalAmount
+            );
+
+            if (response.success) {
+                console.log('✅ Тестовое уведомление отправлено');
+                return true;
+            }
+
+            setError(response.message || "Не удалось отправить тестовое уведомление");
+            return false;
+        } catch (err) {
+            handleError(err, "Ошибка при отправке тестового уведомления");
+            return false;
+        } finally {
+            setIsLoading(false);
+        }
+    }, [handleError]);
+
+    const wsTestUnbind = useCallback(async (
+        phone: string,
+        reason: string
+    ): Promise<boolean> => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const response = await mcoService.testUnbindUser(
+                cleanPhoneNumber(phone),
+                reason
+            );
+
+            if (response.success) {
+                console.log('✅ Тестовое отключение отправлено');
+                return true;
+            }
+
+            setError(response.message || "Не удалось отправить тестовое отключение");
+            return false;
+        } catch (err) {
+            handleError(err, "Ошибка при отправке тестового отключения");
+            return false;
+        } finally {
+            setIsLoading(false);
+        }
+    }, [handleError]);
+
+    // ============================================================================
     // Утилиты
     // ============================================================================
 
@@ -458,6 +591,17 @@ export function McoProvider({ children }: McoProviderProps) {
         receiptsStats,
         notificationResult,
         healthStatus,
+
+        // WebSocket состояния
+        wsStatus,
+        wsIsConnected,
+        wsLastBindStatus,
+        wsLastNewReceipts,
+        wsLastUnbind,
+        wsLastError,
+        wsReconnectAttempts,
+        wsMessagesReceived,
+
         isLoading,
         error,
 
@@ -482,6 +626,16 @@ export function McoProvider({ children }: McoProviderProps) {
 
         // Health
         checkHealth,
+
+        // WebSocket методы
+        wsSubscribe,
+        wsDisconnect,
+        wsReconnect,
+        wsClearMessages,
+
+        // WebSocket тестирование
+        wsTestNotification,
+        wsTestUnbind,
 
         // Утилиты
         clearError,

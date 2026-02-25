@@ -264,3 +264,89 @@ export interface ReceiptsStats {
     message: string;
     data: Receipt[];
 }
+
+// ============================================================================
+// WebSocket типы согласно WEBSOCKET_FRONTEND_GUIDE.md
+// ============================================================================
+
+export type WebSocketMessageType =
+    | 'SUBSCRIBED'
+    | 'BIND_STATUS'
+    | 'NEW_RECEIPTS'
+    | 'UNBIND'
+    | 'ERROR';
+
+export type BindStatusType =
+    | 'REQUEST_APPROVED'
+    | 'REQUEST_DECLINED'
+    | 'REQUEST_CANCELLED_AS_DUPLICATE'
+    | 'REQUEST_EXPIRED'
+    | 'REQUEST_IN_PROGRESS';
+
+export type WebSocketConnectionStatus = 'connecting' | 'connected' | 'disconnected' | 'error';
+
+// Сообщения от сервера к клиенту
+export interface WebSocketMessage {
+    type: WebSocketMessageType;
+}
+
+export interface SubscribedMessage extends WebSocketMessage {
+    type: 'SUBSCRIBED';
+    status: 'success';
+}
+
+export interface BindStatusMessage extends WebSocketMessage {
+    type: 'BIND_STATUS';
+    requestId: string;
+    status: BindStatusType;
+    phone: string;
+}
+
+export interface NewReceiptsMessage extends WebSocketMessage {
+    type: 'NEW_RECEIPTS';
+    phone: string;
+    count: number;
+    totalAmount: string;
+}
+
+export interface UnbindMessage extends WebSocketMessage {
+    type: 'UNBIND';
+    phone: string;
+    reason: string;
+    timestamp: string;
+}
+
+export interface ErrorMessage extends WebSocketMessage {
+    type: 'ERROR';
+    requestId?: string;
+    message: string;
+}
+
+export type WebSocketServerMessage =
+    | SubscribedMessage
+    | BindStatusMessage
+    | NewReceiptsMessage
+    | UnbindMessage
+    | ErrorMessage;
+
+// Сообщение от клиента к серверу
+export interface WebSocketSubscribeMessage {
+    type: 'SUBSCRIBE';
+    requestId: string;
+    phone: string;
+}
+
+export type WebSocketClientMessage = WebSocketSubscribeMessage;
+
+// ============================================================================
+// Callback типы для WebSocket хука
+// ============================================================================
+
+export interface WebSocketCallbacks {
+    onSubscribed?: () => void;
+    onBindStatus?: (data: BindStatusMessage) => void;
+    onNewReceipts?: (data: NewReceiptsMessage) => void;
+    onUnbind?: (data: UnbindMessage) => void;
+    onError?: (data: ErrorMessage) => void;
+    onConnectionChange?: (status: WebSocketConnectionStatus) => void;
+}

@@ -129,6 +129,41 @@ export const mcoService = {
         const response = await api.get(`${BASE_URL}/health`);
         return response.data;
     },
+
+    // ─── WebSocket Testing ──────────────────────────────────────────
+
+    /**
+     * Тестовое уведомление о новых чеках
+     * Отправляет тестовое сообщение NEW_RECEIPTS на WebSocket
+     */
+    testWebSocketNotification: async (
+        phone: string,
+        count: number,
+        totalAmount: string
+    ): Promise<ApiResponse<{ phone: string; count: number; totalAmount: string }>> => {
+        const response = await api.post<ApiResponse<{ phone: string; count: number; totalAmount: string }>>(
+            `${BASE_URL}/test-websocket-notification`,
+            null,
+            { params: { phone, count, totalAmount } }
+        );
+        return response.data;
+    },
+
+    /**
+     * Тестовое отключение пользователя
+     * Отправляет тестовое сообщение UNBIND на WebSocket
+     */
+    testUnbindUser: async (
+        phone: string,
+        reason: string
+    ): Promise<ApiResponse<{ phone: string; reason: string; timestamp: string }>> => {
+        const response = await api.post<ApiResponse<{ phone: string; reason: string; timestamp: string }>>(
+            `${BASE_URL}/test-unbind-user`,
+            null,
+            { params: { phone, reason } }
+        );
+        return response.data;
+    },
 };
 
 // Опционально: пример составного метода (если часто используется)

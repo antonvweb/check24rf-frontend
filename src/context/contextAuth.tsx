@@ -176,41 +176,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }, [code, phone, captchaToken]);
 
     // ============================================================================
-    // Сброс формы
-    // ============================================================================
-    const resetForm = useCallback(() => {
-        setPhone("");
-        setCode(Array(6).fill(""));
-        setIsPhoneValid(false);
-        setAgreedToTerms(false);
-        setCodeSent(false);
-        resetTimer();
-        resetCaptcha();
-    }, [resetTimer, resetCaptcha]);
-
-    // ============================================================================
-    // Выход
-    // ============================================================================
-    const logout = useCallback(async () => {
-        try {
-            await authService.logout();
-        } catch (err) {
-            console.warn("Logout error:", err);
-        } finally {
-            localStorage.removeItem("jwt");
-            setAccessToken(null);
-            setIsAuthenticated(false);
-            resetForm();
-        }
-    }, [resetForm]);
-
-    useEffect(() => {
-        if (seconds === 0 && codeSent) {
-            setCodeSent(false);
-        }
-    }, [seconds, codeSent]);
-
-    // ============================================================================
     // Капча
     // ============================================================================
     const verifyCaptcha = useCallback(async (token: string): Promise<boolean> => {
@@ -262,6 +227,41 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setCaptchaError(null);
         setIsVerifyingCaptcha(false);
     }, []);
+
+    // ============================================================================
+    // Сброс формы
+    // ============================================================================
+    const resetForm = useCallback(() => {
+        setPhone("");
+        setCode(Array(6).fill(""));
+        setIsPhoneValid(false);
+        setAgreedToTerms(false);
+        setCodeSent(false);
+        resetTimer();
+        resetCaptcha();
+    }, [resetTimer, resetCaptcha]);
+
+    // ============================================================================
+    // Выход
+    // ============================================================================
+    const logout = useCallback(async () => {
+        try {
+            await authService.logout();
+        } catch (err) {
+            console.warn("Logout error:", err);
+        } finally {
+            localStorage.removeItem("jwt");
+            setAccessToken(null);
+            setIsAuthenticated(false);
+            resetForm();
+        }
+    }, [resetForm]);
+
+    useEffect(() => {
+        if (seconds === 0 && codeSent) {
+            setCodeSent(false);
+        }
+    }, [seconds, codeSent]);
 
     // ============================================================================
     // Таймер обратного отсчета
