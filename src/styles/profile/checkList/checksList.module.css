@@ -44,10 +44,41 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     background-color: var(--btn-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
 }
 
 .noAccessBtn:hover {
     background-color: var(--btn-secondary-hover);
+}
+
+.noAccessBtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.btnPreloader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+}
+
+.btnPreloader .spinner {
+    width: 24px;
+    height: 24px;
+    animation: spinner-rotate 1s linear infinite;
+}
+
+.btnPreloader .path {
+    stroke: var(--font-primary);
+    stroke-linecap: round;
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+    animation: spinner-dash 1.5s ease-in-out infinite;
 }
 
 .haveAccess{

@@ -1,5 +1,6 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
 import styles from '@/styles/profile/checkList/checksList.module.css';
+import preloaderStyles from '@/styles/preloader.module.css';
 import {CheckItem} from "@/components/checksList/CheckItem";
 import {ContextMenu} from "@/components/ui/profileUI/ContextMenu";
 import {CalendarModel} from "@/components/ui/profileUI/CalendarModel";
@@ -30,6 +31,7 @@ export default function ChecksList({mode}: ChecksListProps) {
     const [contextMenu, setContextMenu] = useState<MenuState>(null);
     const [isContextMenuVisible, setContextMenuVisible] = useState(false);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const { currentUser } = useUser();
     const { bindAndCheck,  userReceipts} = useMco();
@@ -77,26 +79,50 @@ export default function ChecksList({mode}: ChecksListProps) {
             <main className={styles.mainCheckList}>
                 <div className={styles.leftBoxCheckList}>
                     {!currentUser?.partnerConnected ? (
-                        <div className={styles.noAccess}>
+    <div className={styles.noAccess}>
                             <div className={styles.noAccessWrapper}>
                                 <p className={styles.noAccessText}>Чтобы увидеть чеки, выдайте доступ</p>
                                 <button
                                     type="button"
                                     className={styles.noAccessBtn}
+                                    disabled={isLoading}
                                     onClick={async () => {
                                         if (!currentUser?.phoneNumber) return;
 
-                                        const result = await bindAndCheck(cleanPhoneNumber(currentUser.phoneNumber));
-                                        if (result) {
-                                            showToast("success", "Запрос успешно отправлен");
-                                            window.open("https://dr.stm-labs.ru/partners", "_blank", "noopener,noreferrer");
-                                        }
-                                        else {
-                                            showToast("danger", "Пользователь уже подключен");
+                                        setIsLoading(true);
+                                        try {
+                                            const result = await bindAndCheck(cleanPhoneNumber(currentUser.phoneNumber));
+                                            if (result) {
+                                                showToast("success", "Запрос успешно отправлен");
+                                                window.open("https://dr.stm-labs.ru/partners", "_blank", "noopener,noreferrer");
+                                            } else {
+                                                showToast("danger", "Пользователь уже подключен");
+                                            }
+                                        } finally {
+                                            setIsLoading(false);
                                         }
                                     }}
                                 >
-                                    Выдать доступ
+                                    {isLoading ? (
+                                        <div className={styles.btnPreloader}>
+                                            <svg
+                                                className={preloaderStyles.spinner}
+                                                viewBox="0 0 50 50"
+                                                aria-hidden="true"
+                                            >
+                                                <circle
+                                                    className={preloaderStyles.path}
+                                                    cx="25"
+                                                    cy="25"
+                                                    r="20"
+                                                    fill="none"
+                                                    strokeWidth="3"
+                                                />
+                                            </svg>
+                                        </div>
+                                    ) : (
+                                        "Выдать доступ"
+                                    )}
                                 </button>
                             </div>
                         </div>

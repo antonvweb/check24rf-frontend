@@ -176,6 +176,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }, [code, phone, captchaToken]);
 
     // ============================================================================
+    // Сброс формы
+    // ============================================================================
+    const resetForm = useCallback(() => {
+        setPhone("");
+        setCode(Array(6).fill(""));
+        setIsPhoneValid(false);
+        setAgreedToTerms(false);
+        setCodeSent(false);
+        resetTimer();
+        resetCaptcha();
+    }, [resetTimer, resetCaptcha]);
+
+    // ============================================================================
     // Выход
     // ============================================================================
     const logout = useCallback(async () => {
@@ -189,20 +202,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setIsAuthenticated(false);
             resetForm();
         }
-    }, []);
-
-    // ============================================================================
-    // Сброс формы
-    // ============================================================================
-    const resetForm = useCallback(() => {
-        setPhone("");
-        setCode(Array(6).fill(""));
-        setIsPhoneValid(false);
-        setAgreedToTerms(false);
-        setCodeSent(false);
-        resetTimer();
-        resetCaptcha();
-    }, [resetTimer]);
+    }, [resetForm]);
 
     useEffect(() => {
         if (seconds === 0 && codeSent) {
