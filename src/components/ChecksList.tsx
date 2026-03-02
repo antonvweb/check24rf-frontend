@@ -76,7 +76,7 @@ export default function ChecksList({mode}: ChecksListProps) {
             </header>
             <main className={styles.mainCheckList}>
                 <div className={styles.leftBoxCheckList}>
-                    {!currentUser?.partnerConnected ? (
+                    {!currentUser?.isPartnerConnected ? (
     <div className={styles.noAccess}>
                             <div className={styles.noAccessWrapper}>
                                 <p className={styles.noAccessText}>Чтобы увидеть чеки, выдайте доступ</p>

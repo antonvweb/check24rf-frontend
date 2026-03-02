@@ -11,19 +11,16 @@ export function withAuthProtection<T extends object>(
     return function ProtectedComponent(props: T) {
         const router = useRouter();
         const pathname = usePathname();
-        const { isTokenValid, checkAuth, isLoading: authLoading, accessToken } = useAuth();
+        const { isAuthenticated, isLoading: authLoading, checkAuth } = useAuth();
         const [isChecking, setIsChecking] = useState(true);
 
         useEffect(() => {
             const checkAuthStatus = async () => {
-                const token = typeof window !== "undefined" ? localStorage.getItem("jwt") : null;
-                const isValid = isTokenValid(token);
-
                 const isStartPage = pathname === "/start" || pathname === "/";
 
                 if (isStartPage) {
                     // Публичная страница (логин)
-                    if (isValid) {
+                    if (isAuthenticated) {
                         // Если уже авторизован - редирект на профиль
                         router.replace("/profile");
                     } else {
@@ -31,11 +28,11 @@ export function withAuthProtection<T extends object>(
                     }
                 } else {
                     // Защищенная страница
-                    if (!isValid) {
-                        // Токен невалиден - редирект на логин
+                    if (!isAuthenticated) {
+                        // Не авторизован - редирект на логин
                         router.replace("/start");
                     } else {
-                        // Токен валиден - проверяем пользователя
+                        // Авторизован - проверяем через API
                         const authSuccess = await checkAuth();
                         if (!authSuccess) {
                             router.replace("/start");
@@ -47,7 +44,7 @@ export function withAuthProtection<T extends object>(
             };
 
             checkAuthStatus();
-        }, [pathname, isTokenValid, checkAuth, router, accessToken]);
+        }, [pathname, isAuthenticated, checkAuth, router]);
 
         if (isChecking || authLoading) {
             return <Preloader />;

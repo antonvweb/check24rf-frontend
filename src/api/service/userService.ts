@@ -1,4 +1,6 @@
-// apiUser.ts
+// userService.ts
+// Сервис управления пользователями согласно API_DOCUMENTATION.md
+
 import type {
     User,
     UserCreateRequest,
@@ -6,80 +8,126 @@ import type {
     UserUpdateRequest,
     UserMeResponse,
     UserSearchParams,
+    UsersListParams,
+    UserListResponse,
+    UserReceiptsResponse,
 } from "@/api/types/typeApiUser";
 import api from "@/api/axios";
 
-// Базовый путь (можно вынести в env или константу)
-const BASE_URL = "/api/users"; // предполагаем, что api уже имеет baseURL
+const BASE_URL = "/api/users";
 
 export const userService = {
-    // Создание пользователя (админ/спец права)
-    createUser: async (data: UserCreateRequest): Promise<UserCreateResponse> => {
-        const response = await api.post<UserCreateResponse>(BASE_URL, data);
-        return response.data;
-    },
-
-    // Текущий пользователь (/me)
+    /**
+     * Получение информации о текущем пользователе
+     * GET /api/users/me
+     */
     getCurrentUser: async (): Promise<User> => {
         const response = await api.get<UserMeResponse>(`${BASE_URL}/me`);
         return response.data.data;
     },
 
-    // Пользователь по ID
+    /**
+     * Получение информации о пользователе по ID
+     * GET /api/users/{userId}
+     */
     getUserById: async (userId: string): Promise<User> => {
         const response = await api.get<User>(`${BASE_URL}/${userId}`);
         return response.data;
     },
 
-    // Поиск по телефону/email
-    searchUsers: async (params: UserSearchParams): Promise<User[]> => {
-        // Предполагаем, что возвращается массив (если пагинированный — измени тип)
-        const response = await api.get<User[]>(`${BASE_URL}/search`, {
+    /**
+     * Получение списка всех пользователей с пагинацией
+     * GET /api/users
+     */
+    getUsersList: async (params?: UsersListParams): Promise<UserListResponse> => {
+        const response = await api.get<UserListResponse>(BASE_URL, {
             params: {
-                query: params.query,
+                page: params?.page ?? 0,
+                size: params?.size ?? 20,
+                sortBy: params?.sortBy ?? 'createdAt',
+                sortDir: params?.sortDir ?? 'desc',
             },
         });
         return response.data;
     },
 
-    // Обновление пользователя
-    updateUser: async (data: UserUpdateRequest): Promise<User> => {
-        const response = await api.put<User>(`${BASE_URL}`, data);
+    /**
+     * Поиск пользователей по номеру телефона или email
+     * GET /api/users/search
+     */
+    searchUsers: async (params: UserSearchParams): Promise<User[]> => {
+        const response = await api.get<User[]>(`${BASE_URL}/search`, {
+            params: { query: params.query },
+        });
         return response.data;
     },
 
-    // Удаление пользователя
+    /**
+     * Создание нового пользователя
+     * POST /api/users
+     */
+    createUser: async (data: UserCreateRequest): Promise<UserCreateResponse> => {
+        const response = await api.post<UserCreateResponse>(BASE_URL, data);
+        return response.data;
+    },
+
+    /**
+     * Обновление информации о пользователе
+     * PUT /api/users/{userId}
+     */
+    updateUser: async (userId: string, data: UserUpdateRequest): Promise<User> => {
+        const response = await api.put<User>(`${BASE_URL}/${userId}`, data);
+        return response.data;
+    },
+
+    /**
+     * Деактивация пользователя (мягкое удаление)
+     * PATCH /api/users/{userId}/deactivate
+     */
+    deactivateUser: async (userId: string): Promise<void> => {
+        await api.patch(`${BASE_URL}/${userId}/deactivate`);
+    },
+
+    /**
+     * Активация пользователя
+     * PATCH /api/users/{userId}/activate
+     */
+    activateUser: async (userId: string): Promise<void> => {
+        await api.patch(`${BASE_URL}/${userId}/activate`);
+    },
+
+    /**
+     * Удаление пользователя полностью (жесткое удаление)
+     * DELETE /api/users/{userId}
+     */
     deleteUser: async (userId: string): Promise<void> => {
         await api.delete(`${BASE_URL}/${userId}`);
     },
 
-    // ──────────────────────────────────────────────
-    // Legacy / дополнительные методы
-    // ──────────────────────────────────────────────
-
-    // Старый метод /user (legacy)
-    getUserLegacy: async (): Promise<User> => {
-        const response = await api.get<User>(`${BASE_URL}/user`);
+    /**
+     * Получение чеков пользователя
+     * GET /api/users/{userId}/receipts
+     */
+    getUserReceipts: async (
+        userId: string,
+        page: number = 0,
+        size: number = 20
+    ): Promise<UserReceiptsResponse> => {
+        const response = await api.get<UserReceiptsResponse>(
+            `${BASE_URL}/${userId}/receipts`,
+            { params: { page, size } }
+        );
         return response.data;
     },
 
-    // Проверка активности
+    /**
+     * Проверка активности пользователя
+     * GET /api/users/is-active
+     */
     checkIsActive: async (): Promise<boolean> => {
         const response = await api.get<boolean>(`${BASE_URL}/is-active`);
         return response.data;
     },
-
-    // Legacy смена альтернативных данных (email/phoneAlt)
-    changeAltData: async (payload: { type: "email" | "phone"; data: string }): Promise<void> => {
-        await api.post(`${BASE_URL}/change-data`, payload);
-    },
-};
-
-// Тип для ошибок (опционально, если хочешь централизованно обрабатывать)
-export type UserApiError = {
-    message: string;
-    status?: number;
-    code?: string;
 };
 
 export default userService;

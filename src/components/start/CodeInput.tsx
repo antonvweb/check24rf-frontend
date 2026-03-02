@@ -28,8 +28,8 @@ export const CodeInput = () => {
         const codeString = code.join("");
         if (codeString.length === 6) {
             (async () => {
-                const success = await verifyCode();
-                if (success) {
+                const result = await verifyCode();
+                if (result) {
                     setIsCodeSuccess(true);
                     setIsCodeValid(true);
                 } else {

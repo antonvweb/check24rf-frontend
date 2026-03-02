@@ -53,8 +53,12 @@ const DEFAULT_OPTIONS: Required<Omit<UseMcoWebSocketOptions, 'url' | 'onSubscrib
 
 /**
  * WebSocket хук для подключения к МЧО Сервису
- *
- * Использует единый WebSocket endpoint /ws/notifications для всех уведомлений:
+ * 
+ * Согласно API_DOCUMENTATION.md и WEBSOCKET_FRONTEND_GUIDE.md:
+ * - URL: wss://api.xn--24-mlcu7d.xn--p1ai/api/mco/ws (production)
+ * - URL: ws://localhost:80/api/mco/ws (development через Nginx)
+ * 
+ * Использует единый WebSocket endpoint /api/mco/ws для всех уведомлений:
  * - SUBSCRIBED - подтверждение подписки
  * - BIND_STATUS - статус подключения пользователя
  * - NEW_RECEIPTS - новые чеки
@@ -64,7 +68,6 @@ const DEFAULT_OPTIONS: Required<Omit<UseMcoWebSocketOptions, 'url' | 'onSubscrib
  * @example
  * ```tsx
  * const { status, subscribe, lastBindStatus } = useMcoWebSocket({
- *     url: 'ws://localhost:8080/ws/notifications',
  *     onBindStatus: (data) => {
  *         if (data.status === 'REQUEST_APPROVED') {
  *             console.log('Пользователь подключен!');
@@ -322,24 +325,28 @@ export function useMcoWebSocket(options: UseMcoWebSocketOptions = {}): UseMcoWeb
 
 /**
  * Получение WebSocket URL в зависимости от окружения
+ * 
+ * Согласно API_DOCUMENTATION.md:
+ * - Production: wss://api.xn--24-mlcu7d.xn--p1ai/api/mco/ws
+ * - Development: ws://localhost:80/api/mco/ws (через Nginx)
  */
 function getWebSocketUrl(): string {
     const isDevelopment = process.env.NODE_ENV === 'development';
 
     if (isDevelopment) {
-        // Для локальной разработки
-        return 'ws://localhost:8080/ws/notifications';
+        // Для локальной разработки через Nginx
+        return 'ws://localhost:80/api/mco/ws';
     }
 
     // Для production - используем тот же хост, что и для API
     // Проверяем наличие window для SSR
     if (typeof window !== 'undefined' && window.location) {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        return `${protocol}//${window.location.host}/ws/notifications`;
+        return `${protocol}//${window.location.host}/api/mco/ws`;
     }
 
     // Fallback для SSR
-    return 'wss://localhost:8080/ws/notifications';
+    return 'wss://api.xn--24-mlcu7d.xn--p1ai/api/mco/ws';
 }
 
 export default useMcoWebSocket;

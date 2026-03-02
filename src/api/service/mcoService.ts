@@ -1,23 +1,37 @@
 // mcoService.ts
-import api from "@/api/axios"; // твой axios-инстанс с интерсепторами и withCredentials
+// Сервис интеграции с МЧО согласно API_DOCUMENTATION.md
+
+import api from "@/api/axios";
 import {
     ApiResponse,
     BindUserData,
     BindRequestStatus,
+    BatchBindResult,
+    BindEventsResponse,
+    UnboundUsersResponse,
+    UnbindUserRequest,
+    UnbindUserResponse,
+    ReceiptPageResponse,
+    ReceiptsStats,
     SendNotificationPayload,
-    SendNotificationData, BindEvent, UnboundUser, ReceiptsStats, ReceiptPageResponse,
+    SendNotificationData,
 } from "@/api/types/typesMcoService";
 
 const BASE_URL = "/api/mco";
 
 export const mcoService = {
-    // ─── User Binding ───────────────────────────────────────────────
+    // ============================================================================
+    // User Binding (Подключение пользователя)
+    // ============================================================================
 
+    /**
+     * Подключение пользователя к партнёру
+     * POST /api/mco/bind-user
+     */
     bindUser: async (
         phone: string,
         permissionGroups: string = "DEFAULT"
     ): Promise<ApiResponse<BindUserData>> => {
-        console.log(phone, permissionGroups);
         const response = await api.post<ApiResponse<BindUserData>>(
             `${BASE_URL}/bind-user`,
             null,
@@ -26,21 +40,31 @@ export const mcoService = {
         return response.data;
     },
 
+    /**
+     * Пакетное подключение пользователей
+     * POST /api/mco/bind-users-batch
+     */
     bindUsersBatch: async (
         phones: string[]
-    ): Promise<ApiResponse<{ requestId?: string }>> => {
+    ): Promise<ApiResponse<BatchBindResult>> => {
         if (phones.length > 100) {
             throw new Error("Максимум 100 номеров в пакетном запросе");
         }
-        const response = await api.post<ApiResponse<{ requestId?: string }>>(
+        const response = await api.post<ApiResponse<BatchBindResult>>(
             `${BASE_URL}/bind-users-batch`,
             phones
         );
         return response.data;
     },
 
-    // ─── Bind Status & Events ───────────────────────────────────────
+    // ============================================================================
+    // Bind Status & Events
+    // ============================================================================
 
+    /**
+     * Проверка статуса заявки на подключение
+     * GET /api/mco/bind-request-status
+     */
     getBindRequestStatus: async (
         requestId: string
     ): Promise<ApiResponse<BindRequestStatus>> => {
@@ -51,68 +75,106 @@ export const mcoService = {
         return response.data;
     },
 
-    getBindRequestsStatuses: async (
-        requestIds: string[]
-    ): Promise<ApiResponse<Record<string, BindRequestStatus>>> => {
-        if (requestIds.length > 50) {
-            throw new Error("Максимум 50 requestId в одном запросе");
-        }
-        const response = await api.post<
-            ApiResponse<Record<string, BindRequestStatus>>
-        >(`${BASE_URL}/bind-requests-statuses`, requestIds);
-        return response.data;
-    },
-
+    /**
+     * Получение событий подключения/отключения
+     * GET /api/mco/bind-events
+     */
     getBindEvents: async (
         marker: string = "S_FROM_END"
-    ): Promise<ApiResponse<BindEvent>> => {
-        const response = await api.get(
+    ): Promise<ApiResponse<BindEventsResponse>> => {
+        const response = await api.get<ApiResponse<BindEventsResponse>>(
             `${BASE_URL}/bind-events`,
             { params: { marker } }
         );
         return response.data;
     },
 
+    /**
+     * Получение списка отключившихся пользователей
+     * GET /api/mco/unbound-users
+     */
     getUnboundUsers: async (
         marker: string = "S_FROM_END"
-    ): Promise<ApiResponse<UnboundUser>> => {
-        const response = await api.get(
+    ): Promise<ApiResponse<UnboundUsersResponse>> => {
+        const response = await api.get<ApiResponse<UnboundUsersResponse>>(
             `${BASE_URL}/unbound-users`,
             { params: { marker } }
         );
         return response.data;
     },
 
-    // ─── Receipts ───────────────────────────────────────────────────
+    // ============================================================================
+    // Unbind (Отключение пользователя)
+    // ============================================================================
 
+    /**
+     * Отключение пользователя от партнёра
+     * POST /api/mco/unbind-user
+     */
+    unbindUser: async (
+        data: UnbindUserRequest
+    ): Promise<ApiResponse<UnbindUserResponse>> => {
+        const response = await api.post<ApiResponse<UnbindUserResponse>>(
+            `${BASE_URL}/unbind-user`,
+            data
+        );
+        return response.data;
+    },
+
+    // ============================================================================
+    // Receipts (Чеки)
+    // ============================================================================
+
+    /**
+     * Получение чеков пользователя по телефону
+     * GET /api/mco/receipts/user
+     */
+    getUserReceipts: async (
+        phone: string,
+        page: number = 0,
+        size: number = 20,
+        sort?: string
+    ): Promise<ApiResponse<ReceiptPageResponse>> => {
+        const response = await api.get<ApiResponse<ReceiptPageResponse>>(
+            `${BASE_URL}/receipts/user`,
+            { params: { phone, page, size, sort } }
+        );
+        return response.data;
+    },
+
+    /**
+     * Синхронизация чеков пользователя
+     * GET /api/mco/receipts/sync
+     */
     syncUserReceipts: async (
         phone: string
     ): Promise<ApiResponse<{ syncedCount?: number }>> => {
-        const response = await api.get(
+        const response = await api.get<ApiResponse<{ syncedCount?: number }>>(
             `${BASE_URL}/receipts/sync`,
             { params: { phone } }
         );
         return response.data;
     },
-    getUserReceipts: async (
-        phone: string,
-        page: number = 0,
-        size: number = 20
-    ): Promise<ApiResponse<ReceiptPageResponse>> => {
-        const response = await api.get(
-            `${BASE_URL}/receipts/user`,
-            { params: { phone, page, size } }
+
+    /**
+     * Получение статистики по чекам
+     * GET /api/mco/receipts/stats
+     */
+    getReceiptsStats: async (): Promise<ApiResponse<ReceiptsStats>> => {
+        const response = await api.get<ApiResponse<ReceiptsStats>>(
+            `${BASE_URL}/receipts/stats`
         );
         return response.data;
     },
 
-    getReceiptsStats: async (): Promise<ApiResponse<ReceiptsStats>> => {
-        const response = await api.get(`${BASE_URL}/receipts/stats`);
-        return response.data;
-    },
+    // ============================================================================
+    // Notifications (Уведомления)
+    // ============================================================================
 
-    // ─── Notifications ──────────────────────────────────────────────
-
+    /**
+     * Отправка уведомления пользователю
+     * POST /api/mco/send-notification
+     */
     sendNotification: async (
         payload: SendNotificationPayload
     ): Promise<ApiResponse<SendNotificationData>> => {
@@ -123,18 +185,78 @@ export const mcoService = {
         return response.data;
     },
 
-    // ─── Health ─────────────────────────────────────────────────────
-
-    health: async (): Promise<ApiResponse<{ status: "UP" | "DOWN" }>> => {
-        const response = await api.get(`${BASE_URL}/health`);
+    /**
+     * Получение списка всех типов уведомлений
+     * GET /api/mco/notifications/demo/types
+     */
+    getNotificationTypes: async (): Promise<ApiResponse<{
+        totalTypes: number;
+        category: string;
+        types: Array<{
+            name: string;
+            category: string;
+            titleTemplate: string;
+            messageTemplate: string;
+            shortMessageTemplate: string;
+            description: string;
+        }>;
+    }>> => {
+        const response = await api.get<ApiResponse<{
+            totalTypes: number;
+            category: string;
+            types: Array<{
+                name: string;
+                category: string;
+                titleTemplate: string;
+                messageTemplate: string;
+                shortMessageTemplate: string;
+                description: string;
+            }>;
+        }>>(`${BASE_URL}/notifications/demo/types`);
         return response.data;
     },
 
-    // ─── WebSocket Testing ──────────────────────────────────────────
+    // ============================================================================
+    // Partner Registration (Регистрация партнёра)
+    // ============================================================================
+
+    /**
+     * Регистрация партнёра в МЧО
+     * POST /api/mco/register
+     */
+    registerPartner: async (
+        logoPath?: string
+    ): Promise<ApiResponse<{ partnerId: string }>> => {
+        const response = await api.post<ApiResponse<{ partnerId: string }>>(
+            `${BASE_URL}/register`,
+            null,
+            { params: { logoPath } }
+        );
+        return response.data;
+    },
+
+    // ============================================================================
+    // Health Check
+    // ============================================================================
+
+    /**
+     * Проверка здоровья сервиса
+     * GET /api/mco/health
+     */
+    health: async (): Promise<ApiResponse<{ status: "UP" | "DOWN" }>> => {
+        const response = await api.get<ApiResponse<{ status: "UP" | "DOWN" }>>(
+            `${BASE_URL}/health`
+        );
+        return response.data;
+    },
+
+    // ============================================================================
+    // WebSocket Testing (тестовые endpoints)
+    // ============================================================================
 
     /**
      * Тестовое уведомление о новых чеках
-     * Отправляет тестовое сообщение NEW_RECEIPTS на WebSocket
+     * POST /api/mco/test-websocket-notification
      */
     testWebSocketNotification: async (
         phone: string,
@@ -151,7 +273,7 @@ export const mcoService = {
 
     /**
      * Тестовое отключение пользователя
-     * Отправляет тестовое сообщение UNBIND на WebSocket
+     * POST /api/mco/test-unbind-user
      */
     testUnbindUser: async (
         phone: string,
@@ -166,7 +288,13 @@ export const mcoService = {
     },
 };
 
-// Опционально: пример составного метода (если часто используется)
+// ============================================================================
+// Helper функции
+// ============================================================================
+
+/**
+ * Комплексная функция: привязка и проверка статуса
+ */
 export const bindAndCheckStatus = async (
     phone: string
 ): Promise<{ bindResult: ApiResponse<BindUserData>; status?: ApiResponse<BindRequestStatus> }> => {
@@ -176,7 +304,6 @@ export const bindAndCheckStatus = async (
         throw new Error("Не удалось получить requestId после привязки");
     }
 
-    // Можно добавить небольшую задержку или polling, здесь просто один запрос
     const status = await mcoService.getBindRequestStatus(bindResult.data.requestId);
 
     return { bindResult, status };

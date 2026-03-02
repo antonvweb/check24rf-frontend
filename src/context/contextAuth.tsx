@@ -1,4 +1,4 @@
-// src/context/AuthContext.tsx
+// src/context/contextAuth.tsx
 "use client";
 
 import React, {
@@ -13,16 +13,15 @@ import { jwtDecode } from "jwt-decode";
 import { AxiosError } from "axios";
 
 import { authService } from "@/api/service/authService";
-import api from "@/api/axios";
-
-interface CaptchaVerifyResponse {
-    captchaToken: string;
-}
+import type { AuthResponseData } from "@/api/types/typeApiAuth";
 
 interface AuthContextType {
     isAuthenticated: boolean;
     isLoading: boolean;
     accessToken: string | null;
+    userId: string | null;
+    phoneNumber: string | null;
+    email: string | null;
 
     phone: string;
     code: string[];
@@ -42,7 +41,7 @@ interface AuthContextType {
     setAgreedToTerms: (agreed: boolean) => void;
 
     sendVerificationCode: () => Promise<boolean>;
-    verifyCode: () => Promise<boolean>;
+    verifyCode: () => Promise<AuthResponseData | null>;
     logout: () => Promise<void>;
     checkAuth: () => Promise<boolean>;
     isTokenValid: (token: string | null) => boolean;
@@ -51,6 +50,7 @@ interface AuthContextType {
     resetCaptcha: () => void;
 
     resetForm: () => void;
+    clearAuthData: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -63,6 +63,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string | null>(null);
+    const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
+    const [email, setEmail] = useState<string | null>(null);
 
     const [phone, setPhone] = useState("");
     const [code, setCode] = useState<string[]>(Array(6).fill(""));
@@ -93,25 +96,40 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }, []);
 
     // ============================================================================
-    // Простая проверка аутентификации (БЕЗ refresh)
+    // Проверка аутентификации через API validate endpoint
+    // Токены хранятся в httpOnly cookies, сервер сам их проверяет
     // ============================================================================
     const checkAuth = useCallback(async (): Promise<boolean> => {
-        const token = localStorage.getItem("jwt");
-
-        if (!token || !isTokenValid(token)) {
+        try {
+            // Проверяем токен через API
+            const response = await authService.validateToken();
+            
+            if (response.success && response.data === true) {
+                setIsAuthenticated(true);
+                // Токен валиден, но данные пользователя загрузим отдельно через UserContext
+                return true;
+            }
+            
+            // Токен не валиден
             setAccessToken(null);
+            setUserId(null);
+            setPhoneNumber(null);
+            setEmail(null);
+            setIsAuthenticated(false);
+            return false;
+        } catch {
+            // Ошибка проверки токена - пользователь не аутентифицирован
+            setAccessToken(null);
+            setUserId(null);
+            setPhoneNumber(null);
+            setEmail(null);
             setIsAuthenticated(false);
             return false;
         }
-
-        // Токен валиден
-        setAccessToken(token);
-
-        return true;
-    }, [isTokenValid]);
+    }, []);
 
     // ============================================================================
-    // Инициализация при монтировании - ТОЛЬКО ПРОВЕРКА
+    // Инициализация при монтировании - проверка токена
     // ============================================================================
     useEffect(() => {
         (async () => {
@@ -147,11 +165,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }, [isPhoneValid, agreedToTerms, captchaToken, codeSent, phone, startTimer]);
 
     // ============================================================================
-    // Проверка кода
+    // Проверка кода и аутентификация
+    // Сервер устанавливает httpOnly cookies (accessToken, refreshToken)
     // ============================================================================
-    const verifyCode = useCallback(async (): Promise<boolean> => {
+    const verifyCode = useCallback(async (): Promise<AuthResponseData | null> => {
         const codeString = code.join("");
-        if (codeString.length !== 6) return false;
+        if (codeString.length !== 6) return null;
 
         try {
             const cleanPhone = phone.replace(/\D/g, "");
@@ -161,17 +180,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 captchaToken: captchaToken || undefined,
             });
 
-            if (response.success && response.data?.accessToken) {
-                const { accessToken: newToken } = response.data;
-                localStorage.setItem("jwt", newToken);
-                setAccessToken(newToken);
+            if (response.success && response.data) {
+                const authData = response.data;
+                
+                // Сохраняем данные пользователя в контексте
+                setAccessToken(authData.userId ? `user-${authData.userId}` : null);
+                setUserId(authData.userId || null);
+                setPhoneNumber(authData.phoneNumber || null);
+                setEmail(authData.email || null);
                 setIsAuthenticated(true);
-                return true;
+                
+                return authData;
             }
-            return false;
+            return null;
         } catch (err) {
             console.error("Ошибка верификации:", err);
-            return false;
+            return null;
         }
     }, [code, phone, captchaToken]);
 
@@ -189,11 +213,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setCaptchaError(null);
 
         try {
-            const response = await api.post<CaptchaVerifyResponse>("/api/auth/verify-captcha", {
-                captchaToken: token,
-            });
+            const response = await authService.verifyCaptcha({ captchaToken: token });
 
-            if (response.status === 200) {
+            if (response.success) {
                 setCaptchaToken(token);
                 setIsCaptchaVerified(true);
                 return true;
@@ -208,8 +230,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
             let message = "Неизвестная ошибка при проверке каптчи";
             if (err instanceof AxiosError) {
                 message =
-                    err.response?.data?.error ||
                     err.response?.data?.message ||
+                    err.response?.data?.error ||
                     "Ошибка сети при проверке каптчи";
             }
 
@@ -242,7 +264,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }, [resetTimer, resetCaptcha]);
 
     // ============================================================================
-    // Выход
+    // Очистка данных аутентификации
+    // ============================================================================
+    const clearAuthData = useCallback(() => {
+        setAccessToken(null);
+        setUserId(null);
+        setPhoneNumber(null);
+        setEmail(null);
+        setIsAuthenticated(false);
+    }, []);
+
+    // ============================================================================
+    // Выход из системы
     // ============================================================================
     const logout = useCallback(async () => {
         try {
@@ -250,12 +283,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         } catch (err) {
             console.warn("Logout error:", err);
         } finally {
-            localStorage.removeItem("jwt");
-            setAccessToken(null);
-            setIsAuthenticated(false);
+            clearAuthData();
             resetForm();
         }
-    }, [resetForm]);
+    }, [clearAuthData, resetForm]);
 
     useEffect(() => {
         if (seconds === 0 && codeSent) {
@@ -277,6 +308,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         isAuthenticated,
         isLoading,
         accessToken,
+        userId,
+        phoneNumber,
+        email,
 
         phone,
         code,
@@ -305,6 +339,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         resetCaptcha,
 
         resetForm,
+        clearAuthData,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

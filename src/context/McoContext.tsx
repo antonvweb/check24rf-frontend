@@ -13,8 +13,8 @@ import { useMcoWebSocket } from "@/hooks/useMcoWebSocket";
 import {
     BindUserData,
     BindRequestStatus,
-    BindEvent,
-    UnboundUser,
+    BindEventsResponse,
+    UnboundUsersResponse,
     ReceiptsStats,
     SendNotificationPayload,
     SendNotificationData,
@@ -24,6 +24,9 @@ import {
     UnbindMessage,
     ErrorMessage,
     WebSocketConnectionStatus,
+    BatchBindResult,
+    ReceiptDto,
+    addIdsToReceipts,
 } from "@/api/types/typesMcoService";
 import { cleanPhoneNumber } from "@/utils/start/formatPhoneNumber";
 
@@ -35,9 +38,8 @@ interface McoContextType {
     // Состояния
     bindData: BindUserData | null;
     bindStatus: BindRequestStatus | null;
-    bindStatuses: Record<string, BindRequestStatus>;
-    bindEvents: BindEvent[];
-    unboundUsers: UnboundUser[];
+    bindEvents: BindEventsResponse | null;
+    unboundUsers: UnboundUsersResponse | null;
     userReceipts: ReceiptPageResponse | null;
     receiptsStats: ReceiptsStats | null;
     notificationResult: SendNotificationData | null;
@@ -58,18 +60,20 @@ interface McoContextType {
 
     // User Binding
     bindUser: (phone: string, permissionGroups?: string) => Promise<boolean>;
-    bindUsersBatch: (phones: string[]) => Promise<string | null>;
+    bindUsersBatch: (phones: string[]) => Promise<BatchBindResult | null>;
     bindAndCheck: (phone: string) => Promise<boolean>;
 
     // Bind Status & Events
     getBindRequestStatus: (requestId: string) => Promise<boolean>;
-    getBindRequestsStatuses: (requestIds: string[]) => Promise<boolean>;
     getBindEvents: (marker?: string) => Promise<boolean>;
     getUnboundUsers: (marker?: string) => Promise<boolean>;
 
+    // Unbind
+    unbindUser: (phoneNumber: string, unbindReason: string) => Promise<boolean>;
+
     // Receipts
     syncUserReceipts: (phone: string) => Promise<number | null>;
-    getUserReceipts: (phone: string) => Promise<boolean>;
+    getUserReceipts: (phone: string, page?: number, size?: number) => Promise<boolean>;
     getReceiptsStats: () => Promise<boolean>;
 
     // Notifications
@@ -109,9 +113,8 @@ export function McoProvider({ children }: McoProviderProps) {
     // ── Состояния ──────────────────────────────────────────────────
     const [bindData, setBindData] = useState<BindUserData | null>(null);
     const [bindStatus, setBindStatus] = useState<BindRequestStatus | null>(null);
-    const [bindStatuses, setBindStatuses] = useState<Record<string, BindRequestStatus>>({});
-    const [bindEvents, setBindEvents] = useState<BindEvent[]>([]);
-    const [unboundUsers, setUnboundUsers] = useState<UnboundUser[]>([]);
+    const [bindEvents, setBindEvents] = useState<BindEventsResponse | null>(null);
+    const [unboundUsers, setUnboundUsers] = useState<UnboundUsersResponse | null>(null);
     const [userReceipts, setUserReceipts] = useState<ReceiptPageResponse | null>(null);
     const [receiptsStats, setReceiptsStats] = useState<ReceiptsStats | null>(null);
     const [notificationResult, setNotificationResult] = useState<SendNotificationData | null>(null);
@@ -142,10 +145,11 @@ export function McoProvider({ children }: McoProviderProps) {
             if (data.status === 'REQUEST_APPROVED') {
                 setBindStatus({
                     requestId: data.requestId,
-                    status: 'SUCCESS',
-                    phoneNumber: data.phone,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
+                    status: 'REQUEST_APPROVED',
+                    statusDescription: 'Одобрена - пользователь подключен к партнеру',
+                    userIdentifier: data.phone,
+                    permissionGroups: 'DEFAULT',
+                    responseTime: new Date().toISOString(),
                 });
             }
         },
@@ -213,15 +217,15 @@ export function McoProvider({ children }: McoProviderProps) {
         }
     }, [handleError]);
 
-    const bindUsersBatch = useCallback(async (phones: string[]): Promise<string | null> => {
+    const bindUsersBatch = useCallback(async (phones: string[]): Promise<BatchBindResult | null> => {
         setIsLoading(true);
         setError(null);
 
         try {
             const response = await mcoService.bindUsersBatch(phones);
 
-            if (response.success && response.data?.requestId) {
-                return response.data.requestId;
+            if (response.success && response.data) {
+                return response.data;
             }
 
             setError(response.message || "Не удалось запустить пакетную привязку");
@@ -290,28 +294,6 @@ export function McoProvider({ children }: McoProviderProps) {
         }
     }, [handleError]);
 
-    const getBindRequestsStatuses = useCallback(async (requestIds: string[]): Promise<boolean> => {
-        setIsLoading(true);
-        setError(null);
-
-        try {
-            const response = await mcoService.getBindRequestsStatuses(requestIds);
-
-            if (response.success && response.data) {
-                setBindStatuses(response.data);
-                return true;
-            }
-
-            setError(response.message || "Не удалось получить статусы");
-            return false;
-        } catch (err) {
-            handleError(err, "Ошибка при получении статусов привязок");
-            return false;
-        } finally {
-            setIsLoading(false);
-        }
-    }, [handleError]);
-
     const getBindEvents = useCallback(async (marker: string = "S_FROM_END"): Promise<boolean> => {
         setIsLoading(true);
         setError(null);
@@ -320,8 +302,7 @@ export function McoProvider({ children }: McoProviderProps) {
             const response = await mcoService.getBindEvents(marker);
 
             if (response.success && response.data) {
-                // Предполагаем, что data - это массив событий
-                setBindEvents(Array.isArray(response.data) ? response.data : [response.data]);
+                setBindEvents(response.data);
                 return true;
             }
 
@@ -343,7 +324,7 @@ export function McoProvider({ children }: McoProviderProps) {
             const response = await mcoService.getUnboundUsers(marker);
 
             if (response.success && response.data) {
-                setUnboundUsers(Array.isArray(response.data) ? response.data : [response.data]);
+                setUnboundUsers(response.data);
                 return true;
             }
 
@@ -351,6 +332,38 @@ export function McoProvider({ children }: McoProviderProps) {
             return false;
         } catch (err) {
             handleError(err, "Ошибка при получении отвязанных пользователей");
+            return false;
+        } finally {
+            setIsLoading(false);
+        }
+    }, [handleError]);
+
+    // ============================================================================
+    // Unbind (Отключение пользователя)
+    // ============================================================================
+
+    const unbindUser = useCallback(async (
+        phoneNumber: string,
+        unbindReason: string
+    ): Promise<boolean> => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const response = await mcoService.unbindUser({
+                phoneNumber: cleanPhoneNumber(phoneNumber),
+                unbindReason,
+            });
+
+            if (response.success && response.data) {
+                console.log('Пользователь отключен:', response.data);
+                return true;
+            }
+
+            setError(response.message || "Не удалось отключить пользователя");
+            return false;
+        } catch (err) {
+            handleError(err, "Ошибка при отключении пользователя");
             return false;
         } finally {
             setIsLoading(false);
@@ -382,15 +395,24 @@ export function McoProvider({ children }: McoProviderProps) {
         }
     }, [handleError]);
 
-    const getUserReceipts = useCallback(async (phone: string): Promise<boolean> => {
+    const getUserReceipts = useCallback(async (
+        phone: string,
+        page: number = 0,
+        size: number = 20
+    ): Promise<boolean> => {
         setIsLoading(true);
         setError(null);
 
         try {
-            const response = await mcoService.getUserReceipts(cleanPhoneNumber(phone));
+            const response = await mcoService.getUserReceipts(cleanPhoneNumber(phone), page, size);
 
             if (response.success && response.data) {
-                setUserReceipts(response.data);
+                // Добавляем id к чекам для UI
+                const receiptsWithIds: ReceiptPageResponse = {
+                    ...response.data,
+                    content: addIdsToReceipts(response.data.content as Omit<ReceiptDto, 'id'>[]),
+                };
+                setUserReceipts(receiptsWithIds);
                 return true;
             }
 
@@ -554,8 +576,7 @@ export function McoProvider({ children }: McoProviderProps) {
     const clearBindData = useCallback(() => {
         setBindData(null);
         setBindStatus(null);
-        setBindStatuses({});
-        setBindEvents([]);
+        setBindEvents(null);
     }, []);
 
     const clearReceipts = useCallback(() => {
@@ -566,9 +587,8 @@ export function McoProvider({ children }: McoProviderProps) {
     const reset = useCallback(() => {
         setBindData(null);
         setBindStatus(null);
-        setBindStatuses({});
-        setBindEvents([]);
-        setUnboundUsers([]);
+        setBindEvents(null);
+        setUnboundUsers(null);
         setUserReceipts(null);
         setReceiptsStats(null);
         setNotificationResult(null);
@@ -584,7 +604,6 @@ export function McoProvider({ children }: McoProviderProps) {
         // Состояния
         bindData,
         bindStatus,
-        bindStatuses,
         bindEvents,
         unboundUsers,
         userReceipts,
@@ -612,9 +631,11 @@ export function McoProvider({ children }: McoProviderProps) {
 
         // Bind Status & Events
         getBindRequestStatus,
-        getBindRequestsStatuses,
         getBindEvents,
         getUnboundUsers,
+
+        // Unbind
+        unbindUser,
 
         // Receipts
         syncUserReceipts,

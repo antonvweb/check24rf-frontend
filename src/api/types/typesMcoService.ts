@@ -1,117 +1,170 @@
 // typesMcoService.ts
+// Типы согласно API_DOCUMENTATION.md
+
+// ============================================================================
+// Общие типы ответов API
+// ============================================================================
 
 export interface ApiResponse<T> {
     success: boolean;
-    message: string;
-    data: T | null;
-    timestamp: string; // ISO string
+    message?: string;
+    data?: T | null;
+    timestamp?: string; // ISO 8601
 }
 
-export type BindUserData = {
+// ============================================================================
+// User Binding (Подключение пользователя)
+// ============================================================================
+
+/**
+ * Данные подключения пользователя
+ * POST /api/mco/bind-user response data
+ */
+export interface BindUserData {
     requestId: string;
     userIdentifier: string;
     permissionGroups: string;
     statusCheckUrl: string;
     userInstruction: string;
-};
+}
 
+/**
+ * Статус заявки на подключение
+ * GET /api/mco/bind-request-status response data
+ */
 export interface BindRequestStatus {
     requestId: string;
-    status: 'PENDING' | 'PROCESSING' | 'SUCCESS' | 'FAILED' | 'CANCELLED' | string;
-    phoneNumber?: string;
-    createdAt?: string;
-    updatedAt?: string;
-    errorMessage?: string | null;
+    status: BindStatusType;
+    statusDescription?: string;
+    userIdentifier: string;
+    permissionGroups: string;
+    responseTime?: string; // ISO 8601
+    rejectionReason?: string | null;
 }
 
-// receipt-page.interface.ts
+export type BindStatusType =
+    | 'IN_PROGRESS'
+    | 'REQUEST_APPROVED'
+    | 'REQUEST_DECLINED'
+    | 'REQUEST_EXPIRED'
+    | 'REQUEST_CANCELLED_AS_DUPLICATE';
 
 /**
- * Полная структура ответа пагинированного списка чеков
+ * Пакетный запрос на подключение
+ * POST /api/mco/bind-users-batch response data
  */
-export interface ReceiptPageResponse {
-    totalElements: number;
-    totalPages: number;
-    pageable: Pageable;
-    first: boolean;
-    last: boolean;
-    size: number;
-    content: ReceiptDto[];
-    number: number;
-    sort: SortInfo;
-    numberOfElements: number;
-    empty: boolean;
+export interface BatchBindResult {
+    requestId?: string;
+    acceptedCount: number;
+    rejectedCount: number;
+    acceptedUsers: string[];
+    rejectedUsers: RejectedUser[];
 }
 
+export interface RejectedUser {
+    userIdentifier: string;
+    rejectionReasonCode: string;
+    rejectionReasonMessage: string;
+}
+
+// ============================================================================
+// Bind Events & Unbind
+// ============================================================================
+
 /**
- * Информация о текущей странице и сортировке
+ * Событие подключения
+ * GET /api/mco/bind-events response data
  */
-export interface Pageable {
-    pageNumber: number;
-    pageSize: number;
-    sort: SortInfo;
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
+export interface BindEventsResponse {
+    events: BindEventItem[];
+    nextMarker?: string | null;
+    eventsCount: number;
+}
+
+export interface BindEventItem {
+    requestId: string;
+    result: BindStatusType;
+    userIdentifier: string;
+    responseTime: string; // ISO 8601
 }
 
 /**
- * Информация о сортировке
+ * Отключенный пользователь
+ * GET /api/mco/unbound-users response data
  */
-export interface SortInfo {
-    sorted: boolean;
-    empty: boolean;
-    unsorted: boolean;
+export interface UnboundUsersResponse {
+    unboundUsers: UnboundUserItem[];
+    nextMarker?: string | null;
+    hasMore?: boolean;
+    count: number;
+}
+
+export interface UnboundUserItem {
+    requestId: string;
+    userIdentifier: string;
+    responseTime: string; // ISO 8601
 }
 
 /**
- * Один чек (то, что приходит в content)
+ * Запрос на отключение пользователя
+ * POST /api/mco/unbind-user request
+ */
+export interface UnbindUserRequest {
+    phoneNumber: string;
+    unbindReason: string;
+}
+
+/**
+ * Ответ на отключение пользователя
+ * POST /api/mco/unbind-user response data
+ */
+export interface UnbindUserResponse {
+    phoneNumber: string;
+    status: 'UNBOUND' | 'ALREADY_UNBOUND';
+    unboundAt: string; // ISO 8601
+    message: string;
+}
+
+// ============================================================================
+// Receipts (Чеки)
+// ============================================================================
+
+/**
+ * Чек из МЧО
+ * GET /api/mco/receipts/user response data.content
  */
 export interface ReceiptDto {
-    id?: number;
-    phone: string;
-    email: string | null;
+    id?: number;                  // локальный ID для UI
+    phone?: string;
+    email?: string | null;
     fiscalSign: number;
     fiscalDocumentNumber: number;
     fiscalDriveNumber: string;
-    receiptDateTime: string;      // ISO-строка, например "2026-01-20T08:48:37"
-    receiveDate: string;          // ISO-строка
-    totalSum: number;             // уже в рублях с двумя знаками
+    receiptDateTime: string;      // ISO 8601
+    receiveDate: string;          // ISO 8601
+    totalSum: number;             // в рублях
     sourceCode: string;
-    operationType: number;
-    userInn: string;
-    retailPlace: string;
-    rawJson: RawReceiptJson;      // полный распарсенный JSON чека
-}
-
-let currentId = 0;
-
-export function generateReceiptId(): number {
-    return currentId++;
-}
-
-export function addIdsToReceipts(receipts: Omit<ReceiptDto, 'id'>[]): ReceiptDto[] {
-    return receipts.map(receipt => ({
-        ...receipt,
-        id: generateReceiptId()
-    }));
+    operationType?: number;
+    userInn?: string;
+    retailPlace?: string;
+    rawJson: RawReceiptJson;      // всегда объект (требуется на бэкенде)
 }
 
 /**
- * Структура rawJson внутри каждого чека
+ * Структура rawJson внутри чека
  */
 export interface RawReceiptJson {
     user: string;
     items: ReceiptItem[];
     nds10: number;
-    nds18?: number;               // может отсутствовать
+    nds18?: number;
     nds20?: number;
     fnsSite: string;
     userInn: string;
     dateTime: number;             // unix timestamp в секундах
     kktRegId: string;
     operator: string;
-    totalSum: number;             // в копейках!
+    totalSum: number;             // в копейках
     creditSum: number;
     fiscalSign: number;
     prepaidSum: number;
@@ -130,13 +183,13 @@ export interface RawReceiptJson {
     paymentAgentType: number;
     fiscalDriveNumber: string;
     messageFiscalSign: number;
-    retailPlaceAddress?: string;  // может отсутствовать
+    retailPlaceAddress?: string;
     fiscalDocumentNumber: number;
     fiscalDocumentFormatVer: number;
 }
 
 /**
- * Один товар в чеке (items)
+ * Один товар в чеке
  */
 export interface ReceiptItem {
     nds?: number;
@@ -149,124 +202,77 @@ export interface ReceiptItem {
     providerInn?: string;
 }
 
-export interface BindEvent {
-    requestId: string;
-    phoneNumber: string;
-    status: string;
-    timestamp: string;
-    error?: string;
+/**
+ * Пагинированный ответ с чеками
+ * GET /api/mco/receipts/user response data
+ */
+export interface ReceiptPageResponse {
+    content: ReceiptDto[];
+    pageable: {
+        pageNumber: number;
+        pageSize: number;
+        sort: SortInfo;
+        offset: number;
+        paged: boolean;
+        unpaged: boolean;
+    };
+    totalElements: number;
+    totalPages: number;
+    first: boolean;
+    last: boolean;
+    size: number;
+    number: number;
+    sort: SortInfo;
+    numberOfElements: number;
+    empty: boolean;
 }
 
-export interface BindEventsPage {
-    events: BindEvent[];
-    nextMarker: string | null;
+export interface SortInfo {
+    sorted: boolean;
+    empty: boolean;
+    unsorted: boolean;
 }
 
-export interface UnboundUser {
-    phoneNumber: string;
-    unboundAt: string;
-}
-
-export interface UnboundUsersPage {
-    users: UnboundUser[];
-    nextMarker: string | null;
-}
-
-export interface ReceiptsPage {
-    receipts: Receipt[];
-    nextMarker: string | null;
-}
-
+/**
+ * Статистика по чекам
+ * GET /api/mco/receipts/stats response data
+ */
 export interface ReceiptsStats {
     totalCount: number;
-    uniqueUsersCount: number;
-    lastSyncTime?: string;
-    // другие поля по необходимости
+    uniqueUsersCount?: number;
+    lastSyncTime?: string; // ISO 8601
 }
 
+// ============================================================================
+// Notifications (Уведомления)
+// ============================================================================
+
+/**
+ * Запрос на отправку уведомления
+ * POST /api/mco/send-notification request
+ */
 export interface SendNotificationPayload {
     phoneNumber: string;
     title: string;
     message: string;
     shortMessage?: string;
-    category: 'GENERAL' | 'PROMO' | 'SYSTEM' | 'IMPORTANT' | string;
+    category?: 'GENERAL' | 'PROMO' | 'SYSTEM' | 'IMPORTANT' | string;
     externalItemId?: string;
     externalItemUrl?: string;
 }
 
-export type SendNotificationData = {
-    notificationId?: string;
-    status: string;
-};
-
-// typeMcoService.ts (дополнить / создать)
-
-export interface BindEvent {
-    events: BindEventData[];
-    nextMarker: string;
-    eventsCount: number;
-}
-
-interface BindEventData {
-    requestId: string;
-    result: string;
-    userIdentifier: string;
-    responseTime: string;
-}
-
-export interface UnboundUser {
-    unboundUsers: UnboundUserData[];
-    unboundAt: string;
-    reason?: string;
-}
-
-interface UnboundUserData{
-    requestId: string;
-    userIdentifier: string;
-    responseTime: string;
-}
-
-export interface UnbindUserRequest {
+/**
+ * Ответ на отправку уведомления
+ * POST /api/mco/send-notification response data
+ */
+export interface SendNotificationData {
+    requestId?: string;
+    handledAt?: string; // ISO 8601
     phoneNumber: string;
-    unbindReason: string;
-}
-
-
-export interface Receipt {
-    id: string;
-    userId: string;
-    userIdentifier: string;
-    phone: string;
-    email: string;
-    fiscalSign: number;
-    fiscalDocumentNumber: number;
-    fiscalDriveNumber: string;
-    receiptDateTime: string;
-    LocalDateTime: string;
-    totalSum: number;
-    sourceCode: string;
-    operationType: number;
-    userInn: string;
-    retailPlace: string;
-    rawJson: string;
-    createdAt: string;
-    updatedAt: string;
-}
-
-export interface UserReceipts {
-    success: string;
-    message: string;
-    data: Receipt[];
-}
-
-export interface ReceiptsStats {
-    success: string;
-    message: string;
-    data: Receipt[];
 }
 
 // ============================================================================
-// WebSocket типы согласно WEBSOCKET_FRONTEND_GUIDE.md
+// WebSocket типы согласно WEBSOCKET_FRONTEND_GUIDE.md и API_DOCUMENTATION.md
 // ============================================================================
 
 export type WebSocketMessageType =
@@ -276,7 +282,7 @@ export type WebSocketMessageType =
     | 'UNBIND'
     | 'ERROR';
 
-export type BindStatusType =
+export type WebSocketBindStatusType =
     | 'REQUEST_APPROVED'
     | 'REQUEST_DECLINED'
     | 'REQUEST_CANCELLED_AS_DUPLICATE'
@@ -298,7 +304,7 @@ export interface SubscribedMessage extends WebSocketMessage {
 export interface BindStatusMessage extends WebSocketMessage {
     type: 'BIND_STATUS';
     requestId: string;
-    status: BindStatusType;
+    status: WebSocketBindStatusType;
     phone: string;
 }
 
@@ -313,7 +319,7 @@ export interface UnbindMessage extends WebSocketMessage {
     type: 'UNBIND';
     phone: string;
     reason: string;
-    timestamp: string;
+    timestamp: string; // ISO 8601
 }
 
 export interface ErrorMessage extends WebSocketMessage {
@@ -349,4 +355,21 @@ export interface WebSocketCallbacks {
     onUnbind?: (data: UnbindMessage) => void;
     onError?: (data: ErrorMessage) => void;
     onConnectionChange?: (status: WebSocketConnectionStatus) => void;
+}
+
+// ============================================================================
+// Helper функции
+// ============================================================================
+
+let currentId = 0;
+
+export function generateReceiptId(): number {
+    return currentId++;
+}
+
+export function addIdsToReceipts(receipts: Omit<ReceiptDto, 'id'>[]): ReceiptDto[] {
+    return receipts.map(receipt => ({
+        ...receipt,
+        id: currentId++
+    }));
 }

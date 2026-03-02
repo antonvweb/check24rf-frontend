@@ -4,9 +4,9 @@ module.exports = {
             name: "check24rf-domain",             // имя процесса в PM2
             script: "npm",                   // запускаем npm
             args: "run start:domain",            // с этими аргументами (npm run start:ip)
-            cwd: "/var/www/check/frontend/",    // рабочая директория проекта (замени на свой путь)
-            output: "/var/log/check-ip.log",     // куда писать стандартный вывод (stdout)
-            error: "/var/log/check-ip.err.log",  // куда писать ошибки (stderr)
+            cwd: __dirname,                      // рабочая директория проекта (текущая папка)
+            output: "./logs/pm2-out.log",        // куда писать стандартный вывод (stdout)
+            error: "./logs/pm2-error.log",       // куда писать ошибки (stderr)
             merge_logs: true,                // объединять ли stdout и stderr в один поток (можно true/false)
             autorestart: true,               // автоматически перезапускать при падениях
             watch: false,                   // если true — PM2 будет следить за изменениями файлов и перезапускать

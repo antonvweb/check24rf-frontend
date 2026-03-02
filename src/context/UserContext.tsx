@@ -13,7 +13,7 @@ import type {
     User,
     UserUpdateRequest,
 } from "@/api/types/typeApiUser";
-import {useMco} from "@/context/McoContext";
+import { useMco } from "@/context/McoContext";
 import { cleanPhoneNumber } from "@/utils/start/formatPhoneNumber";
 
 // ============================================================================
@@ -33,6 +33,7 @@ interface UserContextType {
 
     // Утилиты
     clearError: () => void;
+    clearUser: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -50,7 +51,7 @@ export function UserProvider({ children }: UserProviderProps) {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    
+
     const { getUserReceipts } = useMco();
 
     // ============================================================================
@@ -84,9 +85,12 @@ export function UserProvider({ children }: UserProviderProps) {
         try {
             const user = await userService.getCurrentUser();
             setCurrentUser(user);
-            if(user){
-                await getUserReceipts(cleanPhoneNumber(user?.phoneNumber));
+            
+            // Загружаем чеки пользователя
+            if (user?.phoneNumber) {
+                await getUserReceipts(cleanPhoneNumber(user.phoneNumber));
             }
+            
             return true;
         } catch (err) {
             handleError(err, "Не удалось загрузить профиль пользователя");
@@ -106,7 +110,9 @@ export function UserProvider({ children }: UserProviderProps) {
         setError(null);
 
         try {
-            const updatedUser = await userService.updateUser(data);
+            // Получаем userId из текущего пользователя или используем "me"
+            const userId = "me"; // API поддерживает PUT /api/users/me
+            const updatedUser = await userService.updateUser(userId, data);
             setCurrentUser(updatedUser);
             return true;
         } catch (err) {
@@ -135,18 +141,18 @@ export function UserProvider({ children }: UserProviderProps) {
             handleError(err, "Не удалось проверить статус активности");
             return false;
         }
-    }, [handleError]);   // ← currentUser убираем из зависимостей
-
-    // ============================================================================
-    // Методы для работы со списком пользователей
-    // ============================================================================
-
+    }, [handleError]);
 
     // ============================================================================
     // Утилиты
     // ============================================================================
 
     const clearError = useCallback(() => {
+        setError(null);
+    }, []);
+
+    const clearUser = useCallback(() => {
+        setCurrentUser(null);
         setError(null);
     }, []);
 
@@ -166,6 +172,7 @@ export function UserProvider({ children }: UserProviderProps) {
         checkIsActive,
 
         clearError,
+        clearUser,
     };
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
