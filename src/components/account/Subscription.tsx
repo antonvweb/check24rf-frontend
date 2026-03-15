@@ -2,6 +2,7 @@ import styles from "@/styles/profile/account/account.module.css";
 import {PayModel} from "@/components/ui/profileUI/PayModel";
 import React, {useEffect, useState} from "react";
 import {userPaySubscribe} from "@/components/types/interfaces";
+import { safeLocalStorage } from "@/utils/storage";
 
 const periods = [
     { label: "1 мес.", value: "1m" },
@@ -23,7 +24,7 @@ export const Subscribe = () => {
 
     const closePayMenu  = () => setIsPayMenuVisible(false);
 
-    const token = localStorage.getItem("userToken") ?? "";
+    const token = typeof window !== 'undefined' ? (safeLocalStorage.getItem("userToken") ?? "") : "";
 
     const user: userPaySubscribe = {
         userToken: token,

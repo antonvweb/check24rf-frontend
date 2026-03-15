@@ -2,17 +2,19 @@ import styles from '@/styles/profile/checkList/checkItem.module.css';
 import {CheckItemProps} from "@/components/types/interfaces";
 import { PayModel } from "@/components/ui/profileUI/PayModel";
 import {useEffect, useState} from "react";
+import { AddToProjectModal } from "@/components/projects/AddToProjectModal";
 
 export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
     const [isPayMenuVisible, setIsPayMenuVisible] = useState(false);
+    const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
 
     const handleRemoveAll = () => {
         items?.forEach(item => onRemove(item.id as number));
     };
 
     useEffect(() => {
-        document.body.style.overflow = isPayMenuVisible ? 'hidden' : '';
-    }, [isPayMenuVisible]);
+        document.body.style.overflow = (isPayMenuVisible || isProjectModalOpen) ? 'hidden' : '';
+    }, [isPayMenuVisible, isProjectModalOpen]);
 
     const openPayMenu   = () => setIsPayMenuVisible(true);
     const closePayMenu  = () => setIsPayMenuVisible(false);
@@ -55,6 +57,13 @@ export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
                     </div>
                 </div>
                 <section className={styles.btnBottom}>
+                    <button type={"button"} className={styles.buyChecks} onClick={() => setIsProjectModalOpen(true)}>
+                        <svg width="21" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M2 1h5l1.5 2H14a1 1 0 011 1v9a1 1 0 01-1 1H2a1 1 0 01-1-1V2a1 1 0 011-1z" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M8 7v4M6 9h4" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                        <span>В проект</span>
+                    </button>
                     <button type={"button"} className={styles.buyChecks} onClick={openPayMenu}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="16" viewBox="0 0 21 16" fill="none">
                             <path d="M0 2.66667C0 1.95942 0.276562 1.28115 0.768845 0.781048C1.26113 0.280951 1.92881 0 2.625 0H18.375C19.0712 0 19.7389 0.280951 20.2312 0.781048C20.7234 1.28115 21 1.95942 21 2.66667V4H0V2.66667ZM0 6.66667V13.3333C0 14.0406 0.276562 14.7189 0.768845 15.219C1.26113 15.719 1.92881 16 2.625 16H18.375C19.0712 16 19.7389 15.719 20.2312 15.219C20.7234 14.7189 21 14.0406 21 13.3333V6.66667H0ZM3.9375 9.33333H5.25C5.5981 9.33333 5.93194 9.47381 6.17808 9.72386C6.42422 9.97391 6.5625 10.313 6.5625 10.6667V12C6.5625 12.3536 6.42422 12.6928 6.17808 12.9428C5.93194 13.1929 5.5981 13.3333 5.25 13.3333H3.9375C3.5894 13.3333 3.25556 13.1929 3.00942 12.9428C2.76328 12.6928 2.625 12.3536 2.625 12V10.6667C2.625 10.313 2.76328 9.97391 3.00942 9.72386C3.25556 9.47381 3.5894 9.33333 3.9375 9.33333Z" fill="white"/>
@@ -67,6 +76,12 @@ export const MultiListPlaceholder = ({ items, onRemove }: CheckItemProps) => {
                         <div className={styles.modalOverlay} onClick={closePayMenu} />
                         <PayModel type={"checks"} items={items} isVisible={true} />
                     </>
+                )}
+                {isProjectModalOpen && (
+                    <AddToProjectModal
+                        receipts={items}
+                        onClose={() => setIsProjectModalOpen(false)}
+                    />
                 )}
             </div>
         </div>

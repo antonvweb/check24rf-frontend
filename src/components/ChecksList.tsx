@@ -12,7 +12,7 @@ import {useMco} from "@/context/McoContext";
 import {useToast} from "@/context/ToastContext";
 import {useUser} from "@/context/UserContext";
 import {CheckListItem} from "@/components/checksList/CheckListItem";
-import {addIdsToReceipts, ReceiptDto} from "@/api/types/typesMcoService";
+import {addIdsToReceipts, MOCK_RECEIPTS, ReceiptDto} from "@/api/types/typesMcoService";
 import { useCheckedItemsContext } from "@/context/CheckedItemsContext";
 import { cleanPhoneNumber } from "@/utils/start/formatPhoneNumber";
 
@@ -47,7 +47,10 @@ export default function ChecksList({mode}: ChecksListProps) {
     };
 
     const receiptsWithId = useMemo(() => {
-        return userReceipts?.content ? addIdsToReceipts(userReceipts.content) : [];
+        if (userReceipts?.content && userReceipts.content.length > 0) {
+            return addIdsToReceipts(userReceipts.content);
+        }
+        return MOCK_RECEIPTS;
     }, [userReceipts]);
 
     useEffect(() => {
@@ -76,8 +79,8 @@ export default function ChecksList({mode}: ChecksListProps) {
             </header>
             <main className={styles.mainCheckList}>
                 <div className={styles.leftBoxCheckList}>
-                    {!currentUser?.isPartnerConnected ? (
-    <div className={styles.noAccess}>
+                    {!currentUser?.partnerConnected ? (
+                        <div className={styles.noAccess}>
                             <div className={styles.noAccessWrapper}>
                                 <p className={styles.noAccessText}>Чтобы увидеть чеки, выдайте доступ</p>
                                 <button

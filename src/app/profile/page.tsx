@@ -5,10 +5,11 @@ import styles from '../../styles/profile/profile.module.css';
 import { ActiveChecks } from "@/components/ActiveChecks";
 import Logo from "@/components/Logo";
 import Navigation from "@/components/Navigation";
-import { ArchiveChecks } from "@/components/ArchiveChecks";
+// import { ArchiveChecks } from "@/components/ArchiveChecks"; // сохранён — может вернуться
 import {Account} from "@/components/Account";
 import {Notifications} from "@/components/Notifications";
 import {Support} from "@/components/Support";
+import {ProjectsView} from "@/components/projects/ProjectsView";
 import { withAuthProtection } from "@/hoc/withAuthProtection";
 import { ThemeProvider } from '@/context/ThemeContext';
 import {useImageLoader} from "@/hooks/start/useImageLoader";
@@ -60,7 +61,7 @@ function Profile() {
                             </main>
                         </div>
                         {activeTab === 'checks' && <ActiveChecks />}
-                        {activeTab === 'archive' && <ArchiveChecks />}
+                        {activeTab === 'projects' && <ProjectsView />}
                         {activeTab === 'account' && <Account />}
                         {activeTab === 'notif' && <Notifications />}
                         {activeTab === 'support' && <Support />}

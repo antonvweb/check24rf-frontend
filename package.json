@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "cross-env NODE_ENV=development NODE_OPTIONS=--inspect next dev --turbopack",
+    "dev:clean": "cross-env NODE_ENV=development next dev --turbopack",
+    "dev:verbose": "cross-env NODE_ENV=development NODE_OPTIONS=--inspect DEBUG=* next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "start:ip": "next start -p 4000",
@@ -34,6 +36,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "tailwindcss": "^4",

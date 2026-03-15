@@ -325,17 +325,22 @@ export function useMcoWebSocket(options: UseMcoWebSocketOptions = {}): UseMcoWeb
 
 /**
  * Получение WebSocket URL в зависимости от окружения
- * 
+ *
  * Согласно API_DOCUMENTATION.md:
  * - Production: wss://api.xn--24-mlcu7d.xn--p1ai/api/mco/ws
- * - Development: ws://localhost:80/api/mco/ws (через Nginx)
+ * - Development: ws://localhost:8080/api/mco/ws (или через переменную NEXT_PUBLIC_WS_URL)
  */
 function getWebSocketUrl(): string {
+    // Проверяем переменную окружения в первую очередь
+    if (process.env.NEXT_PUBLIC_WS_URL) {
+        return process.env.NEXT_PUBLIC_WS_URL;
+    }
+
     const isDevelopment = process.env.NODE_ENV === 'development';
 
     if (isDevelopment) {
-        // Для локальной разработки через Nginx
-        return 'ws://localhost:80/api/mco/ws';
+        // Для локальной разработки - прямой URL к бекенду
+        return 'ws://localhost:8080/api/mco/ws';
     }
 
     // Для production - используем тот же хост, что и для API

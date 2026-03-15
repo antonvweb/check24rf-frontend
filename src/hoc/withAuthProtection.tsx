@@ -11,40 +11,32 @@ export function withAuthProtection<T extends object>(
     return function ProtectedComponent(props: T) {
         const router = useRouter();
         const pathname = usePathname();
-        const { isAuthenticated, isLoading: authLoading, checkAuth } = useAuth();
+        const { isAuthenticated, isLoading: authLoading } = useAuth();
         const [isChecking, setIsChecking] = useState(true);
 
         useEffect(() => {
-            const checkAuthStatus = async () => {
-                const isStartPage = pathname === "/start" || pathname === "/";
+            // Ждём завершения начальной проверки авторизации в AuthProvider
+            if (authLoading) return;
 
-                if (isStartPage) {
-                    // Публичная страница (логин)
-                    if (isAuthenticated) {
-                        // Если уже авторизован - редирект на профиль
-                        router.replace("/profile");
-                    } else {
-                        setIsChecking(false);
-                    }
+            const isStartPage = pathname === "/start" || pathname === "/";
+
+            if (isStartPage) {
+                if (isAuthenticated) {
+                    router.replace("/profile");
                 } else {
-                    // Защищенная страница
-                    if (!isAuthenticated) {
-                        // Не авторизован - редирект на логин
-                        router.replace("/start");
-                    } else {
-                        // Авторизован - проверяем через API
-                        const authSuccess = await checkAuth();
-                        if (!authSuccess) {
-                            router.replace("/start");
-                        } else {
-                            setIsChecking(false);
-                        }
-                    }
+                    setIsChecking(false);
                 }
-            };
-
-            checkAuthStatus();
-        }, [pathname, isAuthenticated, checkAuth, router]);
+            } else {
+                // Защищённая страница — доверяем состоянию из AuthProvider
+                // AuthProvider уже проверил токен при монтировании,
+                // а при логине isAuthenticated устанавливается напрямую
+                if (!isAuthenticated) {
+                    router.replace("/start");
+                } else {
+                    setIsChecking(false);
+                }
+            }
+        }, [pathname, isAuthenticated, authLoading, router]);
 
         if (isChecking || authLoading) {
             return <Preloader />;

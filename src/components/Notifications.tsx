@@ -2,7 +2,6 @@ import styles from '../styles/profile/notifications/notifications.module.css';
 import Reference from "@/components/Reference";
 import ChangeTheme from "@/components/ChangeTheme";
 import { NotificationItems } from "@/components/notifications/NotificationItem";
-import { McoConnectionPanel } from "@/components/McoConnectionPanel";
 
 const notificationsData = [
     {
@@ -113,9 +112,6 @@ export const Notifications = () => {
                 </div>
             </header>
             <main className={styles.mainNotifications}>
-                {/* Панель подключения к МЧО */}
-                <McoConnectionPanel />
-
                 <div className={styles.listNotifications}>
                     {notificationsData.map((notification, index) => (
                         <NotificationItems

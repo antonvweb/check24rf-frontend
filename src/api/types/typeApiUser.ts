@@ -49,7 +49,7 @@ export interface UserDetailResponse {
     telegramChatId?: string;
     createdAt: string;      // ISO 8601
     isActive: boolean;
-    isPartnerConnected: boolean;
+    partnerConnected: boolean;
 }
 
 /**

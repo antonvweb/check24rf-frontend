@@ -62,7 +62,7 @@ export const BasicInformation = () => {
                 <div className={styles.changeBtns}>
                     <button type={"button"} onClick={() => openChangeMenu("phone")}>Сменить дополнительный номер</button>
                     <button type={"button"}  onClick={() => openChangeMenu("email")}>Сменить дополнительный Email</button>
-                    {currentUser?.isPartnerConnected && (
+                    {currentUser?.partnerConnected && (
                         <button
                             type="button"
                             onClick={() => {

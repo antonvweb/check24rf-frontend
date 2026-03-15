@@ -1,0 +1,216 @@
+.projectsView {
+    display: flex;
+    flex-direction: column;
+    flex: 0.9;
+    gap: 19px;
+    user-select: none;
+    min-height: 100%;
+    width: 100%;
+    min-width: 0;
+}
+
+.header {
+     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header__right {
+   margin-left: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 13px;
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    box-shadow: var(--main-box-shadow);
+}
+
+/* Пустое состояние */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 12px;
+    opacity: 0.7;
+    flex: 1;
+}
+
+.emptyState span:first-child {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.emptyState span:last-child {
+    font-size: 0.875rem;
+    text-align: center;
+    max-width: 300px;
+}
+
+/* Список проектов */
+.projectsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+}
+
+/* Карточка проекта */
+.projectCard {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    background: #F0F3F6;
+    box-shadow: var(--main-box-shadow);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.projectCard:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+}
+
+.projectHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.projectInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.projectName {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.projectMeta {
+    display: flex;
+    gap: 16px;
+    font-size: 0.8125rem;
+    opacity: 0.7;
+}
+
+.projectActions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.deleteBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s, background 0.2s;
+}
+
+.deleteBtn:hover {
+    color: #e53e3e;
+    background: rgba(229, 62, 62, 0.08);
+}
+
+.chevron {
+    transition: transform 0.2s;
+}
+
+.chevronOpen {
+    transform: rotate(180deg);
+}
+
+/* Содержимое проекта (список чеков) */
+.projectContent {
+    border-top: 1px solid #e2e8f0;
+    padding: 12px 20px 16px;
+}
+
+.receiptRow {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1fr;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 0.875rem;
+    position: relative;
+}
+
+.receiptRow:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+.receiptRow span:nth-child(2) {
+    text-align: center;
+}
+
+.receiptRow span:nth-child(3) {
+    text-align: right;
+    font-weight: 600;
+}
+
+.removeReceiptBtn {
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #999;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.receiptRow:hover .removeReceiptBtn {
+    opacity: 1;
+}
+
+.removeReceiptBtn:hover {
+    color: #e53e3e;
+}
+
+.projectTotal {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    margin-top: 8px;
+    border-top: 1px solid #C2C2C2;
+    font-weight: 600;
+}

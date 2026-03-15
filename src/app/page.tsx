@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 
 const isMobileDevice = (): boolean => {
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') return false;
   return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 };
 

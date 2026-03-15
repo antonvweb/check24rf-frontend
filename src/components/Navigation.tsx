@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import {motion} from 'framer-motion';
 import clsx from 'clsx';
 import styles from '../styles/profile/navigation.module.css';
+import { safeLocalStorage } from '@/utils/storage';
 
 const ChekIcon = ({ fill }: { fill: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="23" height="24" viewBox="0 0 23 24" fill="none">
@@ -113,8 +114,8 @@ const ITEMS = [{
     label: 'Чеки',
     icon: (fill: string) => <ChekIcon fill={fill} />
 }, {
-    id: 'archive',
-    label: 'Архив',
+    id: 'projects',
+    label: 'Проекты',
     icon: (fill: string) => <ArchiveIcon fill={fill} />
 }, {
     id: 'account',
@@ -144,7 +145,7 @@ export default function Navigation({ activeTab, setActiveTab }: NavigationProps)
         if (hash && ITEMS.some(i => i.id === hash)) {
             setActiveTab(hash);
         }
-        if(localStorage.getItem("theme") === "dark" ){
+        if (safeLocalStorage.getItem("theme") === "dark" ){
             document.documentElement.setAttribute('data-theme', 'dark');
         }
         else{

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { AuthProvider } from "@/context/contextAuth";
 import { UserProvider } from "@/context/UserContext";
 import {McoProvider} from "@/context/McoContext";
+import {ProjectsProvider} from "@/context/ProjectsContext";
 
 export const metadata: Metadata = {
     title: "ЧЕК24.РФ",
@@ -23,9 +24,11 @@ export default function RootLayout({
             <body>
                 <AuthProvider>
                     <McoProvider>
-                        <UserProvider>
-                            {children}
-                        </UserProvider>
+                        <ProjectsProvider>
+                            <UserProvider>
+                                {children}
+                            </UserProvider>
+                        </ProjectsProvider>
                     </McoProvider>
                 </AuthProvider>
             </body>

@@ -18,7 +18,6 @@ import type { AuthResponseData } from "@/api/types/typeApiAuth";
 interface AuthContextType {
     isAuthenticated: boolean;
     isLoading: boolean;
-    accessToken: string | null;
     userId: string | null;
     phoneNumber: string | null;
     email: string | null;
@@ -62,7 +61,6 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [accessToken, setAccessToken] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
     const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
@@ -103,15 +101,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
             // Проверяем токен через API
             const response = await authService.validateToken();
-            
+
             if (response.success && response.data === true) {
                 setIsAuthenticated(true);
                 // Токен валиден, но данные пользователя загрузим отдельно через UserContext
                 return true;
             }
-            
+
             // Токен не валиден
-            setAccessToken(null);
             setUserId(null);
             setPhoneNumber(null);
             setEmail(null);
@@ -119,7 +116,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
             return false;
         } catch {
             // Ошибка проверки токена - пользователь не аутентифицирован
-            setAccessToken(null);
             setUserId(null);
             setPhoneNumber(null);
             setEmail(null);
@@ -167,6 +163,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // ============================================================================
     // Проверка кода и аутентификация
     // Сервер устанавливает httpOnly cookies (accessToken, refreshToken)
+    // Данные пользователя получаем из ответа API
     // ============================================================================
     const verifyCode = useCallback(async (): Promise<AuthResponseData | null> => {
         const codeString = code.join("");
@@ -182,14 +179,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             if (response.success && response.data) {
                 const authData = response.data;
-                
+
                 // Сохраняем данные пользователя в контексте
-                setAccessToken(authData.userId ? `user-${authData.userId}` : null);
+                // Токены хранятся в httpOnly cookies и не доступны через JS
                 setUserId(authData.userId || null);
                 setPhoneNumber(authData.phoneNumber || null);
                 setEmail(authData.email || null);
                 setIsAuthenticated(true);
-                
+
                 return authData;
             }
             return null;
@@ -267,12 +264,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Очистка данных аутентификации
     // ============================================================================
     const clearAuthData = useCallback(() => {
-        setAccessToken(null);
         setUserId(null);
         setPhoneNumber(null);
         setEmail(null);
         setIsAuthenticated(false);
     }, []);
+
+    // ============================================================================
+    // Слушаем событие истечения сессии от axios-интерсептора
+    // При получении — сбрасываем авторизацию, HOC перенаправит на /start
+    // ============================================================================
+    useEffect(() => {
+        const handleSessionExpired = () => {
+            clearAuthData();
+        };
+        window.addEventListener("auth:session-expired", handleSessionExpired);
+        return () => window.removeEventListener("auth:session-expired", handleSessionExpired);
+    }, [clearAuthData]);
 
     // ============================================================================
     // Выход из системы
@@ -307,7 +315,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const value: AuthContextType = {
         isAuthenticated,
         isLoading,
-        accessToken,
         userId,
         phoneNumber,
         email,
